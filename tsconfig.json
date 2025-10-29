@@ -1,0 +1,63 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "ESNext", // Specify ECMAScript target version. 'ESNext' means the latest version.
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // List of library files to be included in the compilation.
+    "jsx": "react-jsx", // Support for JSX in .tsx files. 'react-jsx' is the modern transform.
+    "module": "ESNext", // Specify module code generation. 'ESNext' supports modern features like dynamic imports.
+    "moduleResolution": "node", // How modules get resolved. 'node' mimics Node.js's module resolution.
+    "resolveJsonModule": true, // Allows importing .json files.
+    "isolatedModules": true, // Ensures that each file can be safely compiled in isolation.
+    "noEmit": true, // Do not emit output files (like .js), as this is handled by your build tool (e.g., Vite, Create React App).
+    "allowJs": true, // Allow JavaScript files to be compiled.
+    /* Strict Type-Checking Options */
+    "strict": true, // Enable all strict type-checking options.
+    "noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type.
+    "strictNullChecks": true, // In strict null checking mode, the `null` and `undefined` values are not in the domain of every type.
+    "strictFunctionTypes": true, // Enable stricter checking of function types.
+    "strictBindCallApply": true, // Enable stricter checking of the `bind`, `call`, and `apply` methods on functions.
+    "strictPropertyInitialization": true, // Ensure non-undefined class properties are initialized in the constructor.
+    "noImplicitThis": true, // Raise error on 'this' expressions with an implied 'any' type.
+    "alwaysStrict": true, // Parse in strict mode and emit "use strict" for each source file.
+    /* Module Resolution Options */
+    "baseUrl": ".", // Base directory to resolve non-absolute module names. THIS IS KEY FOR PATH ALIASES.
+    "paths": {
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ]
+      // Add any other aliases you need here
+    },
+    "esModuleInterop": true, // Enables compatibility with CommonJS modules.
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export.
+    /* Advanced Options */
+    "skipLibCheck": true, // Skip type checking of all declaration files (*.d.ts).
+    "forceConsistentCasingInFileNames": true // Disallow inconsistently-cased references to the same file.
+  },
+  /* Files to include in the compilation */
+  "include": [
+    "src" // This will include all files in the 'src' directory.
+    // You can also be more specific, e.g., "src/**/*.ts", "src/**/*.tsx"
+  ],
+  /* Files to exclude from the compilation */
+  "exclude": [
+    "node_modules", // Always a good idea to exclude node_modules.
+    "dist",
+    "build"
+  ]
+}
