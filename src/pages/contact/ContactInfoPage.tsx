@@ -4,7 +4,12 @@ import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import { FiSend, FiUsers, FiCheckCircle, FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
 
-const ContactInfoPage: React.FC = () => {
+interface ContactInfoPageProps {
+    isLoginModalOpen: boolean;
+    setIsLoginModalOpen: (open: boolean) => void;
+}
+
+const ContactInfoPage: React.FC<ContactInfoPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -26,7 +31,7 @@ const ContactInfoPage: React.FC = () => {
 
     return (
         <PageWrapper>
-            <Header />
+            <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
             <main className="min-h-screen w-full bg-primary-950 text-primary-50">
                 {/* Background Overlay */}
                 <div className="absolute inset-0 bg-primary-900/70"></div>

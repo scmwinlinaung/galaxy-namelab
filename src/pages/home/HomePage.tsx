@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiSearch, FiCopy, FiHeart, FiCalendar, FiStar, FiMoon, FiSun } from 'react-icons/fi';
+import { FiSearch, FiCopy, FiHeart, FiCalendar, FiStar, FiMoon, FiSun, FiMail } from 'react-icons/fi';
 
 import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
@@ -69,15 +69,19 @@ function generateCosmicNames(name: string, birthdate: string, type: string): str
 
 const fadeUp = {
     hidden: { opacity: 0, y: 20 },
-    // @ts-ignore
     visible: (delay = 0) => ({
         opacity: 1,
         y: 0,
-        transition: { duration: 0.8, delay, ease: "easeOut" },
+        transition: { duration: 0.8, delay, ease: "easeOut" as const },
     }),
 };
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+    isLoginModalOpen: boolean;
+    setIsLoginModalOpen: (open: boolean) => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
     const navigate = useNavigate();
     const [placeholder, setPlaceholder] = useState("a futuristic tech startup...");
     const [type, setType] = useState("business");
@@ -123,7 +127,7 @@ const HomePage: React.FC = () => {
 
     return (
         <PageWrapper>
-            <Header />
+            <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
 
             <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center bg-gradient-to-b from-primary-700 via-primary-800 to-primary-950 text-white overflow-hidden px-4 py-12">
                 {/* Background Blobs */}
@@ -142,54 +146,24 @@ const HomePage: React.FC = () => {
                     transition={{ repeat: Infinity, duration: 15, ease: 'easeInOut' }}
                 />
 
-                {/* Website Introduction Section */}
+  
+  
                 <motion.div
                     // @ts-ignore
                     variants={fadeUp}
                     initial="hidden"
                     animate="visible"
-                    custom={0.1}
-                    className="w-full max-w-5xl mb-12 mt-10 bg-primary-900/30 backdrop-blur-md rounded-3xl p-8 border border-primary-600/30"
+                    custom={0.3}
+                    className="flex items-center justify-center gap-2 mb-6"
                 >
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-                        >
-                            <FiStar className="text-4xl text-yellow-400" />
-                        </motion.div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-primary-100">
-                            Cosmic Name Generation with Astrology
-                        </h2>
-                        <motion.div
-                            animate={{ rotate: -360 }}
-                            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-                        >
-                            <FiMoon className="text-4xl text-blue-300" />
-                        </motion.div>
-                    </div>
-                    <p className="text-lg text-primary-100 leading-relaxed mb-4">
-                        Welcome to <span className="font-bold text-primary-200">Galaxy NameLab</span> – where ancient wisdom meets modern creativity!
-                        We harness the power of <span className="font-semibold text-yellow-300">astrology</span> and <span className="font-semibold text-blue-300">numerology</span> to suggest
-                        names that align with cosmic energies and your personal birth chart.
-                    </p>
-                    <p className="text-base text-primary-200">
-                        Simply enter your desired concept, birthdate, and let the stars guide you to the perfect name
-                        for your business, project, or creative endeavor. Each suggestion is cosmically calibrated
-                        to resonate with your unique astrological profile!
-                    </p>
+                    <a
+                        href="mailto:galaxynamelab@gmail.com"
+                        className="flex items-center gap-2 text-primary-200 hover:text-white transition-colors duration-300 bg-primary-800/40 px-4 py-2 rounded-full border border-primary-600/30 hover:bg-primary-700/50"
+                    >
+                        <FiMail className="text-xl" />
+                        <span className="text-sm">galaxynamelab@gmail.com</span>
+                    </a>
                 </motion.div>
-
-                <motion.h1
-                    // @ts-ignore
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="visible"
-                    custom={0.2}
-                    className="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg"
-                >
-                    Welcome to <span className="text-primary-200">Galaxy NameLab</span>
-                </motion.h1>
 
                 <motion.p
                     // @ts-ignore
@@ -299,10 +273,10 @@ const HomePage: React.FC = () => {
                     initial="hidden"
                     animate="visible"
                     custom={1.0}
-                    className="w-full max-w-6xl mb-16"
+                    className="w-full max-w-4xl mb-16"
                 >
                     <h2 className="text-4xl font-bold mb-8 text-primary-100">Featured Businesses</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {[
                             {
                                 name: "Ya Kun Kaya Toast",
@@ -319,22 +293,6 @@ const HomePage: React.FC = () => {
                                 description: "Award-winning bakery chain that revolutionized bread-making with creative, Asian-inspired pastries.",
                                 website: "https://breadtalk.com",
                                 color: "from-rose-600 to-pink-700"
-                            },
-                            {
-                                name: "Apple Inc.",
-                                type: "World Business",
-                                location: "Global",
-                                description: "Technology giant known for iPhone, Mac, and innovative consumer electronics that changed the world.",
-                                website: "https://apple.com",
-                                color: "from-slate-600 to-gray-800"
-                            },
-                            {
-                                name: "Tesla",
-                                type: "World Business",
-                                location: "Global",
-                                description: "Revolutionary electric vehicle and clean energy company accelerating sustainable transportation.",
-                                website: "https://tesla.com",
-                                color: "from-red-600 to-red-800"
                             }
                         ].map((business, index) => (
                             <motion.div
@@ -399,31 +357,61 @@ const HomePage: React.FC = () => {
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* See More Button */}
+                    <div className="text-center mt-8">
+                        <Button
+                            onClick={() => navigate('/business')}
+                            className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 hover:shadow-lg"
+                        >
+                            See More Businesses
+                        </Button>
+                    </div>
                 </motion.div>
 
                 {/* Richest People Showcase */}
-                <motion.div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                    {richestPeople.map((person, index) => (
-                        <motion.div
-                            key={index}
-                            // @ts-ignore
-                            variants={fadeUp}
-                            initial="hidden"
-                            animate="visible"
-                            custom={0.5 + index * 0.2}
-                            className="bg-primary-900/40 border border-primary-700 rounded-2xl p-6 text-left shadow-lg backdrop-blur-sm hover:scale-105 transition-transform duration-300"
+                <motion.div
+                    // @ts-ignore
+                    variants={fadeUp}
+                    initial="hidden"
+                    animate="visible"
+                    custom={1.2}
+                    className="w-full max-w-4xl mb-16"
+                >
+                    <h2 className="text-4xl font-bold mb-8 text-primary-100">Success Stories</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {richestPeople.slice(0, 2).map((person, index) => (
+                            <motion.div
+                                key={index}
+                                // @ts-ignore
+                                variants={fadeUp}
+                                initial="hidden"
+                                animate="visible"
+                                custom={0.5 + index * 0.2}
+                                className="bg-primary-900/40 border border-primary-700 rounded-2xl p-6 text-left shadow-lg backdrop-blur-sm hover:scale-105 transition-transform duration-300"
+                            >
+                                <img
+                                    src={person.photo}
+                                    alt={person.name}
+                                    className="w-full h-48 object-cover rounded-xl mb-4"
+                                />
+                                <h3 className="text-2xl font-bold mb-2">{person.name}</h3>
+                                <p className="text-primary-200 mb-1"><strong>Profession:</strong> {person.profession}</p>
+                                <p className="text-primary-200 mb-1"><strong>Net Worth:</strong> {person.netWorth}</p>
+                                <p className="text-primary-50 text-sm">{person.explanation}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* See More Button */}
+                    <div className="text-center mt-8">
+                        <Button
+                            onClick={() => navigate('/success')}
+                            className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 hover:shadow-lg"
                         >
-                            <img
-                                src={person.photo}
-                                alt={person.name}
-                                className="w-full h-48 object-cover rounded-xl mb-4"
-                            />
-                            <h2 className="text-2xl font-bold mb-2">{person.name}</h2>
-                            <p className="text-primary-200 mb-1"><strong>Profession:</strong> {person.profession}</p>
-                            <p className="text-primary-200 mb-1"><strong>Net Worth:</strong> {person.netWorth}</p>
-                            <p className="text-primary-50 text-sm">{person.explanation}</p>
-                        </motion.div>
-                    ))}
+                            See More Success Stories
+                        </Button>
+                    </div>
                 </motion.div>
 
                 {/* About Astrology Section */}
