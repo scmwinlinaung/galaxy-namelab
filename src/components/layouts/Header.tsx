@@ -39,13 +39,16 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                 </Link>
 
                 {/* Desktop Navigation Links */}
-                <div className="hidden md:flex items-center space-x-4 sm:space-x-8 text-lg">
+                <div className="hidden md:flex items-center space-x-10 text-base font-medium tracking-wide uppercase">
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.to}
                             to={link.to}
                             className={({ isActive }) =>
-                                `transition-colors duration-300 ${isActive ? 'text-primary-400' : 'text-white hover:text-primary-300'}`
+                                `transition-colors duration-300 ${isActive
+                                    ? 'text-white' // active link stays white
+                                    : 'text-gray-300 hover:text-white' // hover turns white only
+                                }`
                             }
                         >
                             {link.label}
@@ -53,11 +56,13 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                     ))}
                     <button
                         onClick={handleLoginClick}
-                        className="transition-colors duration-300 text-white hover:text-primary-300 font-semibold"
+                        className="ml-6 border border-primary-400 text-primary-400 px-4 py-1.5 rounded-full hover:bg-primary-400 hover:text-white transition-all duration-300 font-semibold"
                     >
                         Login
                     </button>
                 </div>
+
+
 
                 {/* Mobile Menu Button */}
                 <button
@@ -85,12 +90,11 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                                 to={link.to}
                                 onClick={() => setIsMenuOpen(false)}
                                 className={({ isActive }) =>
-                                    `transition-colors duration-300 px-4 py-2 rounded-lg ${
-                                        isActive
-                                    ? 'text-primary-400 bg-primary-800/50'
-                                    : 'text-white hover:text-primary-300 hover:bg-primary-800/30'
-                                }`
-                            }
+                                    `transition-colors duration-300 px-4 py-2 rounded-lg ${isActive
+                                        ? 'text-primary-400 bg-primary-800/50'
+                                        : 'text-white hover:text-primary-300 hover:bg-primary-800/30'
+                                    }`
+                                }
                             >
                                 {link.label}
                             </NavLink>

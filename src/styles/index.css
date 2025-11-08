@@ -1,22 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 @theme {
-    --color-primary-50: #f2e7f3;
-    --color-primary-100: #e5cfe7;
-    --color-primary-200: #d8b8da;
-    --color-primary-300: #ca9fcd;
-    --color-primary-400: #bc88c0;
-    --color-primary-500: #af70b3;
-    --color-primary-600: #9e64a1;
-    --color-primary-700: #8d588f;
-    --color-primary-800: #7c4c7d;
-    --color-primary-900: #6b406b;
-    --color-primary-950: #540d5b;
+    /* Primary – Deep cosmic indigo and violet */
+    --color-primary-50: #f3eefc;
+    --color-primary-100: #e2baf8;
+    --color-primary-200: #c88ff0;
+    --color-primary-300: #aa63e3;
+    --color-primary-400: #8b3dcf;
+    /* soft lavender accent */
+    --color-primary-500: #6c21b5;
+    /* main accent purple */
+    --color-primary-600: #571a94;
+    /* hover / focus color */
+    --color-primary-700: #451475;
+    --color-primary-800: #330f56;
+    --color-primary-900: #220a3a;
+    --color-primary-950: #180728;
+    /* your main color - deep cosmic indigo */
 
-    --color-secondary: #ff8fab;
-    /* Softer pink accent */
-    --color-accent: #b980f0;
-    /* Vibrant accent for highlights */
-    --color-bg-dark: #1a1023;
-    --color-text-light: #f5eff7;
+    /* Secondary – A vibrant, celestial pink for highlights */
+    --color-secondary: #e55a9c;
+    /* brighter highlight (CTA hover, links) */
+
+    /* Accent – Vivid cosmic violet for buttons or icons */
+    --color-accent: #a358e8;
+    /* vivid highlight glow */
+
+    /* Background shades – Deep space tones from your base color */
+    --color-bg-dark: #180728;
+    /* your main color as the primary background */
+    --color-bg-darker: #11041c;
+    /* a near-black for depth (footers, etc.) */
+    --color-bg-star: #200d3a;
+    /* slightly lighter for textured backgrounds */
+
+    /* Text colors – High-contrast and clean for readability */
+    --color-text-light: #f3eefc;
+    /* a soft, lavender-tinted white for body text */
+    --color-text-muted: #c5b6e0;
+    /* a muted purple-gray for secondary text */
+    --color-text-accent: #aa63e3;
+    /* a brighter text color for links, matching primary-300 */
+
+    --font-display: "Playfair Display", serif;
+    --font-body: "Inter", sans-serif;
+}
+
+@layer base {
+    html {
+        font-family: var(--font-body);
+        background-color: var(--color-bg-dark);
+        color: var(--color-text-light);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-display);
+        color: var(--color-text-light);
+    }
+
+    p,
+    span,
+    a,
+    li,
+    button,
+    input,
+    textarea {
+        font-family: var(--font-body);
+    }
 }
