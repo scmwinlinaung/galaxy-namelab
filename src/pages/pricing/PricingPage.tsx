@@ -26,7 +26,7 @@ const pricingPlans = [
         borderColor: "border-gray-600",
         buttonColor: "bg-gray-600 hover:bg-gray-700",
         features: [
-            { name: "5 Name generations per month", included: true },
+            { name: "5 Name generations", included: true },
             { name: "Basic numerology insights", included: true },
             { name: "Standard zodiac compatibility", included: true },
             { name: "Email support", included: true },
@@ -144,40 +144,6 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                     </p>
                 </motion.div>
 
-                {/* Billing Toggle */}
-                <motion.div
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="visible"
-                    custom={0.3}
-                    className="mb-12"
-                >
-                    <div className="flex items-center gap-4 bg-primary-900/40 backdrop-blur-md rounded-full p-1 border border-primary-600/30">
-                        <button
-                            onClick={() => setBillingCycle('monthly')}
-                            className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                                billingCycle === 'monthly'
-                                    ? 'bg-primary-600 text-white'
-                                    : 'text-primary-300 hover:text-white'
-                            }`}
-                        >
-                            Monthly Billing
-                        </button>
-                        <button
-                            onClick={() => setBillingCycle('yearly')}
-                            className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 ${
-                                billingCycle === 'yearly'
-                                    ? 'bg-primary-600 text-white'
-                                    : 'text-primary-300 hover:text-white'
-                            }`}
-                        >
-                            Yearly Billing
-                            <span className="bg-yellow-500 text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
-                                Save 20%
-                            </span>
-                        </button>
-                    </div>
-                </motion.div>
 
                 {/* Pricing Cards */}
                 <motion.div

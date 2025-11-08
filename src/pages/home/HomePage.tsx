@@ -146,8 +146,8 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     transition={{ repeat: Infinity, duration: 15, ease: 'easeInOut' }}
                 />
 
-  
-  
+
+
                 <motion.div
                     // @ts-ignore
                     variants={fadeUp}
@@ -164,107 +164,62 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         <span className="text-sm">galaxynamelab@gmail.com</span>
                     </a>
                 </motion.div>
-
-                <motion.p
+                <motion.div
                     // @ts-ignore
                     variants={fadeUp}
                     initial="hidden"
                     animate="visible"
-                    custom={0.4}
-                    className="text-lg md:text-xl text-primary-50 max-w-3xl mb-8"
+                    custom={1.5}
+                    className="w-full max-w-6xl mb-12 bg-primary-900/30 backdrop-blur-md rounded-3xl p-10 border border-primary-600/30"
                 >
-                    {tagline}
-                </motion.p>
+                    <div className="flex items-center justify-center gap-3 mb-6">
+                        <FiSun className="text-5xl text-yellow-400" />
+                        <h2 className="text-4xl md:text-5xl font-bold text-primary-100">
+                            About Astrology & Numerology
+                        </h2>
+                        <FiMoon className="text-5xl text-indigo-400" />
+                    </div>
 
-                {/* Name Generation Input with Glassmorphism */}
-                <motion.form
-                    onSubmit={handleNameGeneration}
-                    // @ts-ignore
-                    variants={fadeUp}
-                    initial="hidden"
-                    animate="visible"
-                    custom={0.6}
-                    className="w-full max-w-3xl z-10 mb-6"
-                >
-                    <div className="bg-black/20 backdrop-blur-lg border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col items-center gap-5">
-
-                        {/* Main Input */}
-                        <div className="w-full relative">
-                            <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-primary-200 text-2xl" />
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder={`e.g., ${placeholder}`}
-                                className="w-full bg-primary-900/50 text-white text-xl pl-14 pr-6 py-4 placeholder-primary-300 focus:outline-none rounded-full border-2 border-primary-700 focus:border-primary-400 transition-colors duration-300"
-                            />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                        <div>
+                            <h3 className="text-2xl font-bold text-primary-200 mb-4">🌟 Astrology</h3>
+                            <p className="text-primary-100 leading-relaxed mb-4">
+                                Astrology is the ancient practice of interpreting celestial movements and their influence on human affairs.
+                                Your birth chart reveals the positions of planets at your birth, each contributing unique energies to your personality and life path.
+                            </p>
+                            <p className="text-primary-200">
+                                The 12 zodiac signs represent archetypal energies that shape character traits, strengths, and challenges.
+                                By aligning your name with astrological insights, you create harmony between your identity and cosmic forces.
+                            </p>
                         </div>
 
-                        {/* Secondary Inputs: Date & Type */}
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 w-full">
-                            {/* Date Picker */}
-                            <div className="flex items-center gap-3 bg-primary-900/40 border border-primary-700 px-4 py-2 rounded-full">
-                                <FiCalendar className="text-primary-200" />
-                                <input
-                                    type="date"
-                                    value={birthdate}
-                                    onChange={(e) => setBirthdate(e.target.value)}
-                                    className="bg-transparent text-white focus:outline-none"
-                                    style={{ colorScheme: 'dark' }} // Improves date picker appearance in dark mode
-                                />
-                            </div>
-
-                            {/* Type Selection */}
-                            <div className="flex gap-2 p-1 bg-primary-900/40 rounded-full border border-primary-700">
-                                {["business", "project"].map((option) => (
-                                    <button
-                                        key={option}
-                                        onClick={() => setType(option)}
-                                        type="button"
-                                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-300 ${type === option
-                                            ? "bg-primary-500 text-white"
-                                            : "bg-transparent text-primary-200 hover:bg-primary-700/50"
-                                            }`}
-                                    >
-                                        {option === "business" ? "Business Name" : "Project Name"}
-                                    </button>
-                                ))}
-                            </div>
+                        <div>
+                            <h3 className="text-2xl font-bold text-primary-200 mb-4">🔢 Numerology</h3>
+                            <p className="text-primary-100 leading-relaxed mb-4">
+                                Numerology is the mystical study of numbers and their vibrational significance. Each number carries specific
+                                energies and meanings that influence personality, destiny, and life purpose.
+                            </p>
+                            <p className="text-primary-200">
+                                Your Life Path Number, derived from your birthdate, reveals your core purpose and natural talents.
+                                By calculating the numerical value of names, we ensure cosmic alignment with your personal vibration
+                                for maximum success and fulfillment.
+                            </p>
                         </div>
                     </div>
-                </motion.form>
+
+                    <div className="mt-8 p-6 bg-primary-800/40 rounded-2xl border border-primary-600/30">
+                        <h4 className="text-xl font-bold text-primary-100 mb-3 text-center">
+                            ✨ Why Use Astrology for Naming? ✨
+                        </h4>
+                        <p className="text-primary-200 text-center leading-relaxed">
+                            Names carry vibrational frequencies that interact with cosmic energies. When your name resonates
+                            with your astrological profile and numerological signature, it creates a powerful alignment that
+                            attracts opportunities, success, and positive energy into your life and ventures.
+                        </p>
+                    </div>
+                </motion.div>
 
 
-                {/* Generated Suggestions */}
-                {suggestions.length > 0 && (
-                    <motion.div
-                        // @ts-ignore
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="visible"
-                        custom={0.8}
-                        className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl"
-                    >
-                        {suggestions.map((s, i) => (
-                            <div
-                                key={i}
-                                className="flex justify-between items-center bg-primary-900/40 border border-primary-700 px-4 py-3 rounded-full text-white shadow-md"
-                            >
-                                <span>{s}</span>
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => navigator.clipboard.writeText(s)}
-                                        className="hover:text-primary-200"
-                                    >
-                                        <FiCopy />
-                                    </button>
-                                    <button className="hover:text-primary-200">
-                                        <FiHeart />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </motion.div>
-                )}
 
                 {/* Business Showcase Flashcards */}
                 <motion.div
@@ -358,16 +313,16 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         ))}
                     </div>
 
-                    {/* See More Button */}
                     <div className="text-center mt-8">
                         <Button
                             onClick={() => navigate('/business')}
-                            className="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 hover:shadow-lg"
+                            className="bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 hover:shadow-lg active:scale-95 touch-manipulation"
                         >
                             See More Businesses
                         </Button>
                     </div>
                 </motion.div>
+
 
                 {/* Richest People Showcase */}
                 <motion.div
