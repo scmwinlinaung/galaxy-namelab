@@ -40,7 +40,7 @@ const pricingPlans = [
     {
         name: "Cosmic Explorer",
         price: "$19",
-        period: "/month",
+        period: "",
         description: "For serious name seekers and creators",
         icon: <FiStar className="w-6 h-6" />,
         color: "from-blue-600 to-purple-700",
@@ -62,7 +62,7 @@ const pricingPlans = [
     {
         name: "Galaxy Master",
         price: "$49",
-        period: "/month",
+        period: "",
         description: "Ultimate cosmic naming experience",
         icon: <FiAward className="w-6 h-6" />,
         color: "from-yellow-600 to-orange-700",
