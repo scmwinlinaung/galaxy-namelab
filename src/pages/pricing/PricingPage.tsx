@@ -17,26 +17,7 @@ const fadeUp = {
 };
 
 const pricingPlans = [
-    {
-        name: "Starter",
-        price: "Free",
-        description: "Perfect for exploring cosmic naming",
-        icon: <FiZap className="w-6 h-6" />,
-        color: "from-gray-600 to-gray-800",
-        borderColor: "border-gray-600",
-        buttonColor: "bg-gray-600 hover:bg-gray-700",
-        features: [
-            { name: "5 Name generations", included: true },
-            { name: "Basic numerology insights", included: true },
-            { name: "Standard zodiac compatibility", included: true },
-            { name: "Email support", included: true },
-            { name: "Advanced astrology reports", included: false },
-            { name: "Business name analysis", included: false },
-            { name: "Priority support", included: false },
-            { name: "Custom name consultations", included: false },
-        ],
-        highlighted: false
-    },
+
     {
         name: "Cosmic Explorer",
         price: "$19",

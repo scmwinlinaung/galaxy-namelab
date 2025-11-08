@@ -98,20 +98,20 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                 viewport={{ once: true, amount: 0.3 }}
             >
                 <div className="md:w-1/2">
-                    <img src={imageSrc} alt={imageAlt} className="rounded-lg shadow-xl object-fill w-full h-150" />
+                    <img src={imageSrc} alt={imageAlt} className="rounded-lg shadow-xl object-fill w-full h-170" />
                 </div>
                 <div className="md:w-1/2">
                     <h2 className={`text-4xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>{title}</h2>
                     <div className={`w-20 h-0.5 mb-4 ${isDark ? 'bg-primary-400' : 'bg-indigo-500'}`}></div>
-                    <div className={`flex items-center gap-4 text-sm mb-4 ${isDark ? 'text-primary-200' : 'text-gray-500'}`}>
+                    {/* <div className={`flex items-center gap-4 text-sm mb-4 ${isDark ? 'text-primary-200' : 'text-gray-500'}`}>
                         <span>{date}</span>
                         <span>•</span>
                         <span>{category}</span>
                         <span>•</span>
                         <span>{author}</span>
-                    </div>
+                    </div> */}
                     <p className={`leading-relaxed mb-6 ${isDark ? 'text-primary-100' : 'text-gray-600'}`}>{excerpt}</p>
-                    {buttonText.length > 0 &&
+                    {/* {buttonText.length > 0 &&
                         <button
                             onClick={onButtonClick}
                             className={`font-semibold border-2 rounded-full px-8 py-3 transition-colors duration-300 focus:outline-none focus:ring-2 
@@ -122,7 +122,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         >
                             {buttonText}
                         </button>
-                    }
+                    } */}
                 </div>
             </motion.div>
         );
@@ -136,9 +136,9 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             <section id="content-dark" className="bg-gray-50 text-gray-800 py-20 px-4 md:px-8 bg-gradient-to-b from-primary-700 via-primary-800 to-primary-950">
                 <div className="max-w-6xl mx-auto space-y-24 mt-20">
                     <ContentBlock
-                        imageSrc="https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1000w,f_auto,q_auto:best/newscms/2019_51/3151931/191217-astrology-gets-a-bad-rap-main-kh.jpg"
+                        imageSrc="https://www.yourtango.com/sites/default/files/image_blog/is-astrology-real.jpg"
                         imageAlt="Astrology and Numerology"
-                        title="About Astrology & Numerology"
+                        title="Astrology & Numerology"
                         date="OCT 28, 2025"
                         category="GUIDES"
                         author="GALAXY NAMELAB"
@@ -171,6 +171,26 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             </section>
 
             {/* Content Section - Light background */}
+            <section id="content-light1" className="bg-gray-50 text-gray-800 py-20 px-4 md:px-8 bg-gradient-to-b from-primary-700 via-primary-800 to-primary-950">
+                <div className="max-w-6xl mx-auto space-y-24">
+                    <ContentBlock
+                        imageSrc={richestPeople[1].photo}
+                        imageAlt={richestPeople[1].name}
+                        title="Weightless Moons: Success Stories"
+                        date="NOV 02, 2025"
+                        category="CASE STUDY"
+                        author="STELLA MARS"
+                        excerpt={`Discover how aligning with cosmic energies can illuminate the path to success. From Elon Musk's pioneering Aries spirit to Oprah's visionary Aquarian nature, we explore the astrological and numerological blueprints of today's leaders.`}
+                        buttonText="READ MORE"
+                        onButtonClick={() => navigate('/success')}
+                        imageLeft={false}
+                        theme={'dark'}
+                    // 'theme' prop is omitted, so it defaults to 'light'
+                    />
+                </div>
+            </section>
+
+            {/* Content Section - Light background */}
             <section id="content-light2" className="bg-gray-50 text-gray-800 py-20 px-4 md:px-8">
                 <div className="max-w-6xl mx-auto space-y-24">
                     <ContentBlock
@@ -180,14 +200,34 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         date="NOV 07, 2025"
                         category="BUSINESS"
                         author="GALAXY NAMELAB"
-                        excerpt="A brand's name carries a unique vibration. Explore how iconic businesses like 'Ya Kun Kaya Toast' and 'BreadTalk' have names that resonate with success, creating a powerful market presence and lasting customer connection through cosmic alignment."
-                        buttonText="READ MORE"
+                        excerpt="A brand's name carries a unique vibration. Explore how iconic businesses like 'Telsa Motor' have names that resonate with success, creating a powerful market presence and lasting customer connection through cosmic alignment."
+                        buttonText="VIEW MORE SUCCESS BUSINESS"
                         onButtonClick={() => navigate('/business')}
                         imageLeft={true}
                     // 'theme' prop is omitted, so it defaults to 'light'
                     />
                 </div>
             </section >
+
+            <section id="content-light2" className="bg-gray-50 text-gray-800 py-20 px-4 md:px-8  bg-gradient-to-b from-primary-700 via-primary-800 to-primary-950">
+                <div className="max-w-6xl mx-auto space-y-24">
+                    <ContentBlock
+                        imageSrc="https://images.icon-icons.com/4049/PNG/512/facebook_logo_icon_257023.png"
+                        imageAlt="Featured Businesses"
+                        title="Fire signs – Thriving Businesses"
+                        date="NOV 07, 2025"
+                        category="BUSINESS"
+                        author="GALAXY NAMELAB"
+                        excerpt="A brand's name carries a unique vibration. Explore how iconic businesses like 'Facebook' have names that resonate with success, creating a powerful market presence and lasting customer connection through cosmic alignment."
+                        buttonText="VIEW MORE SUCCESS BUSINESS"
+                        onButtonClick={() => navigate('/business')}
+                        imageLeft={true}
+                        theme={'dark'}
+                    // 'theme' prop is omitted, so it defaults to 'light'
+                    />
+                </div>
+            </section >
+
 
             {/* Footer Section */}
             < motion.footer
@@ -199,13 +239,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             >
                 <div className="w-full max-w-6xl mx-auto px-4 text-white">
                     <div className="flex flex-col items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <FiStar className="text-yellow-400" />
-                            <p className="text-primary-200 text-sm">
-                                Powered by Cosmic Intelligence & Ancient Wisdom
-                            </p>
-                            <FiStar className="text-yellow-400" />
-                        </div>
+
                         <div className="text-primary-300 text-sm text-center">
                             <p>&copy; {new Date().getFullYear()} Galaxy NameLab. All Rights Reserved.</p>
                             <p className="mt-1">Crafted with ✨ and guided by the stars</p>
