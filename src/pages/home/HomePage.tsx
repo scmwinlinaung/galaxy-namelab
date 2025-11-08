@@ -175,46 +175,21 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     <div className="flex items-center justify-center gap-3 mb-6">
                         <FiSun className="text-5xl text-yellow-400" />
                         <h2 className="text-4xl md:text-5xl font-bold text-primary-100">
-                            About Astrology & Numerology
+                            Galaxy Name Lab
                         </h2>
                         <FiMoon className="text-5xl text-indigo-400" />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                        <div>
-                            <h3 className="text-2xl font-bold text-primary-200 mb-4">🌟 Astrology</h3>
-                            <p className="text-primary-100 leading-relaxed mb-4">
-                                Astrology is the ancient practice of interpreting celestial movements and their influence on human affairs.
-                                Your birth chart reveals the positions of planets at your birth, each contributing unique energies to your personality and life path.
-                            </p>
-                            <p className="text-primary-200">
-                                The 12 zodiac signs represent archetypal energies that shape character traits, strengths, and challenges.
-                                By aligning your name with astrological insights, you create harmony between your identity and cosmic forces.
-                            </p>
-                        </div>
-
-                        <div>
-                            <h3 className="text-2xl font-bold text-primary-200 mb-4">🔢 Numerology</h3>
-                            <p className="text-primary-100 leading-relaxed mb-4">
-                                Numerology is the mystical study of numbers and their vibrational significance. Each number carries specific
-                                energies and meanings that influence personality, destiny, and life purpose.
-                            </p>
-                            <p className="text-primary-200">
-                                Your Life Path Number, derived from your birthdate, reveals your core purpose and natural talents.
-                                By calculating the numerical value of names, we ensure cosmic alignment with your personal vibration
-                                for maximum success and fulfillment.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="mt-8 p-6 bg-primary-800/40 rounded-2xl border border-primary-600/30">
-                        <h4 className="text-xl font-bold text-primary-100 mb-3 text-center">
-                            ✨ Why Use Astrology for Naming? ✨
-                        </h4>
-                        <p className="text-primary-200 text-center leading-relaxed">
-                            Names carry vibrational frequencies that interact with cosmic energies. When your name resonates
-                            with your astrological profile and numerological signature, it creates a powerful alignment that
-                            attracts opportunities, success, and positive energy into your life and ventures.
+                    <div className="text-left">
+                        <p className="text-primary-100 leading-relaxed text-lg">
+                            Choosing a name is more than just selecting beautiful sounds — it is the beginning of one's identity, personality, and life journey. In astrology, a name carries vibration and energy that can influence character, success, relationships, and destiny. By aligning a name with one's birth star, zodiac sign, date of birth, and planetary positions, we can create harmony between the individual and the universe.
+                        </p>
+                        <p className="text-primary-200 leading-relaxed text-lg mt-4">
+                            Our naming with astrology service helps you discover meaningful, balanced, and auspicious names that support positive growth and well-being. Whether you are naming a newborn, changing your own name, or selecting a business or brand name, we use traditional astrological methods combined with deep cultural understanding to guide you.
+                        </p>
+                        <p className="text-primary-100 leading-relaxed text-lg mt-4 text-center italic">
+                            Every name has a story.<br />
+                            Let us help you choose a name that brings luck, strength, and happiness for life.
                         </p>
                     </div>
                 </motion.div>
