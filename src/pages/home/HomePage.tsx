@@ -98,7 +98,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                 viewport={{ once: true, amount: 0.3 }}
             >
                 <div className="md:w-1/2">
-                    <img src={imageSrc} alt={imageAlt} className="rounded-lg shadow-xl object-fill w-full h-170" />
+                    <img src={imageSrc} alt={imageAlt} className="rounded-lg shadow-xl object-fill w-full " />
                 </div>
                 <div className="md:w-1/2">
                     <h2 className={`text-4xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>{title}</h2>
