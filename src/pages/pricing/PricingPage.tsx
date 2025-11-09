@@ -134,7 +134,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                     custom={0.5}
                     className="w-full max-w-7xl mb-16"
                 >
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {pricingPlans.map((plan, index) => (
                             <motion.div
                                 key={index}
