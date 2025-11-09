@@ -58,27 +58,7 @@ const richestPeople = [
         netWorth: "$100B",
         explanation: "Numerology: Life path 6 → nurturing, responsible; Astrology: Virgo → analytical, reliable."
     },
-    {
-        name: "Bernard Arnault",
-        photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Bernard_Arnault_%28cropped_2%29.jpg/800px-Bernard_Arnault_%28cropped_2%29.jpg",
-        profession: "Business Magnate",
-        netWorth: "$180B",
-        explanation: "Numerology: Life path 9 → humanitarian, generous; Astrology: Pisces → intuitive, creative."
-    },
-    {
-        name: "Larry Ellison",
-        photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Larry_Ellison_World_Economic_Forum_2012.jpg/800px-Larry_Ellison_World_Economic_Forum_2012.jpg",
-        profession: "Entrepreneur",
-        netWorth: "$130B",
-        explanation: "Numerology: Life path 5 → adventurous, freedom-loving; Astrology: Leo → confident, natural leader."
-    },
-    {
-        name: "Michael Bloomberg",
-        photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Michael_Bloomberg_in_2023.jpg/800px-Michael_Bloomberg_in_2023.jpg",
-        profession: "Businessman",
-        netWorth: "$70B",
-        explanation: "Numerology: Life path 3 → creative, communicative; Astrology: Aquarius → innovative, humanitarian."
-    }
+
 ];
 
 interface SuccessPageProps {
@@ -144,7 +124,7 @@ const SuccessPage: React.FC<SuccessPageProps> = ({ isLoginModalOpen, setIsLoginM
                                 className="bg-primary-900/40 border border-primary-700 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm hover:scale-105 transition-transform duration-300 group"
                             >
                                 {/* Image Container */}
-                                <div className="relative h-64 overflow-hidden">
+                                <div className="relative overflow-hidden">
                                     <img
                                         src={person.photo}
                                         alt={person.name}

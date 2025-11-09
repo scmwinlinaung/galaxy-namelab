@@ -74,3 +74,22 @@
         font-family: var(--font-body);
     }
 }
+
+@layer utilities {
+    /* 3D Transform Utilities for Card Flip Animation */
+    .preserve-3d {
+        transform-style: preserve-3d;
+    }
+
+    .backface-hidden {
+        backface-visibility: hidden;
+    }
+
+    /* Line clamp utility */
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
