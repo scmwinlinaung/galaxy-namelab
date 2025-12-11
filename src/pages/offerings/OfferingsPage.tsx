@@ -79,16 +79,16 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
         <PageWrapper>
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
 
-            {/* Hero Section - Beautiful Cosmic Design */}
-            <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center bg-gradient-to-b from-primary-700 via-primary-800 to-primary-950 text-white overflow-hidden px-4 py-12">
-                {/* Background Blobs */}
+            {/* Hero Section - Beautiful Dark Cosmic Design */}
+            <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center bg-primary-950 text-primary-50 overflow-hidden px-4 py-12">
+                {/* Background Blobs - Updated for dark theme */}
                 <motion.div
-                    className="absolute top-1/4 left-1/4 w-72 h-72 bg-yellow-500 rounded-full mix-blend-screen blur-3xl opacity-20"
+                    className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply blur-3xl opacity-20"
                     animate={{ y: [0, -20, 0], x: [0, 20, 0] }}
                     transition={{ repeat: Infinity, duration: 12, ease: 'easeInOut' }}
                 />
                 <motion.div
-                    className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen blur-3xl opacity-15"
+                    className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-600 rounded-full mix-blend-multiply blur-3xl opacity-15"
                     animate={{ y: [0, 20, 0], x: [0, -20, 0] }}
                     transition={{ repeat: Infinity, duration: 15, ease: 'easeInOut' }}
                 />
@@ -99,15 +99,15 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                     initial="hidden"
                     animate="visible"
                     custom={0.1}
-                    className="w-full max-w-5xl mb-12 mt-10 bg-primary-900/30 backdrop-blur-md rounded-3xl p-8 border border-primary-600/30"
+                    className="w-full max-w-5xl mb-12 mt-10 bg-primary-900/50 backdrop-blur-md rounded-3xl p-8 border border-primary-800 shadow-2xl"
                 >
-                    <h1 className="text-4xl md:text-6xl font-extrabold mb-4 text-primary-100">
+                    <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-amber-600 to-purple-600">
                         Our Offerings
                     </h1>
-                    <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-primary-200">
+                    <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-primary-200">
                         Invest in Your Legacy
                     </h2>
-                    <p className="text-lg text-primary-200 leading-relaxed">
+                    <p className="text-xl text-primary-100 leading-relaxed max-w-4xl mx-auto">
                         Choose the path that aligns with your vision. Whether you want us to craft the perfect name or validate your own creative ideas, we ensure your brand resonates with Stellar Fortune energy.
                     </p>
                 </motion.div>
@@ -117,14 +117,14 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                     {/* Loading State */}
                     {loading && (
                         <div className="text-center py-12">
-                            <div className="text-primary-200">Loading cosmic packages...</div>
+                            <div className="text-2xl text-primary-300 font-medium animate-pulse">Loading cosmic packages...</div>
                         </div>
                     )}
 
                     {/* Error State */}
                     {error && (
                         <div className="text-center py-12">
-                            <div className="text-red-400">Error: {error}</div>
+                            <div className="text-2xl text-red-400 font-medium bg-red-900/20 backdrop-blur-sm rounded-2xl p-6 border border-red-800 max-w-2xl mx-auto">Error: {error}</div>
                         </div>
                     )}
 
@@ -142,10 +142,10 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                     className="mb-20"
                                 >
                                     <div className="text-center mb-12">
-                                        <h3 className="text-3xl font-bold text-primary-100 mb-4">
+                                        <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-amber-600 mb-6">
                                             {category}
                                         </h3>
-                                        <p className="text-lg text-primary-200 max-w-3xl mx-auto">
+                                        <p className="text-xl text-primary-100 max-w-4xl mx-auto leading-relaxed font-light">
                                             {category === 'Business Naming Solutions'
                                                 ? 'Professional naming services tailored to your business needs'
                                                 : category === 'Personal & Nickname Solutions'
@@ -166,8 +166,8 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                 {/* Path Header - Only show if there are multiple paths or it's not the Personal category */}
                                                 {!isPersonalCategory && (Object.keys(paths).length > 1 || path) && (
                                                     <div className="text-center mb-8">
-                                                        <h4 className="text-2xl font-semibold text-primary-100 mb-3">{path}</h4>
-                                                        <p className="text-primary-200 max-w-2xl mx-auto">
+                                                        <h4 className="text-3xl font-semibold text-primary-200 mb-4">{path}</h4>
+                                                        <p className="text-lg text-primary-100 max-w-3xl mx-auto leading-relaxed">
                                                             {path.includes('Signature') || isSignatureSeries
                                                                 ? 'Best for: Entrepreneurs who want a "Done-For-You" service. We do the heavy lifting, calculating and crafting names that are 100% scientifically aligned with your Cosmic Blueprint.'
                                                                 : path.includes('Validator')
@@ -198,66 +198,65 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                         >
                                                             {pkg.isPopular && (
                                                                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                                                                    <span className="bg-accent text-primary-950 px-4 py-1 rounded-full text-sm font-bold">
+                                                                    <span className="bg-gradient-to-r from-amber-400 to-orange-400 text-slate-900 px-6 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse">
                                                                         MOST POPULAR
                                                                     </span>
                                                                 </div>
                                                             )}
 
                                                             <div className={`h-full relative overflow-hidden group ${pkg.isPopular
-                                                                ? 'bg-gradient-to-br from-accent/20 via-primary-600/90 to-primary-800 hover:from-accent/30 hover:via-primary-500/95 hover:to-primary-700'
-                                                                : 'bg-gradient-to-br from-primary-600/90 via-primary-700 to-primary-800/95 hover:from-primary-500/95 hover:via-primary-600 hover:to-primary-700/90'
-                                                                } rounded-3xl p-${isSignatureSeries && !isPersonalCategory ? '8' : isPersonalCategory ? '8' : '6'
-                                                                } border-2 ${pkg.isPopular ? 'border-accent/40' : 'border-primary-400/30'} shadow-2xl backdrop-blur-sm hover:scale-105 transition-all duration-500 flex flex-col`}>
+                                                                ? 'bg-gradient-to-br from-amber-900/30 via-purple-900/30 to-primary-900/50 hover:from-amber-900/20 hover:via-purple-900/20 hover:to-primary-900/30'
+                                                                : 'bg-gradient-to-br from-purple-900/30 via-amber-900/30 to-primary-900/50 hover:from-purple-900/20 hover:via-amber-900/20 hover:to-primary-900/30'
+                                                                } rounded-3xl p-8 border-2 ${pkg.isPopular ? 'border-amber-600/50' : 'border-primary-700/50'} shadow-xl hover:shadow-2xl backdrop-blur-sm hover:scale-105 transition-all duration-500 flex flex-col`}>
 
                                                                 {/* Enhanced background effects */}
-                                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                                <div className="absolute inset-0 bg-gradient-to-t from-purple-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                                                 {pkg.isPopular && (
-                                                                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-accent/30 to-transparent rounded-full blur-2xl"></div>
+                                                                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-600/20 to-transparent rounded-full blur-2xl"></div>
                                                                 )}
 
                                                                 {/* Header with improved styling */}
                                                                 <div className="relative text-center mb-6">
                                                                     {pkg.isPopular && (
-                                                                        <div className="flex justify-center mb-3">
-                                                                            <MdWorkspacePremium className="text-accent text-2xl animate-pulse" />
+                                                                        <div className="flex justify-center mb-4">
+                                                                            <MdWorkspacePremium className="text-amber-600 text-3xl animate-pulse drop-shadow-lg" />
                                                                         </div>
                                                                     )}
-                                                                    <h5 className={`font-bold text-primary-100 mb-2 ${isSignatureSeries && !isPersonalCategory
-                                                                        ? 'text-2xl'
+                                                                    <h5 className={`font-bold text-primary-50 mb-3 ${isSignatureSeries && !isPersonalCategory
+                                                                        ? 'text-3xl'
                                                                         : isPersonalCategory
-                                                                            ? 'text-xl'
-                                                                            : 'text-lg'
+                                                                            ? 'text-2xl'
+                                                                            : 'text-xl'
                                                                         }`}>{pkg.name.replace(' – MOST POPULAR', '')}</h5>
                                                                     <div className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${pkg.isPopular
-                                                                        ? 'from-accent to-secondary'
-                                                                        : 'from-primary-100 to-primary-200'
-                                                                        } mb-2 ${isSignatureSeries && !isPersonalCategory || isPersonalCategory
-                                                                            ? 'text-4xl'
-                                                                            : 'text-3xl'
-                                                                        }`}>${pkg.price}</div>
+                                                                        ? 'from-amber-600 to-orange-600'
+                                                                        : 'from-purple-600 to-purple-500'
+                                                                        } mb-3 ${isSignatureSeries && !isPersonalCategory || isPersonalCategory
+                                                                            ? 'text-5xl'
+                                                                            : 'text-4xl'
+                                                                        } drop-shadow-lg`}>${pkg.price}</div>
                                                                 </div>
 
                                                                 {/* Enhanced Submission Info with better styling */}
                                                                 {((pkg.submissionLimit > 0 || pkg.submissionDurationDays > 0) && (
-                                                                    <div className="relative bg-primary-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-primary-400/20">
+                                                                    <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-purple-700/50">
                                                                         <div className="flex items-center justify-center gap-2 mb-2">
-                                                                            <FiPackage className="text-accent" />
-                                                                            <span className="text-accent font-semibold text-sm">Submission Details</span>
+                                                                            <FiPackage className="text-amber-400" />
+                                                                            <span className="text-amber-400 font-semibold text-base">Submission Details</span>
                                                                         </div>
                                                                         <div className="space-y-2">
                                                                             {pkg.submissionLimit > 0 && (
-                                                                                <div className="flex items-center justify-center text-primary-200 text-sm">
-                                                                                    <span className="font-medium text-primary-100">Limit:</span>
-                                                                                    <span className="ml-2 px-2 py-1 bg-accent/20 rounded-full text-accent font-semibold">
+                                                                                <div className="flex items-center justify-center text-primary-100 text-base">
+                                                                                    <span className="font-medium text-primary-200">Limit:</span>
+                                                                                    <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
                                                                                         {pkg.submissionLimit} names
                                                                                     </span>
                                                                                 </div>
                                                                             )}
                                                                             {pkg.submissionDurationDays > 0 && (
-                                                                                <div className="flex items-center justify-center text-primary-200 text-sm">
-                                                                                    <span className="font-medium text-primary-100">Duration:</span>
-                                                                                    <span className="ml-2 px-2 py-1 bg-primary-600/30 rounded-full text-primary-200">
+                                                                                <div className="flex items-center justify-center text-primary-100 text-base">
+                                                                                    <span className="font-medium text-primary-200">Duration:</span>
+                                                                                    <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-purple-300 text-base">
                                                                                         {pkg.submissionDurationDays} days
                                                                                     </span>
                                                                                 </div>
@@ -268,10 +267,10 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
 
                                                                 {/* Enhanced Package Description for Signature Series */}
                                                                 {isSignatureSeries && !isPersonalCategory && pkg.description && (
-                                                                    <div className="relative bg-gradient-to-r from-primary-700/40 to-primary-600/40 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-primary-400/20">
+                                                                    <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-amber-700/50">
                                                                         <div className="flex items-start gap-3">
-                                                                            <FiZap className="text-accent mt-1 flex-shrink-0" size={16} />
-                                                                            <p className="text-primary-200 text-sm leading-relaxed">
+                                                                            <FiZap className="text-amber-400 mt-1 flex-shrink-0" size={16} />
+                                                                            <p className="text-primary-100 text-sm leading-relaxed">
                                                                                 {pkg.description}
                                                                             </p>
                                                                         </div>
@@ -287,17 +286,15 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                             {pkg.deliverables && pkg.deliverables !== 'There is no Deliverables to input' && (
                                                                                 <div className="relative">
                                                                                     <div className="flex items-center gap-2 mb-3">
-                                                                                        <FiGift className="text-accent" size={18} />
-                                                                                        <span className="text-accent font-semibold text-sm">What You'll Receive</span>
+                                                                                        <FiGift className="text-purple-400" size={18} />
+                                                                                        <span className="text-purple-300 font-semibold text-sm">What You'll Receive</span>
                                                                                     </div>
-                                                                                    <div className="space-y-2">
+                                                                                    <div className="space-y-2 text-left items-start gap-3 bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50 hover:bg-purple-800/40 transition-all duration-300">
                                                                                         {pkg.deliverables.split('\n').map((deliverable, index) => (
                                                                                             deliverable.trim() && (
-                                                                                                <div key={index} className="group flex items-center gap-3 bg-primary-700/30 backdrop-blur-sm rounded-xl p-3 border border-primary-400/20 hover:bg-primary-600/40 transition-all duration-300">
-                                                                                                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-accent/20 to-accent/10 rounded-lg flex items-center justify-center border border-accent/30">
-                                                                                                        <span className="text-accent font-bold text-xs">{index + 1}</span>
-                                                                                                    </div>
-                                                                                                    <span className={`text-primary-200 ${isSignatureSeries ? 'text-sm' : 'text-xs'} leading-relaxed group-hover:text-primary-100 transition-colors duration-300`}>
+                                                                                                <div key={index} className="">
+
+                                                                                                    <span className={`text-primary-100 font-medium ${isSignatureSeries ? 'text-sm' : 'text-sm'} leading-relaxed group-hover:text-primary-50 transition-colors duration-300 flex-1`}>
                                                                                                         {deliverable.trim()}
                                                                                                     </span>
                                                                                                 </div>
@@ -309,15 +306,15 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
 
                                                                             {/* Enhanced collaborative features */}
                                                                             {!isSignatureSeries && pkg.submissionLimit > 0 && (
-                                                                                <div className="relative bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm rounded-xl p-4 border border-primary-400/20">
+                                                                                <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
                                                                                     <div className="flex items-center gap-3">
-                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center border border-blue-400/30">
+                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
                                                                                             <FiPackage className="text-blue-400" />
                                                                                         </div>
                                                                                         <div>
-                                                                                            <span className="text-primary-100 font-semibold text-sm">Your Creative Input</span>
-                                                                                            <p className={`text-primary-200 ${isSignatureSeries ? 'text-sm' : 'text-xs'} mt-1`}>
-                                                                                                Submit up to <span className="text-accent font-semibold">{pkg.submissionLimit}</span> names for our expert validation
+                                                                                            <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
+                                                                                            <p className={`text-primary-100 ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
+                                                                                                Submit up to <span className="text-purple-400 font-semibold">{pkg.submissionLimit}</span> names for our expert validation
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
@@ -326,14 +323,14 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
 
                                                                             {/* Enhanced expected outcome */}
                                                                             {pkg.expectedOutcome && pkg.expectedOutcome !== 'There is no Expected Outcome for this plan. ' && pkg.expectedOutcome !== 'There is no Expected Outcome' && (
-                                                                                <div className="relative bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-sm rounded-xl p-4 border border-green-400/20">
+                                                                                <div className="relative bg-green-900/30 backdrop-blur-sm rounded-xl p-4 border border-green-700/50">
                                                                                     <div className="flex items-center gap-3">
-                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg flex items-center justify-center border border-green-400/30">
+                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-green-800 to-emerald-800 rounded-lg flex items-center justify-center border border-green-600/50">
                                                                                             <FiTrendingUp className="text-green-400" />
                                                                                         </div>
                                                                                         <div>
-                                                                                            <span className="text-primary-100 font-semibold text-sm">Expected Results</span>
-                                                                                            <p className={`text-primary-200 ${isSignatureSeries ? 'text-sm' : 'text-xs'} mt-1`}>
+                                                                                            <span className="text-primary-50 font-semibold text-sm">Expected Results</span>
+                                                                                            <p className={`text-primary-100 ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
                                                                                                 {isSignatureSeries ? 'Complete Cosmic Blueprint analysis' : pkg.expectedOutcome}
                                                                                             </p>
                                                                                         </div>
@@ -343,30 +340,17 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
 
                                                                             {/* Enhanced verification features */}
                                                                             <div className="space-y-2">
-                                                                                <div className="flex items-center gap-3 bg-gradient-to-r from-accent/10 to-yellow-500/10 backdrop-blur-sm rounded-xl p-3 border border-accent/30">
-                                                                                    <FiShield className="text-accent flex-shrink-0" size={18} />
+                                                                                <div className="flex items-center gap-3 bg-amber-900/30 backdrop-blur-sm rounded-xl p-4 border border-amber-700/50">
+                                                                                    <FiShield className="text-amber-400 flex-shrink-0" size={18} />
                                                                                     <div>
-                                                                                        <span className="text-primary-100 font-semibold text-sm">Cosmic Verification</span>
-                                                                                        <p className={`text-primary-200 ${isSignatureSeries ? 'text-sm' : 'text-xs'} mt-1`}>
+
+                                                                                        <p className={`text-primary-100 ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
                                                                                             Every name is validated using Stellar Fortune principles
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
 
-                                                                                {/* Popular package bonuses */}
-                                                                                {pkg.isPopular && (
-                                                                                    <>
-                                                                                        <div className="flex items-center gap-3 bg-gradient-to-r from-accent/20 to-secondary/20 backdrop-blur-sm rounded-xl p-3 border border-accent/40">
-                                                                                            <FiAward className="text-accent flex-shrink-0" size={18} />
-                                                                                            <div>
-                                                                                                <span className="text-primary-100 font-semibold text-sm">Premium Benefits</span>
-                                                                                                <p className={`text-primary-200 ${isSignatureSeries ? 'text-sm' : 'text-xs'} mt-1`}>
-                                                                                                    Priority delivery + Brand energy analysis
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </>
-                                                                                )}
+
                                                                             </div>
                                                                         </div>
                                                                     )}
@@ -374,44 +358,44 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                     {/* Enhanced Personal & Nickname Solutions Features */}
                                                                     {category === 'Personal & Nickname Solutions' && (
                                                                         <div className="space-y-3">
-                                                                            <div className="relative bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm rounded-xl p-4 border border-purple-400/20">
+                                                                            <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50">
                                                                                 <div className="flex items-center gap-3">
-                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center border border-purple-400/30">
+                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-purple-800 to-pink-800 rounded-lg flex items-center justify-center border border-purple-600/50">
                                                                                         <FiGift className="text-purple-400" />
                                                                                     </div>
                                                                                     <div>
-                                                                                        <span className="text-primary-100 font-semibold text-sm">From Galaxy NameLab</span>
-                                                                                        <p className="text-primary-200 text-sm mt-1">{pkg.deliverables}</p>
+                                                                                        <span className="text-primary-50 font-semibold text-sm">From Galaxy NameLab</span>
+                                                                                        <p className="text-primary-100 text-sm mt-1">{pkg.deliverables}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div className="relative bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-sm rounded-xl p-4 border border-blue-400/20">
+                                                                            <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
                                                                                 <div className="flex items-center gap-3">
-                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg flex items-center justify-center border border-blue-400/30">
+                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-cyan-800 rounded-lg flex items-center justify-center border border-blue-600/50">
                                                                                         <FiPackage className="text-blue-400" />
                                                                                     </div>
                                                                                     <div>
-                                                                                        <span className="text-primary-100 font-semibold text-sm">From You</span>
-                                                                                        <p className="text-primary-200 text-sm mt-1">
+                                                                                        <span className="text-primary-50 font-semibold text-sm">From You</span>
+                                                                                        <p className="text-primary-100 text-sm mt-1">
                                                                                             {pkg.submissionLimit > 0
                                                                                                 ? `Submit ${pkg.submissionLimit} ideas for validation`
                                                                                                 : 'Submit unlimited ideas for validation'
                                                                                             }
-                                                                                            {pkg.expectedOutcome && <span className="block text-accent font-medium mt-1">Expected: {pkg.expectedOutcome}</span>}
+                                                                                            {pkg.expectedOutcome && <span className="block text-amber-400 font-medium mt-1">Expected: {pkg.expectedOutcome}</span>}
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
 
-                                                                            <div className="relative bg-gradient-to-r from-accent/20 to-yellow-500/20 backdrop-blur-sm rounded-xl p-4 border border-accent/40">
+                                                                            <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-xl p-4 border border-amber-700/50">
                                                                                 <div className="flex items-center gap-3">
-                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-accent/30 to-yellow-500/30 rounded-lg flex items-center justify-center border border-accent/50">
-                                                                                        <FiStar className="text-accent" />
+                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-amber-800 to-yellow-800 rounded-lg flex items-center justify-center border border-amber-600/50">
+                                                                                        <FiStar className="text-amber-400" />
                                                                                     </div>
                                                                                     <div>
-                                                                                        <span className="text-primary-100 font-semibold text-sm">Total Result</span>
-                                                                                        <p className="text-primary-200 text-sm mt-1">{pkg.description}</p>
+                                                                                        <span className="text-primary-50 font-semibold text-sm">Total Result</span>
+                                                                                        <p className="text-primary-100 text-sm mt-1">{pkg.description}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -421,14 +405,14 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                     {/* Default Features for other categories */}
                                                                     {category !== 'Business Naming Solutions' && category !== 'Personal & Nickname Solutions' && (
                                                                         <>
-                                                                            <div className="flex items-center text-primary-100">
-                                                                                <FiCheck className="text-accent mr-3 flex-shrink-0" size={18} />
-                                                                                <span className="text-primary-200">{pkg.deliverables}</span>
+                                                                            <div className="flex items-center text-primary-50">
+                                                                                <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
+                                                                                <span className="text-primary-100">{pkg.deliverables}</span>
                                                                             </div>
                                                                             {pkg.expectedOutcome && (
-                                                                                <div className="flex items-center text-primary-100">
-                                                                                    <FiCheck className="text-accent mr-3 flex-shrink-0" size={18} />
-                                                                                    <span className="text-primary-200">{pkg.expectedOutcome}</span>
+                                                                                <div className="flex items-center text-primary-50">
+                                                                                    <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
+                                                                                    <span className="text-primary-100">{pkg.expectedOutcome}</span>
                                                                                 </div>
                                                                             )}
                                                                         </>
@@ -439,9 +423,9 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                 <div className="mt-8 relative z-10">
                                                                     <Button
                                                                         className={`w-full relative overflow-hidden group ${pkg.isPopular
-                                                                            ? 'bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-primary-950 font-bold shadow-lg hover:shadow-accent/50'
-                                                                            : 'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-400 hover:to-primary-500 text-primary-100 font-semibold shadow-lg hover:shadow-primary-500/50'
-                                                                            } font-semibold py-3 px-6 rounded-full transition-all duration-500 transform hover:scale-105 hover:-translate-y-1`}
+                                                                            ? 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-900 font-bold shadow-lg hover:shadow-amber-400/50 text-lg py-4'
+                                                                            : 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-400 hover:to-purple-500 text-white font-semibold shadow-lg hover:shadow-purple-500/50 text-base py-3'
+                                                                            } font-semibold px-6 rounded-full transition-all duration-500 transform hover:scale-105 hover:-translate-y-1`}
                                                                         onClick={() => console.log(`Selected: ${pkg.name}`)}
                                                                     >
                                                                         <span className="relative z-10">Get Started</span>
@@ -464,78 +448,71 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                             ))}
 
                             {/* How It Works Section */}
-                            <motion.div
-                                variants={fadeUp}
-                                initial="hidden"
-                                animate="visible"
-                                custom={1.1}
-                                className="mb-20"
-                            >
-                                <div className="text-center mb-12">
-                                    <h3 className="text-3xl font-bold text-primary-100 mb-4">
+                            <div className="text-center w-full ">
+                                <motion.div
+                                    variants={fadeUp}
+                                    initial="hidden"
+                                    animate="visible"
+                                    custom={2.0}
+                                    className="mb-8"
+                                >
+                                    <h3 className="text-4xl font-bold text-primary-50 mb-8 bg-gradient-to-r from-purple-600 via-amber-600 to-purple-600 bg-clip-text text-transparent">
                                         How It Works
                                     </h3>
-                                    <p className="text-lg text-primary-200 max-w-3xl mx-auto">
-                                        Our proven process for discovering your perfect Stellar Fortune names
-                                    </p>
-                                </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {/* Step 1 */}
+                                        <motion.div
+                                            variants={fadeUp}
+                                            initial="hidden"
+                                            animate="visible"
+                                            custom={2.1}
+                                            className="bg-purple-900/30 backdrop-blur-sm rounded-2xl p-8 border border-purple-700/50 hover:border-amber-600/60 transition-all duration-300 group hover:scale-105"
+                                        >
+                                            <div className="text-5xl font-bold text-amber-600 mb-4">01</div>
+                                            <h4 className="text-xl font-bold text-primary-50 mb-4 group-hover:text-amber-400 transition-colors">
+                                                Stellar Analysis
+                                            </h4>
+                                            <p className="text-primary-100 text-base leading-relaxed">
+                                                We analyze your chart and provide your "Stellar Key Letters" (e.g., starts with A, B, C...)
+                                            </p>
+                                        </motion.div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                                    <motion.div
-                                        variants={fadeUp}
-                                        initial="hidden"
-                                        animate="visible"
-                                        custom={1.2}
-                                        className="text-center"
-                                    >
-                                        <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                            <span className="text-2xl font-bold text-primary-100">1</span>
-                                        </div>
-                                        <h4 className="text-xl font-semibold text-primary-100 mb-3">
-                                            We Analyze Your Chart
-                                        </h4>
-                                        <p className="text-primary-200">
-                                            We analyze your chart and provide your "Stellar Key Letters" (e.g., starts with A, B, C...).
-                                        </p>
-                                    </motion.div>
+                                        {/* Step 2 */}
+                                        <motion.div
+                                            variants={fadeUp}
+                                            initial="hidden"
+                                            animate="visible"
+                                            custom={2.2}
+                                            className="bg-purple-900/30 backdrop-blur-sm rounded-2xl p-8 border border-purple-700/50 hover:border-amber-600/60 transition-all duration-300 group hover:scale-105"
+                                        >
+                                            <div className="text-5xl font-bold text-amber-600 mb-4">02</div>
+                                            <h4 className="text-xl font-bold text-primary-50 mb-4 group-hover:text-amber-400 transition-colors">
+                                                Creative Generation
+                                            </h4>
+                                            <p className="text-primary-100 text-base leading-relaxed">
+                                                You generate a list of names using these letters
+                                            </p>
+                                        </motion.div>
 
-                                    <motion.div
-                                        variants={fadeUp}
-                                        initial="hidden"
-                                        animate="visible"
-                                        custom={1.3}
-                                        className="text-center"
-                                    >
-                                        <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                            <span className="text-2xl font-bold text-primary-100">2</span>
-                                        </div>
-                                        <h4 className="text-xl font-semibold text-primary-100 mb-3">
-                                            You Generate Names
-                                        </h4>
-                                        <p className="text-primary-200">
-                                            You generate a list of names using these letters based on your creative vision.
-                                        </p>
-                                    </motion.div>
-
-                                    <motion.div
-                                        variants={fadeUp}
-                                        initial="hidden"
-                                        animate="visible"
-                                        custom={1.4}
-                                        className="text-center"
-                                    >
-                                        <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                                            <span className="text-2xl font-bold text-primary-100">3</span>
-                                        </div>
-                                        <h4 className="text-xl font-semibold text-primary-100 mb-3">
-                                            We Audit & Verify
-                                        </h4>
-                                        <p className="text-primary-200">
-                                            We audit your list and identify the ones that are True Stellar Fortune Names.
-                                        </p>
-                                    </motion.div>
-                                </div>
-                            </motion.div>
+                                        {/* Step 3 */}
+                                        <motion.div
+                                            variants={fadeUp}
+                                            initial="hidden"
+                                            animate="visible"
+                                            custom={2.3}
+                                            className="bg-purple-900/30 backdrop-blur-sm rounded-2xl p-8 border border-purple-700/50 hover:border-amber-600/60 transition-all duration-300 group hover:scale-105"
+                                        >
+                                            <div className="text-5xl font-bold text-amber-600 mb-4">03</div>
+                                            <h4 className="text-xl font-bold text-primary-50 mb-4 group-hover:text-amber-400 transition-colors">
+                                                Fortune Audit
+                                            </h4>
+                                            <p className="text-primary-100 text-base leading-relaxed">
+                                                We audit your list and identify the ones that are True Stellar Fortune Names
+                                            </p>
+                                        </motion.div>
+                                    </div>
+                                </motion.div>
+                            </div>
                         </>
                     )}
                 </div>
