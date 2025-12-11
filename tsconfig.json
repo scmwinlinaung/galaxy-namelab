@@ -40,6 +40,9 @@
       ],
       "@utils/*": [
         "src/utils/*"
+      ],
+      "@api/*": [
+        "src/api/*"
       ]
       // Add any other aliases you need here
     },

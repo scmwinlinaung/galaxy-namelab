@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
         { to: '/', label: 'Home' },
         { to: '/business', label: 'Business' },
         { to: '/success', label: 'Success' },
-        { to: '/pricing', label: 'Pricing' },
+        { to: '/offerings', label: 'Offerings' },
         { to: '/contact', label: 'Contact' },
     ];
 
