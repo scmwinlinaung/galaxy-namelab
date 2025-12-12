@@ -165,7 +165,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                             <div key={path} className={hasMultiplePackages || !isSignatureSeries ? "mb-16" : ""}>
                                                 {/* Path Header - Only show if there are multiple paths or it's not the Personal category */}
                                                 {!isPersonalCategory && (Object.keys(paths).length > 1 || path) && (
-                                                    <div className="text-center mb-10">
+                                                    <div className="text-center mb-16">
                                                         <h4 className="text-3xl font-semibold text-white mb-4">{path}</h4>
                                                         <p className="text-lg text-white max-w-3xl mx-auto leading-relaxed">
                                                             {path.includes('Signature') || isSignatureSeries
