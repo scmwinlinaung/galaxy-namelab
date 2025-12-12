@@ -104,10 +104,10 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                     <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-amber-600 to-purple-600">
                         Our Offerings
                     </h1>
-                    <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-primary-200">
+                    <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-white">
                         Invest in Your Legacy
                     </h2>
-                    <p className="text-xl text-primary-100 leading-relaxed max-w-4xl mx-auto">
+                    <p className="text-xl text-white leading-relaxed max-w-4xl mx-auto">
                         Choose the path that aligns with your vision. Whether you want us to craft the perfect name or validate your own creative ideas, we ensure your brand resonates with Stellar Fortune energy.
                     </p>
                 </motion.div>
@@ -145,7 +145,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                         <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-amber-600 mb-6">
                                             {category}
                                         </h3>
-                                        <p className="text-xl text-primary-100 max-w-4xl mx-auto leading-relaxed font-light">
+                                        <p className="text-xl text-white max-w-4xl mx-auto leading-relaxed font-light">
                                             {category === 'Business Naming Solutions'
                                                 ? 'Professional naming services tailored to your business needs'
                                                 : category === 'Personal & Nickname Solutions'
@@ -165,9 +165,9 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                             <div key={path} className={hasMultiplePackages || !isSignatureSeries ? "mb-16" : ""}>
                                                 {/* Path Header - Only show if there are multiple paths or it's not the Personal category */}
                                                 {!isPersonalCategory && (Object.keys(paths).length > 1 || path) && (
-                                                    <div className="text-center mb-8">
-                                                        <h4 className="text-3xl font-semibold text-primary-200 mb-4">{path}</h4>
-                                                        <p className="text-lg text-primary-100 max-w-3xl mx-auto leading-relaxed">
+                                                    <div className="text-center mb-10">
+                                                        <h4 className="text-3xl font-semibold text-white mb-4">{path}</h4>
+                                                        <p className="text-lg text-white max-w-3xl mx-auto leading-relaxed">
                                                             {path.includes('Signature') || isSignatureSeries
                                                                 ? 'Best for: Entrepreneurs who want a "Done-For-You" service. We do the heavy lifting, calculating and crafting names that are 100% scientifically aligned with your Cosmic Blueprint.'
                                                                 : path.includes('Validator')
@@ -246,17 +246,17 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                         </div>
                                                                         <div className="space-y-2">
                                                                             {pkg.submissionLimit > 0 && (
-                                                                                <div className="flex items-center justify-center text-primary-100 text-base">
-                                                                                    <span className="font-medium text-primary-200">Limit:</span>
+                                                                                <div className="flex items-center justify-center text-white text-base">
+                                                                                    <span className="font-medium text-white">Limit:</span>
                                                                                     <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
                                                                                         {pkg.submissionLimit} names
                                                                                     </span>
                                                                                 </div>
                                                                             )}
                                                                             {pkg.submissionDurationDays > 0 && (
-                                                                                <div className="flex items-center justify-center text-primary-100 text-base">
-                                                                                    <span className="font-medium text-primary-200">Duration:</span>
-                                                                                    <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-purple-300 text-base">
+                                                                                <div className="flex items-center justify-center text-white text-base">
+                                                                                    <span className="font-medium text-white">Duration:</span>
+                                                                                    <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-white text-base">
                                                                                         {pkg.submissionDurationDays} days
                                                                                     </span>
                                                                                 </div>
@@ -270,7 +270,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                     <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-amber-700/50">
                                                                         <div className="flex items-start gap-3">
                                                                             <FiZap className="text-amber-400 mt-1 flex-shrink-0" size={16} />
-                                                                            <p className="text-primary-100 text-sm leading-relaxed">
+                                                                            <p className="text-white text-sm leading-relaxed">
                                                                                 {pkg.description}
                                                                             </p>
                                                                         </div>
@@ -287,14 +287,14 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                                 <div className="relative">
                                                                                     <div className="flex items-center gap-2 mb-3">
                                                                                         <FiGift className="text-purple-400" size={18} />
-                                                                                        <span className="text-purple-300 font-semibold text-sm">What You'll Receive</span>
+                                                                                        <span className="text-white font-semibold text-sm">What You'll Receive</span>
                                                                                     </div>
                                                                                     <div className="space-y-2 text-left items-start gap-3 bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50 hover:bg-purple-800/40 transition-all duration-300">
                                                                                         {pkg.deliverables.split('\n').map((deliverable, index) => (
                                                                                             deliverable.trim() && (
                                                                                                 <div key={index} className="">
 
-                                                                                                    <span className={`text-primary-100 font-medium ${isSignatureSeries ? 'text-sm' : 'text-sm'} leading-relaxed group-hover:text-primary-50 transition-colors duration-300 flex-1`}>
+                                                                                                    <span className={`text-white font-medium ${isSignatureSeries ? 'text-sm' : 'text-sm'} leading-relaxed group-hover:text-primary-50 transition-colors duration-300 flex-1`}>
                                                                                                         {deliverable.trim()}
                                                                                                     </span>
                                                                                                 </div>
@@ -313,7 +313,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                                         </div>
                                                                                         <div>
                                                                                             <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
-                                                                                            <p className={`text-primary-100 ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
+                                                                                            <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
                                                                                                 Submit up to <span className="text-purple-400 font-semibold">{pkg.submissionLimit}</span> names for our expert validation
                                                                                             </p>
                                                                                         </div>
@@ -330,7 +330,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                                         </div>
                                                                                         <div>
                                                                                             <span className="text-primary-50 font-semibold text-sm">Expected Results</span>
-                                                                                            <p className={`text-primary-100 ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
+                                                                                            <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
                                                                                                 {isSignatureSeries ? 'Complete Cosmic Blueprint analysis' : pkg.expectedOutcome}
                                                                                             </p>
                                                                                         </div>
@@ -344,7 +344,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                                     <FiShield className="text-amber-400 flex-shrink-0" size={18} />
                                                                                     <div>
 
-                                                                                        <p className={`text-primary-100 ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
+                                                                                        <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
                                                                                             Every name is validated using Stellar Fortune principles
                                                                                         </p>
                                                                                     </div>
@@ -365,7 +365,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                                     </div>
                                                                                     <div>
                                                                                         <span className="text-primary-50 font-semibold text-sm">From Galaxy NameLab</span>
-                                                                                        <p className="text-primary-100 text-sm mt-1">{pkg.deliverables}</p>
+                                                                                        <p className="text-white text-sm mt-1">{pkg.deliverables}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -377,7 +377,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                                     </div>
                                                                                     <div>
                                                                                         <span className="text-primary-50 font-semibold text-sm">From You</span>
-                                                                                        <p className="text-primary-100 text-sm mt-1">
+                                                                                        <p className="text-white text-sm mt-1">
                                                                                             {pkg.submissionLimit > 0
                                                                                                 ? `Submit ${pkg.submissionLimit} ideas for validation`
                                                                                                 : 'Submit unlimited ideas for validation'
@@ -395,7 +395,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                                     </div>
                                                                                     <div>
                                                                                         <span className="text-primary-50 font-semibold text-sm">Total Result</span>
-                                                                                        <p className="text-primary-100 text-sm mt-1">{pkg.description}</p>
+                                                                                        <p className="text-white text-sm mt-1">{pkg.description}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -407,12 +407,12 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                         <>
                                                                             <div className="flex items-center text-primary-50">
                                                                                 <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
-                                                                                <span className="text-primary-100">{pkg.deliverables}</span>
+                                                                                <span className="text-white">{pkg.deliverables}</span>
                                                                             </div>
                                                                             {pkg.expectedOutcome && (
                                                                                 <div className="flex items-center text-primary-50">
                                                                                     <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
-                                                                                    <span className="text-primary-100">{pkg.expectedOutcome}</span>
+                                                                                    <span className="text-white">{pkg.expectedOutcome}</span>
                                                                                 </div>
                                                                             )}
                                                                         </>
@@ -472,7 +472,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                             <h4 className="text-xl font-bold text-primary-50 mb-4 group-hover:text-amber-400 transition-colors">
                                                 Stellar Analysis
                                             </h4>
-                                            <p className="text-primary-100 text-base leading-relaxed">
+                                            <p className="text-white text-base leading-relaxed">
                                                 We analyze your chart and provide your "Stellar Key Letters" (e.g., starts with A, B, C...)
                                             </p>
                                         </motion.div>
@@ -489,7 +489,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                             <h4 className="text-xl font-bold text-primary-50 mb-4 group-hover:text-amber-400 transition-colors">
                                                 Creative Generation
                                             </h4>
-                                            <p className="text-primary-100 text-base leading-relaxed">
+                                            <p className="text-white text-base leading-relaxed">
                                                 You generate a list of names using these letters
                                             </p>
                                         </motion.div>
@@ -506,7 +506,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                             <h4 className="text-xl font-bold text-primary-50 mb-4 group-hover:text-amber-400 transition-colors">
                                                 Fortune Audit
                                             </h4>
-                                            <p className="text-primary-100 text-base leading-relaxed">
+                                            <p className="text-white text-base leading-relaxed">
                                                 We audit your list and identify the ones that are True Stellar Fortune Names
                                             </p>
                                         </motion.div>
