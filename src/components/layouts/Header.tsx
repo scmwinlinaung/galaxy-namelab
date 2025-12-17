@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
+import { NAVIGATION, ANIMATION } from '../../constants';
 
 interface HeaderProps {
     isLoginModalOpen: boolean;
@@ -13,13 +14,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-    const navLinks = [
-        { to: '/', label: 'Home' },
-        { to: '/business', label: 'Business' },
-        { to: '/success', label: 'Success' },
-        { to: '/offerings', label: 'Offerings' },
-        { to: '/contact', label: 'Contact' },
-    ];
+    const navLinks = NAVIGATION.ITEMS;
 
     const handleLoginClick = () => {
         setIsLoginModalOpen(true);
@@ -58,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                         onClick={handleLoginClick}
                         className="ml-6 border border-primary-400 text-primary-400 px-4 py-1.5 rounded-full hover:bg-primary-400 hover:text-white transition-all duration-300 font-semibold"
                     >
-                        Login
+                        {NAVIGATION.LOGIN_BUTTON}
                     </button>
                 </div>
 
@@ -68,19 +63,19 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                 <button
                     onClick={toggleMenu}
                     className="md:hidden text-white hover:text-primary-300 transition-colors duration-300"
-                    aria-label="Toggle menu"
+                    aria-label={NAVIGATION.MENU_TOGGLE_ARIA_LABEL}
                 >
-                    {isMenuOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
+                    {isMenuOpen ? <FiX className="w-8 h-8" /> : <FiMenu className="w-8 h-8" />}
                 </button>
             </nav>
 
             {/* Mobile Navigation Menu */}
             {isMenuOpen && (
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
+                    initial={ANIMATION.VARIANTS.SLIDE.INITIAL}
+                    animate={ANIMATION.VARIANTS.SLIDE.ANIMATE}
+                    exit={ANIMATION.VARIANTS.SLIDE.EXIT}
+                    transition={ANIMATION.VARIANTS.SLIDE.TRANSITION}
                     className="md:hidden mt-4 bg-primary-900/95 backdrop-blur-md rounded-2xl p-4 border border-primary-600/30"
                 >
                     <nav className="flex flex-col space-y-4 text-lg">

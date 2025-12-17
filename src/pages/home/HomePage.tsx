@@ -6,15 +6,7 @@ import { FiArrowRight, FiStar, FiCheckCircle, FiTrendingUp } from 'react-icons/f
 import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import Section from '@components/ui/Section';
-
-const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (delay = 0) => ({
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.8, delay, ease: "easeOut" as const },
-    }),
-};
+import { ANIMATION, IMAGES } from '../../constants';
 
 interface HomePageProps {
     isLoginModalOpen: boolean;
@@ -33,7 +25,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                 <div className="max-w-6xl mx-auto text-center">
                     <motion.h1
                         className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
-                        variants={fadeUp}
+                        variants={ANIMATION.VARIANTS.FADE_UP}
                         initial="hidden"
                         animate="visible"
                     >
@@ -42,7 +34,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     </motion.h1>
                     <motion.p
                         className="text-xl md:text-2xl mb-12 text-purple-200 max-w-4xl mx-auto"
-                        variants={fadeUp}
+                        variants={ANIMATION.VARIANTS.FADE_UP}
                         initial="hidden"
                         animate="visible"
                         custom={0.2}
@@ -56,13 +48,13 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             <Section variant="light">
                 <motion.div
                     className="flex flex-col md:flex-row items-center gap-12"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
                 >
                     <div className="md:w-1/2">
-                        <img src="/Horoscope.jpg" alt="Astrology Chart" className="rounded-lg shadow-2xl w-full" />
+                        <img src={IMAGES.HOROSCOPE} alt="Astrology Chart" className="rounded-lg shadow-2xl w-full" />
                     </div>
                     <div className="md:w-1/2">
                         <h2 className="text-4xl font-bold mb-4 text-gray-900">Beyond Numerology. Beyond Traditional Astrology.</h2>
@@ -81,7 +73,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             <Section variant="dark">
                 <motion.div
                     className="text-center mb-16"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -92,7 +84,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="grid md:grid-cols-2 gap-12"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -114,7 +106,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="mt-12 text-center"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -133,7 +125,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             <Section variant="light">
                 <motion.div
                     className="text-center mb-16"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -144,7 +136,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="grid md:grid-cols-2 gap-8 mb-12"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -152,7 +144,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                 >
                     <div className="bg-primary-100 border-2 border-primary-300 rounded-lg p-6">
                         <div className="flex items-center gap-2 mb-4">
-                            <FiTrendingUp className="text-primary-600 text-2xl" />
+                            <FiTrendingUp className="text-primary-600 text-4xl" />
                             <h3 className="text-xl font-bold text-primary-800">90% Dominance</h3>
                         </div>
                         <p className="text-gray-700">
@@ -161,7 +153,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     </div>
                     <div className="bg-primary-100 border-2 border-primary-300 rounded-lg p-6">
                         <div className="flex items-center gap-2 mb-4">
-                            <FiStar className="text-primary-600 text-2xl" />
+                            <FiStar className="text-primary-600 text-4xl" />
                             <h3 className="text-xl font-bold text-primary-800">10% Minority</h3>
                         </div>
                         <p className="text-gray-700">
@@ -172,7 +164,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="bg-primary-50 border-2 border-primary-200 rounded-lg p-6 mb-12"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -186,13 +178,13 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="bg-gray-100 rounded-lg p-8 border border-gray-300"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
                     custom={0.6}
                 >
-                    <img src="/Logos.jpg" alt="Stellar Fortune Brands" className="rounded-lg mb-6 w-full" />
+                    <img src={IMAGES.LOGOS} alt="Stellar Fortune Brands" className="rounded-lg mb-6 w-full" />
                     <h3 className="text-2xl font-bold mb-4 text-gray-900">Stellar Fortune Names dominate the global market:</h3>
                     <p className="text-lg leading-relaxed text-gray-700">
                         Apple, Microsoft, Google, YouTube, TikTok, Tesla, Rolex, Mercedes, SpaceX, X, Dell, Amazon, Toyota, Samsung, Honda, Walmart, Facebook, Meta, Mitsubishi.
@@ -207,13 +199,13 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             <Section variant="dark">
                 <motion.div
                     className="flex flex-col md:flex-row items-center gap-12"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
                 >
                     <div className="md:w-1/2">
-                        <img src="/People.jpg" alt="Business Success" className="rounded-lg shadow-2xl w-full" />
+                        <img src={IMAGES.PEOPLE} alt="Business Success" className="rounded-lg shadow-2xl w-full" />
                     </div>
                     <div className="md:w-1/2">
                         <h2 className="text-4xl font-bold mb-4">Serendipity vs. Design</h2>
@@ -240,7 +232,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             {/* Honest Disclaimer Section */}
             <Section variant="light">
                 <motion.div
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -269,7 +261,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
             <Section variant="dark">
                 <motion.div
                     className="text-center mb-16"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -280,7 +272,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="grid md:grid-cols-2 gap-12 items-center mb-16"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -302,7 +294,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8 mb-16"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -321,7 +313,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                 </motion.div>
 
                 <motion.div
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -332,28 +324,28 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     </div>
                     <div className="grid md:grid-cols-2 gap-6">
                         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                            <FiCheckCircle className="text-3xl text-primary-400 mb-4" />
+                            <FiCheckCircle className="text-5xl text-primary-400 mb-4" />
                             <h4 className="text-xl font-bold mb-2 text-white">Entrepreneurs & Business Owners</h4>
                             <p className="text-primary-200">
                                 You might have the perfect business name, but YOU are the captain of the ship. If your personal vibration is weak or misaligned (like Steve Jobs), you become the "bottleneck" to your own company's growth.
                             </p>
                         </div>
                         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                            <FiCheckCircle className="text-3xl text-primary-400 mb-4" />
+                            <FiCheckCircle className="text-5xl text-primary-400 mb-4" />
                             <h4 className="text-xl font-bold mb-2 text-white">Professionals & Employees</h4>
                             <p className="text-primary-200">
                                 Shift your career trajectory from stagnant to soaring. Attract promotions, raises, and unexpected opportunities.
                             </p>
                         </div>
                         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                            <FiCheckCircle className="text-3xl text-primary-400 mb-4" />
+                            <FiCheckCircle className="text-5xl text-primary-400 mb-4" />
                             <h4 className="text-xl font-bold mb-2 text-white">Personal Brands & Influencers</h4>
                             <p className="text-primary-200">
                                 Create a handle or stage name that magnetizes followers and fame.
                             </p>
                         </div>
                         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                            <FiCheckCircle className="text-3xl text-primary-400 mb-4" />
+                            <FiCheckCircle className="text-5xl text-primary-400 mb-4" />
                             <h4 className="text-xl font-bold mb-2 text-white">Children</h4>
                             <p className="text-primary-200">
                                 Give your child a "head start" in life with a nickname that fosters intelligence, charisma, and harmony.
@@ -364,7 +356,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="mt-12 bg-primary-400 text-primary-950 rounded-lg p-8 text-center"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -379,7 +371,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
                 <motion.div
                     className="mt-16 text-center"
-                    variants={fadeUp}
+                    variants={ANIMATION.VARIANTS.FADE_UP}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}

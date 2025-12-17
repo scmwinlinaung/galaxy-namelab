@@ -4,15 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiCalendar, FiStar, FiMoon, FiSun, FiX } from 'react-icons/fi';
 
 import Button from '@components/ui/Button';
-
-const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (delay = 0) => ({
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.8, delay, ease: "easeOut" as const },
-    }),
-};
+import { ANIMATION, VALIDATION, FORM_TEXT, MODAL_TEXT } from '../../constants';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -36,23 +28,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         const newErrors: Record<string, string> = {};
 
         if (!formData.email) {
-            newErrors.email = 'Email is required';
+            newErrors.email = VALIDATION.MESSAGES.EMAIL.REQUIRED;
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email is invalid';
+            newErrors.email = VALIDATION.MESSAGES.EMAIL.INVALID;
         }
 
         if (!formData.password) {
-            newErrors.password = 'Password is required';
+            newErrors.password = VALIDATION.MESSAGES.PASSWORD.REQUIRED;
         } else if (formData.password.length < 8) {
-            newErrors.password = 'Password must be at least 8 characters';
+            newErrors.password = VALIDATION.MESSAGES.PASSWORD.MIN_LENGTH;
         }
 
         if (!isLogin) {
             if (!formData.name) {
-                newErrors.name = 'Name is required';
+                newErrors.name = VALIDATION.MESSAGES.NAME.REQUIRED;
             }
             if (!formData.birthdate) {
-                newErrors.birthdate = 'Birthdate is required for cosmic insights';
+                newErrors.birthdate = VALIDATION.MESSAGES.BIRTHDATE.REQUIRED;
             }
         }
 
@@ -128,7 +120,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                 className="absolute top-4 right-4 text-primary-300 hover:text-white transition-colors duration-300"
                                 aria-label="Close modal"
                             >
-                                <FiX className="w-6 h-6" />
+                                <FiX className="w-8 h-8" />
                             </button>
 
                             {/* Cosmic Icons */}
@@ -137,23 +129,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                     animate={{ rotate: 360 }}
                                     transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
                                 >
-                                    <FiSun className="text-3xl text-yellow-400" />
+                                    <FiSun className="text-5xl text-yellow-400" />
                                 </motion.div>
                                 <h1 className="text-3xl font-bold text-primary-100">
-                                    {isLogin ? 'Welcome Back' : 'Join the Cosmos'}
+                                    {isLogin ? MODAL_TEXT.WELCOME.LOGIN : MODAL_TEXT.WELCOME.REGISTER}
                                 </h1>
                                 <motion.div
                                     animate={{ rotate: -360 }}
-                                    transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                                    transition={{ repeat: Infinity, duration: ANIMATION.DURATIONS.SLOW, ease: "linear" }}
                                 >
-                                    <FiMoon className="text-3xl text-blue-300" />
+                                    <FiMoon className="text-5xl text-blue-300" />
                                 </motion.div>
                             </div>
 
                             <p className="text-primary-200 mb-8">
                                 {isLogin
-                                    ? 'Continue your cosmic naming journey'
-                                    : 'Start your journey to discover the perfect name'
+                                    ? MODAL_TEXT.SUBTITLE.LOGIN
+                                    : MODAL_TEXT.SUBTITLE.REGISTER
                                 }
                             </p>
 
@@ -161,13 +153,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                 {/* Name Field (Registration Only) */}
                                 {!isLogin && (
                                     <div className="relative">
-                                        <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-300 text-xl" />
+                                        <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-300 text-2xl" />
                                         <input
                                             type="text"
                                             name="name"
                                             value={formData.name}
                                             onChange={handleInputChange}
-                                            placeholder="Your full name"
+                                            placeholder={FORM_TEXT.PLACEHOLDERS.NAME}
                                             className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${
                                                 errors.name
                                                     ? 'border-red-500 focus:border-red-400'
@@ -182,13 +174,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
 
                                 {/* Email Field */}
                                 <div className="relative">
-                                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-300 text-xl" />
+                                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-300 text-2xl" />
                                     <input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        placeholder="Email address"
+                                        placeholder={FORM_TEXT.PLACEHOLDERS.EMAIL}
                                         className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${
                                             errors.email
                                                 ? 'border-red-500 focus:border-red-400'

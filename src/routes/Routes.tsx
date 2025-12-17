@@ -1,11 +1,12 @@
 // src/routes.tsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ROUTES } from '../constants';
 import HomePage from '../pages/home/HomePage';
 import ContactInfoPage from '../pages/contact/ContactInfoPage';
-import BusinessPage from '../pages/business/BusinessPage';
 import SuccessPage from '../pages/success/SuccessPage';
-import OfferingsPage from '../pages/offerings/OfferingsPage';
+import PricingPage from '../pages/pricing/PricingPage';
+import InsightPage from '../pages/insights/InsightPage';
 
 interface AppRoutesProps {
     isLoginModalOpen: boolean;
@@ -16,11 +17,11 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ isLoginModalOpen, setIsLoginModal
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HomePage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
-                <Route path="/business" element={<BusinessPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
-                <Route path="/success" element={<SuccessPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
-                <Route path="/offerings" element={<OfferingsPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
-                <Route path="/contact" element={<ContactInfoPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+                <Route path={ROUTES.HOME} element={<HomePage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+                <Route path={ROUTES.INSIGHT} element={<InsightPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+                <Route path={ROUTES.SUCCESS} element={<SuccessPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+                <Route path={ROUTES.PRICING} element={<PricingPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+                <Route path={ROUTES.CONTACT} element={<ContactInfoPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
             </Routes>
         </Router>
     );

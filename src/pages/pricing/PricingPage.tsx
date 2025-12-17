@@ -1,4 +1,4 @@
-// src/pages/offerings/OfferingsPage.tsx
+// src/pages/pricing/PricingPage.tsx
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiStar, FiCheck, FiX, FiPackage, FiZap, FiGift, FiShield, FiTrendingUp, FiAward } from 'react-icons/fi';
@@ -20,12 +20,12 @@ const fadeUp = {
     }),
 };
 
-interface OfferingsPageProps {
+interface PricingPageProps {
     isLoginModalOpen: boolean;
     setIsLoginModalOpen: (open: boolean) => void;
 }
 
-const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
+const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
     const [packages, setPackages] = useState<Package[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -102,7 +102,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                     className="w-full max-w-5xl mb-12 mt-10 bg-primary-900/50 backdrop-blur-md rounded-3xl p-8 border border-primary-800 shadow-2xl"
                 >
                     <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-amber-600 to-purple-600">
-                        Our Offerings
+                        Our Pricing
                     </h1>
                     <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-white">
                         Invest in Your Legacy
@@ -227,7 +227,7 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
                                                                         : isPersonalCategory
                                                                             ? 'text-2xl'
                                                                             : 'text-xl'
-                                                                        }`}>{pkg.name.replace(' – MOST POPULAR', '')}</h5>
+                                                                        }`}>{pkg.name?.replace(' – MOST POPULAR', '') || 'Package'}</h5>
                                                                     <div className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${pkg.isPopular
                                                                         ? 'from-amber-600 to-orange-600'
                                                                         : 'from-purple-600 to-purple-500'
@@ -521,4 +521,4 @@ const OfferingsPage: React.FC<OfferingsPageProps> = ({ isLoginModalOpen, setIsLo
     );
 };
 
-export default OfferingsPage;
+export default PricingPage;
