@@ -25,7 +25,7 @@ const billionaires = [
         entities: "Tesla, SpaceX, X",
         netWorth: "$460.4 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/elon_musk.jpg",
+        image: "/elon_musk.jpg",
         color: "from-blue-600 to-purple-700",
         analysis: {
             blueprint: "Born under Capricorn Ascendant with chart ruler Saturn in 3rd House. Exalted Jupiter aspects Saturn, creating massive expansion of efforts.",
@@ -43,7 +43,7 @@ const billionaires = [
         entities: "Amazon",
         netWorth: "$241.5 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/jeff_bezos.jpg",
+        image: "/jeff_bezos.jpg",
         color: "from-orange-600 to-amber-700",
         analysis: {
             blueprint: "Capricorn Ascendant. 2nd Lord Saturn in 9th House aspects 11th House, creating 'Dhana Yoga' connecting wealth with divine luck.",
@@ -59,7 +59,7 @@ const billionaires = [
         entities: "Microsoft",
         netWorth: "$104.5 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/bill_gates.jpg",
+        image: "/bill_gates.jpg",
         color: "from-cyan-600 to-blue-700",
         analysis: {
             blueprint: "Cancer Ascendant. Moon and Venus in 'Parivartana' (exchange) creating infinite wealth loop. Fortuner Planet in 9th House.",
@@ -75,7 +75,7 @@ const billionaires = [
         entities: "Dell Technologies",
         netWorth: "$146.5 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/michael_dell.jpg",
+        image: "/michael_dell.jpg",
         color: "from-green-600 to-emerald-700",
         analysis: {
             blueprint: "Virgo Ascendant. Venus in 11th House forms 'Dhana Yoga' with Mars. Fortuner Planet in 11th House.",
@@ -91,7 +91,7 @@ const billionaires = [
         entities: "Google, YouTube",
         netWorth: "$265 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/larry_page.jpg",
+        image: "/larry_page.jpg",
         color: "from-red-600 to-pink-700",
         analysis: {
             blueprint: "Cancer Ascendant. Exalted Jupiter on Ascendant (Hamsa Yoga). Fortuner Planet in 11th House.",
@@ -108,7 +108,7 @@ const billionaires = [
         entities: "Google, YouTube",
         netWorth: "$244 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/sergey_brin.jpg",
+        image: "/sergey_brin.jpg",
         color: "from-indigo-600 to-purple-700",
         analysis: {
             blueprint: "Leo Ascendant. Mars and Mercury on Ascendant create 'Raja Yoga' and 'Dhana Yoga'. Fortuner Planet in 11th House.",
@@ -125,7 +125,7 @@ const billionaires = [
         entities: "Facebook, Meta",
         netWorth: "$218 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/mark_zukerberg.jpg",
+        image: "/mark_zukerberg.jpg",
         color: "from-blue-600 to-cyan-700",
         analysis: {
             blueprint: "Capricorn Ascendant. Rare 3rd + 11th Lord alignment by placement. Fortuner Planet in 11th House.",
@@ -142,7 +142,7 @@ const billionaires = [
         entities: "ByteDance, TikTok",
         netWorth: "$69.3 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/zhang_yiming.jpg",
+        image: "/zhang_yiming.jpg",
         color: "from-pink-600 to-rose-700",
         analysis: {
             blueprint: "Sagittarius Ascendant. Jupiter-Mars 'Parivartana Yoga' creates perpetual growth loop. Fortuner Planet in 11th House.",
@@ -159,7 +159,7 @@ const billionaires = [
         entities: "Global Music Icon",
         netWorth: "$1.6 Billion",
         grade: "⭐⭐⭐⭐ (4-Star / Grade A+)",
-        image: "/src/assets/taylor_swift.jpg",
+        image: "/taylor_swift.jpg",
         color: "from-purple-600 to-pink-700",
         analysis: {
             blueprint: "Sagittarius Ascendant. Jupiter on Ascendant. Fortuner Planet in 10th House (Fame).",
@@ -175,7 +175,7 @@ const billionaires = [
         entities: "The King of Pop",
         netWorth: "~$1 Billion (Career Earnings)",
         grade: "⭐⭐⭐ (3-Star / Flawed Structure)",
-        image: "/src/assets/michael_jackson.jpg",
+        image: "/michael_jackson.jpg",
         color: "from-gray-600 to-slate-700",
         analysis: {
             blueprint: "Taurus Ascendant. Saturn and Venus in 1st House create massive 'Raja Yoga'. Fortuner Planet in 10th House.",
@@ -191,7 +191,7 @@ const billionaires = [
         entities: "Apple, iPhone, iOS",
         netWorth: "$8.3 Billion (at time of death)",
         grade: "⚠️ CRITICAL MISMATCH (Dissonant Structure)",
-        image: "/src/assets/steve_jobs.jpg",
+        image: "/steve_jobs.jpg",
         color: "from-slate-600 to-gray-800",
         analysis: {
             blueprint: "Powerful birth chart with strong planetary positions.",
@@ -208,7 +208,7 @@ const billionaires = [
         entities: "Apple Inc.",
         netWorth: "$2.6 Billion",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/tim_cook.jpg",
+        image: "/tim_cook.jpg",
         color: "from-blue-600 to-indigo-700",
         analysis: {
             blueprint: "Virgo Ascendant. Mercury-Mars exchange creates natural Sextile energy. Fortuner Planet in 11th House.",
@@ -224,7 +224,7 @@ const billionaires = [
         entities: "Founder, People's Republic of China",
         netWorth: "Historical Legacy",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/src/assets/mao_zedong.jpg",
+        image: "/mao_zedong.jpg",
         color: "from-red-700 to-red-900",
         analysis: {
             blueprint: "Cancer Ascendant. Mars on Ascendant creates 'Yogakaraka' (King-Maker). Fortuner Planet in 10th House.",

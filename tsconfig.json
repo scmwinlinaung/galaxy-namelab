@@ -29,10 +29,7 @@
       "@components/*": [
         "src/components/*"
       ],
-      "@assets/*": [
-        "src/assets/*"
-      ],
-      "@styles/*": [
+        "@styles/*": [
         "src/styles/*"
       ],
       "@pages/*": [
