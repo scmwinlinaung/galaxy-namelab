@@ -36,5 +36,5 @@ export const CELEBRITY_IMAGES = {
   MICHAEL_JACKSON: '/michael_jackson.jpg',
   STEVE_JOBS: '/steve_jobs.jpg',
   TIM_COOK: '/tim_cook.jpg',
-  MAO_ZEDONG: '/mao_zedong.jpg',
-} as const;
+MAO_ZEDONG: '/mao_zedong.jpg',
+  } as const;
