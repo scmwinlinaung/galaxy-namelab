@@ -51,9 +51,12 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
         fetchPackages();
     }, []);
 
+    // Sort packages by displayOrder
+    const sortedPackages = [...packages].sort((a, b) => a.displayOrder - b.displayOrder);
+
     // Group packages by category dynamically
-    const packagesByCategory = packages.reduce((acc, pkg) => {
-        const category = pkg.category || 'Other';
+    const packagesByCategory = sortedPackages.reduce((acc, pkg) => {
+        const category = pkg.categoryName || 'Other';
         if (!acc[category]) {
             acc[category] = [];
         }
@@ -64,7 +67,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
     // Group packages by path within each category if paths exist
     const packagesByPath = Object.entries(packagesByCategory).reduce((acc, [category, categoryPackages]) => {
         const pathGroups = categoryPackages.reduce((pathAcc, pkg) => {
-            const path = pkg.path || 'Default';
+            const path = pkg.plan?.name || 'Default';
             if (!pathAcc[path]) {
                 pathAcc[path] = [];
             }
@@ -193,10 +196,10 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                             initial="hidden"
                                                             animate="visible"
                                                             custom={0.3 + categoryIndex * 0.3 + pathIndex * 0.1 + pkgIndex * 0.1}
-                                                            className={`relative ${pkg.isPopular ? 'scale-105' : ''
+                                                            className={`relative ${pkg.plan?.isPopular ? 'scale-105' : ''
                                                                 } transition-all duration-300 hover:-translate-y-1 flex flex-col`}
                                                         >
-                                                            {pkg.isPopular && (
+                                                            {pkg.plan?.isPopular && (
                                                                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
                                                                     <span className="bg-gradient-to-r from-amber-400 to-orange-400 text-slate-900 px-6 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse">
                                                                         MOST POPULAR
@@ -204,20 +207,20 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                 </div>
                                                             )}
 
-                                                            <div className={`h-full relative overflow-hidden group ${pkg.isPopular
+                                                            <div className={`h-full relative overflow-hidden group ${pkg.plan?.isPopular
                                                                 ? 'bg-gradient-to-br from-amber-900/30 via-purple-900/30 to-primary-900/50 hover:from-amber-900/20 hover:via-purple-900/20 hover:to-primary-900/30'
                                                                 : 'bg-gradient-to-br from-purple-900/30 via-amber-900/30 to-primary-900/50 hover:from-purple-900/20 hover:via-amber-900/20 hover:to-primary-900/30'
-                                                                } rounded-3xl p-8 border-2 ${pkg.isPopular ? 'border-amber-600/50' : 'border-primary-700/50'} shadow-xl hover:shadow-2xl backdrop-blur-sm hover:scale-105 transition-all duration-500 flex flex-col`}>
+                                                                } rounded-3xl p-8 border-2 ${pkg.plan?.isPopular ? 'border-amber-600/50' : 'border-primary-700/50'} shadow-xl hover:shadow-2xl backdrop-blur-sm hover:scale-105 transition-all duration-500 flex flex-col`}>
 
                                                                 {/* Enhanced background effects */}
                                                                 <div className="absolute inset-0 bg-gradient-to-t from-purple-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                                {pkg.isPopular && (
+                                                                {pkg.plan?.isPopular && (
                                                                     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-600/20 to-transparent rounded-full blur-2xl"></div>
                                                                 )}
 
                                                                 {/* Header with improved styling */}
                                                                 <div className="relative text-center mb-6">
-                                                                    {pkg.isPopular && (
+                                                                    {pkg.plan?.isPopular && (
                                                                         <div className="flex justify-center mb-4">
                                                                             <MdWorkspacePremium className="text-amber-600 text-3xl animate-pulse drop-shadow-lg" />
                                                                         </div>
@@ -227,46 +230,50 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                         : isPersonalCategory
                                                                             ? 'text-2xl'
                                                                             : 'text-xl'
-                                                                        }`}>{pkg.name?.replace(' – MOST POPULAR', '') || 'Package'}</h5>
-                                                                    <div className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${pkg.isPopular
-                                                                        ? 'from-amber-600 to-orange-600'
-                                                                        : 'from-purple-600 to-purple-500'
-                                                                        } mb-3 ${isSignatureSeries && !isPersonalCategory || isPersonalCategory
-                                                                            ? 'text-5xl'
-                                                                            : 'text-4xl'
-                                                                        } drop-shadow-lg`}>${pkg.price}</div>
+                                                                        }`}>{pkg.plan?.name || 'Package'}</h5>
+                                                                    <div className={`font-semibold text-white mb-3 text-lg opacity-80`}>
+                                                                        {pkg.plan?.code || 'PREMIUM'}
+                                                                    </div>
                                                                 </div>
 
                                                                 {/* Enhanced Submission Info with better styling */}
-                                                                {((pkg.submissionLimit > 0 || pkg.submissionDurationDays > 0) && (
+                                                                {(pkg.submissionPolicy && (pkg.submissionPolicy.maxNamesPerSubmission !== 0 || pkg.submissionPolicy.submissionWindowDays)) && (
                                                                     <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-purple-700/50">
                                                                         <div className="flex items-center justify-center gap-2 mb-2">
                                                                             <FiPackage className="text-amber-400" />
                                                                             <span className="text-amber-400 font-semibold text-base">Submission Details</span>
                                                                         </div>
                                                                         <div className="space-y-2">
-                                                                            {pkg.submissionLimit > 0 && (
+                                                                            {pkg.submissionPolicy.maxNamesPerSubmission !== 0 && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && (
                                                                                 <div className="flex items-center justify-center text-white text-base">
                                                                                     <span className="font-medium text-white">Limit:</span>
                                                                                     <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
-                                                                                        {pkg.submissionLimit} names
+                                                                                        {pkg.submissionPolicy.maxNamesPerSubmission} names
                                                                                     </span>
                                                                                 </div>
                                                                             )}
-                                                                            {pkg.submissionDurationDays > 0 && (
+                                                                            {pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
+                                                                                <div className="flex items-center justify-center text-white text-base">
+                                                                                    <span className="font-medium text-white">Limit:</span>
+                                                                                    <span className="ml-2 px-3 py-1 bg-green-800/50 rounded-full text-green-300 font-semibold text-base">
+                                                                                        Unlimited names
+                                                                                    </span>
+                                                                                </div>
+                                                                            )}
+                                                                            {pkg.submissionPolicy.submissionWindowDays && pkg.submissionPolicy.submissionWindowDays > 0 && (
                                                                                 <div className="flex items-center justify-center text-white text-base">
                                                                                     <span className="font-medium text-white">Duration:</span>
                                                                                     <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-white text-base">
-                                                                                        {pkg.submissionDurationDays} days
+                                                                                        {pkg.submissionPolicy.submissionWindowDays} days
                                                                                     </span>
                                                                                 </div>
                                                                             )}
                                                                         </div>
                                                                     </div>
-                                                                ))}
+                                                                )}
 
-                                                                {/* Enhanced Package Description for Signature Series */}
-                                                                {isSignatureSeries && !isPersonalCategory && pkg.description && (
+                                                                {/* Enhanced Package Description */}
+                                                                {pkg.description && (
                                                                     <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-amber-700/50">
                                                                         <div className="flex items-start gap-3">
                                                                             <FiZap className="text-amber-400 mt-1 flex-shrink-0" size={16} />
@@ -282,30 +289,8 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                     {/* Business Naming Solutions Features */}
                                                                     {category === 'Business Naming Solutions' && (
                                                                         <div className="space-y-3">
-                                                                            {/* Enhanced deliverables section */}
-                                                                            {pkg.deliverables && pkg.deliverables !== 'There is no Deliverables to input' && (
-                                                                                <div className="relative">
-                                                                                    <div className="flex items-center gap-2 mb-3">
-                                                                                        <FiGift className="text-purple-400" size={18} />
-                                                                                        <span className="text-white font-semibold text-sm">What You'll Receive</span>
-                                                                                    </div>
-                                                                                    <div className="space-y-2 text-left items-start gap-3 bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50 hover:bg-purple-800/40 transition-all duration-300">
-                                                                                        {pkg.deliverables.split('\n').map((deliverable, index) => (
-                                                                                            deliverable.trim() && (
-                                                                                                <div key={index} className="">
-
-                                                                                                    <span className={`text-white font-medium ${isSignatureSeries ? 'text-sm' : 'text-sm'} leading-relaxed group-hover:text-primary-50 transition-colors duration-300 flex-1`}>
-                                                                                                        {deliverable.trim()}
-                                                                                                    </span>
-                                                                                                </div>
-                                                                                            )
-                                                                                        ))}
-                                                                                    </div>
-                                                                                </div>
-                                                                            )}
-
                                                                             {/* Enhanced collaborative features */}
-                                                                            {!isSignatureSeries && pkg.submissionLimit > 0 && (
+                                                                            {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0 && (
                                                                                 <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
                                                                                     <div className="flex items-center gap-3">
                                                                                         <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
@@ -314,7 +299,22 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                                         <div>
                                                                                             <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
                                                                                             <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
-                                                                                                Submit up to <span className="text-purple-400 font-semibold">{pkg.submissionLimit}</span> names for our expert validation
+                                                                                                Submit up to <span className="text-purple-400 font-semibold">{pkg.submissionPolicy.maxNamesPerSubmission}</span> names for our expert validation
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
+                                                                            {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
+                                                                                <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
+                                                                                    <div className="flex items-center gap-3">
+                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
+                                                                                            <FiPackage className="text-blue-400" />
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
+                                                                                            <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
+                                                                                                Submit <span className="text-green-400 font-semibold">unlimited</span> names for our expert validation
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
@@ -365,7 +365,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                                     </div>
                                                                                     <div>
                                                                                         <span className="text-primary-50 font-semibold text-sm">From Galaxy NameLab</span>
-                                                                                        <p className="text-white text-sm mt-1">{pkg.deliverables}</p>
+                                                                                        <p className="text-white text-sm mt-1">Expert suggestions crafted by our naming specialists</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -378,8 +378,8 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                                     <div>
                                                                                         <span className="text-primary-50 font-semibold text-sm">From You</span>
                                                                                         <p className="text-white text-sm mt-1">
-                                                                                            {pkg.submissionLimit > 0
-                                                                                                ? `Submit ${pkg.submissionLimit} ideas for validation`
+                                                                                            {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0
+                                                                                                ? `Submit ${pkg.submissionPolicy.maxNamesPerSubmission} ideas for validation`
                                                                                                 : 'Submit unlimited ideas for validation'
                                                                                             }
                                                                                             {pkg.expectedOutcome && <span className="block text-amber-400 font-medium mt-1">Expected: {pkg.expectedOutcome}</span>}
@@ -395,7 +395,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                                     </div>
                                                                                     <div>
                                                                                         <span className="text-primary-50 font-semibold text-sm">Total Result</span>
-                                                                                        <p className="text-white text-sm mt-1">{pkg.description}</p>
+                                                                                        <p className="text-white text-sm mt-1">{pkg.expectedOutcome || 'Complete analysis and validation'}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -405,10 +405,6 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                     {/* Default Features for other categories */}
                                                                     {category !== 'Business Naming Solutions' && category !== 'Personal & Nickname Solutions' && (
                                                                         <>
-                                                                            <div className="flex items-center text-primary-50">
-                                                                                <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
-                                                                                <span className="text-white">{pkg.deliverables}</span>
-                                                                            </div>
                                                                             {pkg.expectedOutcome && (
                                                                                 <div className="flex items-center text-primary-50">
                                                                                     <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
@@ -422,15 +418,15 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                 {/* Enhanced Button Container - Always at bottom */}
                                                                 <div className="mt-8 relative z-10">
                                                                     <Button
-                                                                        className={`w-full relative overflow-hidden group ${pkg.isPopular
+                                                                        className={`w-full relative overflow-hidden group ${pkg.plan?.isPopular
                                                                             ? 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-900 font-bold shadow-lg hover:shadow-amber-400/50 text-lg py-4'
                                                                             : 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-400 hover:to-purple-500 text-white font-semibold shadow-lg hover:shadow-purple-500/50 text-base py-3'
                                                                             } font-semibold px-6 rounded-full transition-all duration-500 transform hover:scale-105 hover:-translate-y-1`}
-                                                                        onClick={() => console.log(`Selected: ${pkg.name}`)}
+                                                                        onClick={() => console.log(`Selected: ${pkg.plan?.name}`)}
                                                                     >
                                                                         <span className="relative z-10">Get Started</span>
                                                                         <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                                        {pkg.isPopular && (
+                                                                        {pkg.plan?.isPopular && (
                                                                             <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
                                                                                 <MdWorkspacePremium className="text-primary-900/60 text-sm animate-pulse" />
                                                                             </div>

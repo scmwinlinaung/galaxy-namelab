@@ -25,20 +25,20 @@ import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import Section from '@components/ui/Section';
 
-// Import images
-import elonMuskImage from '/elon_musk.jpg';
-import jeffBezosImage from '/jeff_bezos.jpg';
-import billGatesImage from '/bill_gates.jpg';
-import taylorSwiftImage from '/taylor_swift.jpg';
-import michaelJacksonImage from '/michael_jackson.jpg';
-import steveJobsImage from '/steve_jobs.jpg';
-import michaelDellImage from '/michael_dell.jpg';
-import larryPageImage from '/larry_page.jpg';
-import sergeyBrinImage from '/sergey_brin.jpg';
-import markZuckerbergImage from '/mark_zukerberg.jpg';
-import zhangYimingImage from '/zhang_yiming.jpg';
-import timCookImage from '/tim_cook.jpg';
-import maoZedongImage from '/mao_zedong.jpg';
+// Import images using dynamic imports
+const elonMuskImage = '/elon_musk.jpg';
+const jeffBezosImage = '/jeff_bezos.jpg';
+const billGatesImage = '/bill_gates.jpg';
+const taylorSwiftImage = '/taylor_swift.jpg';
+const michaelJacksonImage = '/michael_jackson.jpg';
+const steveJobsImage = '/steve_jobs.jpg';
+const michaelDellImage = '/michael_dell.jpg';
+const larryPageImage = '/larry_page.jpg';
+const sergeyBrinImage = '/sergey_brin.jpg';
+const markZuckerbergImage = '/mark_zukerberg.jpg';
+const zhangYimingImage = '/zhang_yiming.jpg';
+const timCookImage = '/tim_cook.jpg';
+const maoZedongImage = '/mao_zedong.jpg';
 
 const fadeUp = {
     hidden: { opacity: 0, y: 30 },
@@ -830,7 +830,7 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                     className="text-center mb-8"
                 >
                     <p className="text-xl md:text-xl font-bold mb-6 text-white text-center">
-                        Showing <span className="font-bold text-white">{filteredAndSortedBillionaires.length}</span> Titans
+                        Showing <span className="font-bold text-yellow-400">{filteredAndSortedBillionaires.length}</span> Titans
                     </p>
                 </motion.div>
 

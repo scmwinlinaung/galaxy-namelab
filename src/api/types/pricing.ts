@@ -1,16 +1,26 @@
 export interface Package {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
-  path: string;
+  _id: string;
   isPopular: boolean;
-  deliverables: string;
-  submissionLimit: number;
-  submissionDurationDays: number;
+  status: string;
+  categoryCode: string;
+  categoryName: string;
+  plan: {
+    code: string;
+    name: string;
+    isPopular: boolean;
+  };
+  submissionPolicy: {
+    totalSubmissions: number | string;
+    maxNamesPerSubmission: number | string;
+    submissionFormat: string;
+    submissionWindowDays?: number;
+  };
   expectedOutcome: string;
+  description: string;
+  displayOrder: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum PackageCategory {
