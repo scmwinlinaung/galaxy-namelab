@@ -25,6 +25,21 @@ import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import Section from '@components/ui/Section';
 
+// Import images
+import elonMuskImage from '/elon_musk.jpg';
+import jeffBezosImage from '/jeff_bezos.jpg';
+import billGatesImage from '/bill_gates.jpg';
+import taylorSwiftImage from '/taylor_swift.jpg';
+import michaelJacksonImage from '/michael_jackson.jpg';
+import steveJobsImage from '/steve_jobs.jpg';
+import michaelDellImage from '/michael_dell.jpg';
+import larryPageImage from '/larry_page.jpg';
+import sergeyBrinImage from '/sergey_brin.jpg';
+import markZuckerbergImage from '/mark_zukerberg.jpg';
+import zhangYimingImage from '/zhang_yiming.jpg';
+import timCookImage from '/tim_cook.jpg';
+import maoZedongImage from '/mao_zedong.jpg';
+
 const fadeUp = {
     hidden: { opacity: 0, y: 30 },
     visible: (delay = 0) => ({
@@ -69,7 +84,7 @@ const billionaires = [
         entities: "Tesla, SpaceX, X",
         netWorth: "$460.4 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/elon_musk.jpg",
+        image: elonMuskImage,
         color: "from-blue-600 to-purple-700",
         category: "tech",
         analysis: {
@@ -120,7 +135,7 @@ const billionaires = [
         entities: "Amazon",
         netWorth: "$241.5 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/jeff_bezos.jpg",
+        image: jeffBezosImage,
         color: "from-orange-600 to-amber-700",
         category: "tech",
         analysis: {
@@ -162,7 +177,7 @@ const billionaires = [
         entities: "Microsoft",
         netWorth: "$104.5 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/bill_gates.jpg",
+        image: billGatesImage,
         color: "from-cyan-600 to-blue-700",
         category: "tech",
         analysis: {
@@ -208,7 +223,7 @@ const billionaires = [
         entities: "Global Music Icon",
         netWorth: "$1.6 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐ (4-Star / Grade A+)",
-        image: "/taylor_swift.jpg",
+        image: taylorSwiftImage,
         color: "from-purple-600 to-pink-700",
         category: "entertainment",
         analysis: {
@@ -249,7 +264,7 @@ const billionaires = [
         entities: "The King of Pop",
         netWorth: "~$1 Billion (Career Earnings), left with ~$500M Debt at death.",
         grade: "⭐⭐⭐ (3-Star / Flawed Structure)",
-        image: "/michael_jackson.jpg",
+        image: michaelJacksonImage,
         color: "from-gray-600 to-slate-700",
         category: "entertainment",
         analysis: {
@@ -296,7 +311,7 @@ const billionaires = [
         entities: "Apple, iPhone, iOS",
         netWorth: "$8.3 Billion (at time of death in 2011)",
         grade: "⚠️ CRITICAL MISMATCH (Dissonant Structure)",
-        image: "/steve_jobs.jpg",
+        image: steveJobsImage,
         color: "from-slate-600 to-gray-800",
         category: "tech",
         analysis: {
@@ -341,7 +356,7 @@ const billionaires = [
         entities: "Dell Technologies",
         netWorth: "$146.5 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/michael_dell.jpg",
+        image: michaelDellImage,
         color: "from-green-600 to-teal-700",
         category: "tech",
         analysis: {
@@ -388,7 +403,7 @@ const billionaires = [
         entities: "Google, YouTube",
         netWorth: "$265 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/larry_page.jpg",
+        image: larryPageImage,
         color: "from-blue-600 to-indigo-700",
         category: "tech",
         analysis: {
@@ -436,7 +451,7 @@ const billionaires = [
         entities: "Google, YouTube",
         netWorth: "$244 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/sergey_brin.jpg",
+        image: sergeyBrinImage,
         color: "from-purple-600 to-blue-700",
         category: "tech",
         analysis: {
@@ -483,7 +498,7 @@ const billionaires = [
         entities: "Facebook, Meta",
         netWorth: "$218 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/mark_zukerberg.jpg",
+        image: markZuckerbergImage,
         color: "from-blue-600 to-cyan-700",
         category: "tech",
         analysis: {
@@ -531,7 +546,7 @@ const billionaires = [
         entities: "ByteDance, TikTok",
         netWorth: "$69.3 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/zhang_yiming.jpg",
+        image: zhangYimingImage,
         color: "from-red-600 to-pink-700",
         category: "tech",
         analysis: {
@@ -578,7 +593,7 @@ const billionaires = [
         entities: "Apple Inc.",
         netWorth: "$2.6 Billion (Nov 2025 Estimate)",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/tim_cook.jpg",
+        image: timCookImage,
         color: "from-gray-700 to-slate-800",
         category: "tech",
         analysis: {
@@ -620,7 +635,7 @@ const billionaires = [
         entities: "People's Republic of China",
         netWorth: "Establishing a Global Superpower",
         grade: "⭐⭐⭐⭐⭐ (5-Star / Grade A++)",
-        image: "/mao_zedong.jpg",
+        image: maoZedongImage,
         color: "from-red-800 to-red-900",
         category: "politics",
         analysis: {
@@ -724,225 +739,86 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
         <PageWrapper>
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
 
-            {/* Hero Section with Modern Design */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-                {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-                    <div className="absolute inset-0 bg-black/20"></div>
-                    {/* Floating elements animation */}
-                    <motion.div
-                        animate={{
-                            y: [0, -30, 0],
-                            rotate: [0, 5, 0],
-                        }}
-                        transition={{
-                            duration: 6,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                        className="absolute top-20 left-10 w-20 h-20 bg-yellow-400/20 rounded-full blur-xl"
-                    />
-                    <motion.div
-                        animate={{
-                            x: [0, 40, 0],
-                            y: [0, -20, 0],
-                        }}
-                        transition={{
-                            duration: 8,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                        className="absolute bottom-20 right-10 w-32 h-32 bg-blue-400/20 rounded-full blur-xl"
-                    />
-                    <motion.div
-                        animate={{
-                            x: [0, -30, 0],
-                            y: [0, 30, 0],
-                        }}
-                        transition={{
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                        className="absolute top-1/2 left-1/4 w-24 h-24 bg-purple-400/20 rounded-full blur-xl"
-                    />
+            {/* Main Content Section */}
+            <main className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 text-white relative overflow-hidden">
+                {/* Background Elements */}
+                <div className="absolute inset-0">
+                    <div className="absolute top-0 left-0 w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl animate-pulse"></div>
+                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-slate-900/90"></div>
                 </div>
 
-                {/* Hero Content */}
-                <div className="relative z-10 max-w-6xl mx-auto text-center px-4 md:px-8 py-20">
-                    <motion.div
-                        // @ts-ignore
-                        // @ts-ignore
-                        variants={fadeUp}
-                        initial="hidden"
-                        animate="visible"
-                        custom={0.1}
-                    >
-                        <div className="mb-8">
-                            <motion.div
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-full px-6 py-3 mb-6"
-                            >
-                                <FiAward className="w-6 h-6 text-yellow-300" />
-                                <span className="text-white font-semibold">Cosmic Analysis of Success</span>
-                            </motion.div>
-                        </div>
-
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight">
-                            <span className="bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
-                                Stellar Fortune
-                            </span>
-                            <br />
-                            <span className="text-white">Titans</span>
-                        </h1>
-
-                        <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: "200px" }}
-                            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-                            className="h-1 bg-gradient-to-r from-yellow-400 to-pink-400 mx-auto mb-8"
-                        />
-
-                        <motion.p
-                            // @ts-ignore
-                            variants={fadeUp}
-                            initial="hidden"
-                            animate="visible"
-                            custom={0.7}
-                            className="text-xl md:text-2xl lg:text-3xl text-purple-200 leading-relaxed max-w-5xl mx-auto mb-12"
-                        >
-                            Discover the cosmic secrets behind history's most successful individuals.
-                            <br className="hidden md:block" />
-                            From tech billionaires to cultural icons, explore how <span className="text-yellow-300 font-semibold">Stellar Fortune Names</span>
-                            <br className="hidden md:block" />
-                            and celestial blueprints shaped extraordinary destinies.
-                        </motion.p>
-
-                        <motion.div
-                            // @ts-ignore
-                            variants={fadeUp}
-                            initial="hidden"
-                            animate="visible"
-                            custom={0.9}
-                            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-                        >
-                            <motion.button
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 py-4 rounded-full font-bold text-lg shadow-2xl hover:shadow-yellow-400/50 transition-all duration-300"
-                                onClick={() => document.getElementById('titans-section')?.scrollIntoView({ behavior: 'smooth' })}
-                            >
-                                Explore the Titans
-                            </motion.button>
-                            <motion.button
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition-all duration-300"
-                            >
-                                Learn the Method
-                            </motion.button>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* Stats */}
+                <div className="relative z-10 container mx-auto px-6 py-12 max-w-6xl">
                     <motion.div
                         // @ts-ignore
                         variants={fadeUp}
                         initial="hidden"
-                        animate="visible"
-                        custom={1.1}
-                        className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-4xl mx-auto"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        custom={0.2}
+                        className="mb-12 mt-12"
                     >
-                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                            <div className="text-4xl font-bold text-yellow-300 mb-2">15+</div>
-                            <div className="text-white/80 font-medium">Titan Profiles</div>
-                        </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                            <div className="text-4xl font-bold text-green-300 mb-2">$5T+</div>
-                            <div className="text-white/80 font-medium">Combined Wealth</div>
-                        </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                            <div className="text-4xl font-bold text-blue-300 mb-2">100%</div>
-                            <div className="text-white/80 font-medium">Cosmic Alignment</div>
+                        <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 text-center">
+                            Titans of Success
+                        </h2>
+                        <div className="w-24 h-2 bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 mx-auto mb-8 rounded-full"></div>
+                        <p className="text-xl text-gray-300 max-w-4xl mx-auto text-center mb-16 leading-relaxed">
+                            Explore the cosmic alignment and name analysis of history's most successful individuals through the lens of stellar fortune and cosmic mathematics.
+                        </p>
+
+                        {/* Search and Filters */}
+                        <div className="max-w-3xl mx-auto space-y-6">
+                            {/* Search Bar */}
+                            <div className="relative">
+                                <FiSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                <input
+                                    type="text"
+                                    placeholder="Search by name, title, or company..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-14 pr-6 py-4 rounded-2xl border border-gray-700/50 bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 text-lg shadow-lg"
+                                />
+                            </div>
+
+                            {/* Category Filters */}
+                            <div className="flex flex-wrap gap-3 justify-center">
+                                {categories.map((category) => {
+                                    const Icon = category.icon;
+                                    return (
+                                        <motion.button
+                                            key={category.id}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={() => setSelectedCategory(category.id)}
+                                            className={`flex items-center gap-2 px-8 py-4 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category.id
+                                                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl shadow-purple-500/25 scale-105'
+                                                : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 border border-gray-700/50 backdrop-blur-sm'
+                                                }`}
+                                        >
+                                            <Icon className="w-4 h-4" />
+                                            {category.name}
+                                        </motion.button>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Sort Options */}
+                            <div className="flex justify-center">
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    className="px-8 py-4 rounded-2xl border border-gray-700/50 bg-gray-800/50 backdrop-blur-sm text-white focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 text-lg font-medium shadow-lg appearance-none cursor-pointer"
+                                >
+                                    {sortOptions.map((option) => (
+                                        <option key={option.id} value={option.id}>
+                                            {option.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                     </motion.div>
                 </div>
-            </section>
-
-            {/* Filter and Search Section */}
-
-            <Section variant="light" >
-                <motion.div
-                    // @ts-ignore
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    custom={0.2}
-                    className="mb-12"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 text-center">
-                        Titans of Success
-                    </h2>
-                    <div className="w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mb-6"></div>
-                    <p className="text-lg text-gray-600 max-w-3xl mx-auto text-center mb-12">
-                        Explore the cosmic alignment and name analysis of history's most successful individuals.
-                    </p>
-
-                    {/* Search and Filters */}
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        {/* Search Bar */}
-                        <div className="relative">
-                            <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <input
-                                type="text"
-                                placeholder="Search by name, title, or company..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300"
-                            />
-                        </div>
-
-                        {/* Category Filters */}
-                        <div className="flex flex-wrap gap-3 justify-center">
-                            {categories.map((category) => {
-                                const Icon = category.icon;
-                                return (
-                                    <motion.button
-                                        key={category.id}
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => setSelectedCategory(category.id)}
-                                        className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${selectedCategory === category.id
-                                            ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                            }`}
-                                    >
-                                        <Icon className="w-4 h-4" />
-                                        {category.name}
-                                    </motion.button>
-                                );
-                            })}
-                        </div>
-
-                        {/* Sort Options */}
-                        <div className="flex justify-center">
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                                className="px-6 py-3 rounded-2xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300"
-                            >
-                                {sortOptions.map((option) => (
-                                    <option key={option.id} value={option.id}>
-                                        {option.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                </motion.div>
-
                 {/* Results Count */}
                 <motion.div
                     // @ts-ignore
@@ -950,215 +826,218 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    custom={0.3}
+                    custom={0.2}
                     className="text-center mb-8"
                 >
-                    <p className="text-gray-600">
-                        Showing <span className="font-semibold text-purple-600">{filteredAndSortedBillionaires.length}</span> Titans
+                    <p className="text-xl md:text-xl font-bold mb-6 text-white text-center">
+                        Showing <span className="font-bold text-white">{filteredAndSortedBillionaires.length}</span> Titans
                     </p>
                 </motion.div>
 
                 {/* Billionaires Grid */}
                 <div className="space-y-12">
-                    <AnimatePresence>
-                        {filteredAndSortedBillionaires.map((person, index) => (
-                            <motion.div
-                                key={person.name}
-                                // @ts-ignore
-                                variants={scaleIn}
-                                initial="hidden"
-                                animate="visible"
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                viewport={{ once: true }}
-                                custom={0.5 + index * 0.1}
-                                className="group"
-                            >
-                                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 hover:shadow-3xl transition-all duration-500">
-                                    {/* Header Section */}
-                                    <div className={`relative bg-gradient-to-r ${person.color} p-8 md:p-12 text-white overflow-hidden`}>
-                                        {/* Background Pattern */}
-                                        <div className="absolute inset-0 opacity-10">
-                                            <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -mr-32 -mt-32"></div>
-                                            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full -ml-24 -mb-24"></div>
-                                        </div>
-
-                                        <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8">
-                                            <motion.div
-                                                whileHover={{ scale: 1.08, rotate: 2 }}
-                                                transition={{ duration: 0.3 }}
-                                                className="relative"
-                                            >
-                                                <div className="w-40 h-40 md:w-48 md:h-48 rounded-3xl overflow-hidden border-4 border-white/30 shadow-2xl">
-                                                    <img
-                                                        src={person.image}
-                                                        alt={person.name}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                </div>
-                                                {/* Grade Badge */}
-                                                <motion.div
-                                                    animate={{ rotate: [0, 5, -5, 0] }}
-                                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                                    className="absolute -top-2 -right-2 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold shadow-lg"
-                                                >
-                                                    {person.grade.split(' ')[0]}
-                                                </motion.div>
-                                            </motion.div>
-
-                                            <div className="flex-1 text-center lg:text-left">
-                                                <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3">{person.name}</h3>
-                                                <p className="text-xl text-white/90 mb-2 font-medium">{person.title}</p>
-                                                <p className="text-lg text-white/80 mb-3">{person.entities}</p>
-                                                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-4">
-                                                    <p className="text-2xl font-bold text-yellow-300">{person.netWorth}</p>
-                                                    <div className="flex items-center gap-2">
-                                                        <FiStar className="w-5 h-5 text-yellow-300" />
-                                                        <span className="text-lg font-semibold">{person.grade}</span>
-                                                    </div>
-                                                </div>
+                    <div className="max-w-6xl mx-auto">
+                        <AnimatePresence>
+                            {filteredAndSortedBillionaires.map((person, index) => (
+                                <motion.div
+                                    key={person.name}
+                                    // @ts-ignore
+                                    variants={scaleIn}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    viewport={{ once: true }}
+                                    custom={0.5 + index * 0.1}
+                                    className="group"
+                                >
+                                    <div className="bg-gray-900/60 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-800/50 hover:shadow-3xl hover:shadow-purple-900/20 transition-all duration-500 hover:-translate-y-1">
+                                        {/* Header Section */}
+                                        <div className={`relative bg-gradient-to-r ${person.color} p-8 md:p-12 text-white overflow-hidden`}>
+                                            {/* Background Pattern */}
+                                            <div className="absolute inset-0 opacity-20">
+                                                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
+                                                <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full filter blur-3xl"></div>
+                                                <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/20"></div>
                                             </div>
 
-                                            {/* Expand/Collapse Button */}
-                                            <motion.button
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.9 }}
-                                                onClick={() => toggleCardExpansion(person.name)}
-                                                className="lg:hidden bg-white/20 backdrop-blur-sm p-3 rounded-full"
-                                            >
-                                                {expandedCard === person.name ? (
-                                                    <FiChevronUp className="w-6 h-6" />
-                                                ) : (
-                                                    <FiChevronDown className="w-6 h-6" />
-                                                )}
-                                            </motion.button>
+                                            <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8">
+                                                <motion.div
+                                                    whileHover={{ scale: 1.08, rotate: 2 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="relative"
+                                                >
+                                                    <div className="w-40 h-40 md:w-48 md:h-48 rounded-2xl overflow-hidden border-4 border-white/30 shadow-2xl ring-4 ring-white/10">
+                                                        <img
+                                                            src={person.image}
+                                                            alt={person.name}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                    {/* Grade Badge */}
+                                                    <motion.div
+                                                        animate={{ rotate: [0, 5, -5, 0] }}
+                                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                                        className="absolute -top-3 -right-3 bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-4 py-2 rounded-full text-sm font-bold shadow-xl ring-2 ring-white/20"
+                                                    >
+                                                        {person.grade.split(' ')[0]}
+                                                    </motion.div>
+                                                </motion.div>
+
+                                                <div className="flex-1 text-center lg:text-left">
+                                                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4 text-white">{person.name}</h3>
+                                                    <p className="text-xl md:text-2xl text-white/90 mb-3 font-medium tracking-wide">{person.title}</p>
+                                                    <p className="text-lg md:text-xl text-white/80 mb-6 font-light">{person.entities}</p>
+                                                    <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 mb-8">
+                                                        <p className="text-3xl md:text-4xl font-black text-yellow-400">{person.netWorth}</p>
+                                                        <div className="flex items-center gap-3 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
+                                                            <FiStar className="w-6 h-6 text-yellow-400" />
+                                                            <span className="text-lg font-bold text-white">{person.grade}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Expand/Collapse Button */}
+                                                <motion.button
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    onClick={() => toggleCardExpansion(person.name)}
+                                                    className="lg:hidden bg-white/20 backdrop-blur-sm p-4 rounded-full hover:bg-white/30 transition-colors"
+                                                >
+                                                    {expandedCard === person.name ? (
+                                                        <FiChevronUp className="w-6 h-6" />
+                                                    ) : (
+                                                        <FiChevronDown className="w-6 h-6" />
+                                                    )}
+                                                </motion.button>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Analysis Section */}
-                                    <AnimatePresence>
-                                        {(expandedCard === person.name || window.innerWidth >= 1024) && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: "auto", opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.3 }}
-                                                className="overflow-hidden"
-                                            >
-                                                <div className="p-8 md:p-12 space-y-8">
-                                                    {/* Cosmic Blueprint */}
-                                                    <motion.div
-                                                        // @ts-ignore
-                                                        variants={slideInLeft}
-                                                        initial="hidden"
-                                                        animate="visible"
-                                                        custom={0.1}
-                                                        className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8 border-2 border-indigo-100 shadow-lg hover:shadow-xl transition-all duration-300"
-                                                    >
-                                                        <div className="flex items-center gap-4 mb-6">
-                                                            <div className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                                                                <FiTarget className="w-7 h-7 text-white" />
-                                                            </div>
-                                                            <div>
-                                                                <h4 className="text-2xl font-bold text-gray-900">{person.analysis.blueprint.title}</h4>
-                                                                <p className="text-gray-600 mt-1">{person.analysis.blueprint.content}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="space-y-4">
-                                                            {person.analysis.blueprint.details.map((detail, idx) => (
-                                                                <div key={idx} className="bg-white/70 rounded-xl p-4 leading-relaxed text-gray-700">
-                                                                    {detail}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </motion.div>
-
-                                                    {/* Name Analysis */}
-                                                    <motion.div
-                                                        // @ts-ignore
-                                                        variants={slideInRight}
-                                                        initial="hidden"
-                                                        animate="visible"
-                                                        custom={0.2}
-                                                        className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-8 border-2 border-amber-100 shadow-lg hover:shadow-xl transition-all duration-300"
-                                                    >
-                                                        <div className="flex items-center gap-4 mb-6">
-                                                            <div className="w-14 h-14 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                                                                <FiAward className="w-7 h-7 text-white" />
-                                                            </div>
-                                                            <div>
-                                                                <h4 className="text-2xl font-bold text-gray-900">{person.analysis.name.title}</h4>
-                                                                <p className="text-gray-600 mt-1">{person.analysis.name.content}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="space-y-4">
-                                                            {person.analysis.name.details.map((detail, idx) => (
-                                                                <div key={idx} className="bg-white/70 rounded-xl p-4 leading-relaxed text-gray-700">
-                                                                    {detail}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </motion.div>
-
-                                                    {/* Company Analysis */}
-                                                    <motion.div
-                                                        // @ts-ignore
-                                                        variants={slideInLeft}
-                                                        initial="hidden"
-                                                        animate="visible"
-                                                        custom={0.3}
-                                                        className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-3xl p-8 border-2 border-emerald-100 shadow-lg hover:shadow-xl transition-all duration-300"
-                                                    >
-                                                        <div className="flex items-center gap-4 mb-6">
-                                                            <div className="w-14 h-14 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center shadow-lg">
-                                                                <FiTrendingUp className="w-7 h-7 text-white" />
-                                                            </div>
-                                                            <div>
-                                                                <h4 className="text-2xl font-bold text-gray-900">{person.analysis.companies.title}</h4>
-                                                                <p className="text-gray-600 mt-1">{person.analysis.companies.subtitle}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="space-y-4">
-                                                            {person.analysis.companies.details.map((company, idx) => (
-                                                                <div key={idx} className="bg-white/70 rounded-xl p-6">
-                                                                    <div className="flex items-center justify-between mb-3">
-                                                                        <h5 className="font-bold text-gray-900 text-lg">{company.name}</h5>
-                                                                        <span className="text-sm font-medium text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full">
-                                                                            {company.vibration}
-                                                                        </span>
-                                                                    </div>
-                                                                    <p className="text-gray-700 leading-relaxed">{company.analysis}</p>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </motion.div>
-
-                                                    {/* Conclusion */}
-                                                    {person.analysis.conclusion && (
+                                        {/* Analysis Section */}
+                                        <AnimatePresence>
+                                            {(expandedCard === person.name || window.innerWidth >= 1024) && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: "auto", opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="p-8 md:p-12 space-y-8">
+                                                        {/* Cosmic Blueprint */}
                                                         <motion.div
-                                                            // @ts-ignore    
-                                                            variants={fadeUp}
+                                                            // @ts-ignore
+                                                            variants={slideInLeft}
                                                             initial="hidden"
                                                             animate="visible"
-                                                            custom={0.4}
-                                                            className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-8 text-white border border-gray-700"
+                                                            custom={0.1}
+                                                            className="bg-gradient-to-br from-blue-900/40 to-indigo-900/40 rounded-3xl p-12 border-2 border-blue-700/30 shadow-xl hover:shadow-2xl hover:shadow-blue-900/20 transition-all duration-300 backdrop-blur-sm hover:-translate-y-1"
                                                         >
-                                                            <h4 className="text-2xl font-bold mb-4 flex items-center gap-3">
-                                                                <FiZap className="w-6 h-6 text-yellow-400" />
-                                                                Conclusion
-                                                            </h4>
-                                                            <p className="text-gray-200 leading-relaxed text-lg">{person.analysis.conclusion}</p>
+                                                            <div className="flex items-center gap-4 mb-6">
+                                                                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-xl ring-4 ring-blue-500/20">
+                                                                    <FiTarget className="w-7 h-7 text-white" />
+                                                                </div>
+                                                                <div>
+                                                                    <h4 className="text-2xl font-bold text-white">{person.analysis.blueprint.title}</h4>
+                                                                    <p className="text-gray-300 mt-1 text-lg">{person.analysis.blueprint.content}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-4">
+                                                                {person.analysis.blueprint.details.map((detail, idx) => (
+                                                                    <div key={idx} className="bg-gray-800/60 rounded-xl p-6 leading-relaxed text-gray-200 backdrop-blur-sm border border-gray-700/30 hover:bg-gray-800/70 transition-colors">
+                                                                        {detail}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
                                                         </motion.div>
-                                                    )}
-                                                </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+
+                                                        {/* Name Analysis */}
+                                                        <motion.div
+                                                            // @ts-ignore
+                                                            variants={slideInRight}
+                                                            initial="hidden"
+                                                            animate="visible"
+                                                            custom={0.2}
+                                                            className="bg-gradient-to-br from-yellow-900/40 to-amber-900/40 rounded-3xl p-12 border-2 border-yellow-700/30 shadow-xl hover:shadow-2xl hover:shadow-yellow-900/20 transition-all duration-300 backdrop-blur-sm hover:-translate-y-1"
+                                                        >
+                                                            <div className="flex items-center gap-4 mb-6">
+                                                                <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-xl ring-4 ring-yellow-500/20">
+                                                                    <FiAward className="w-7 h-7 text-white" />
+                                                                </div>
+                                                                <div>
+                                                                    <h4 className="text-2xl font-bold text-white">{person.analysis.name.title}</h4>
+                                                                    <p className="text-gray-300 mt-1 text-lg">{person.analysis.name.content}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-4">
+                                                                {person.analysis.name.details.map((detail, idx) => (
+                                                                    <div key={idx} className="bg-gray-800/60 rounded-xl p-6 leading-relaxed text-gray-200 backdrop-blur-sm border border-gray-700/30 hover:bg-gray-800/70 transition-colors">
+                                                                        {detail}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </motion.div>
+
+                                                        {/* Company Analysis */}
+                                                        <motion.div
+                                                            // @ts-ignore
+                                                            variants={slideInLeft}
+                                                            initial="hidden"
+                                                            animate="visible"
+                                                            custom={0.3}
+                                                            className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 rounded-3xl p-12 border-2 border-green-700/30 shadow-xl hover:shadow-2xl hover:shadow-green-900/20 transition-all duration-300 backdrop-blur-sm hover:-translate-y-1"
+                                                        >
+                                                            <div className="flex items-center gap-4 mb-6">
+                                                                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-xl ring-4 ring-green-500/20">
+                                                                    <FiTrendingUp className="w-7 h-7 text-white" />
+                                                                </div>
+                                                                <div>
+                                                                    <h4 className="text-2xl font-bold text-white">{person.analysis.companies.title}</h4>
+                                                                    <p className="text-gray-300 mt-1 text-lg">{person.analysis.companies.subtitle}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-4">
+                                                                {person.analysis.companies.details.map((company, idx) => (
+                                                                    <div key={idx} className="bg-gray-800/60 rounded-xl p-8 border border-gray-700/30 hover:bg-gray-800/70 transition-colors backdrop-blur-sm">
+                                                                        <div className="flex items-center justify-between mb-4">
+                                                                            <h5 className="font-bold text-white text-xl">{company.name}</h5>
+                                                                            <span className="text-sm font-bold text-emerald-400 bg-emerald-900/50 px-4 py-2 rounded-full border border-emerald-700/50">
+                                                                                {company.vibration}
+                                                                            </span>
+                                                                        </div>
+                                                                        <p className="text-gray-200 leading-relaxed text-lg">{company.analysis}</p>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </motion.div>
+
+                                                        {/* Conclusion */}
+                                                        {person.analysis.conclusion && (
+                                                            <motion.div
+                                                                // @ts-ignore
+                                                                variants={fadeUp}
+                                                                initial="hidden"
+                                                                animate="visible"
+                                                                custom={0.4}
+                                                                className="bg-gradient-to-br from-purple-900/40 to-gray-900/40 rounded-3xl p-12 text-white border border-purple-700/30 backdrop-blur-sm hover:shadow-2xl hover:shadow-purple-900/20 transition-all duration-300"
+                                                            >
+                                                                <h4 className="text-3xl font-bold mb-6 flex items-center gap-4">
+                                                                    <FiZap className="w-8 h-8 text-yellow-400" />
+                                                                    Conclusion
+                                                                </h4>
+                                                                <p className="text-gray-200 leading-relaxed text-xl">{person.analysis.conclusion}</p>
+                                                            </motion.div>
+                                                        )}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </div>
                 </div>
-            </Section>
+            </main>
 
             {/* Conclusion Section */}
             <Section variant="dark">
@@ -1169,23 +1048,23 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                     whileInView="visible"
                     viewport={{ once: true }}
                     custom={0.1}
-                    className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-purple-600/30"
+                    className="bg-gradient-to-br from-indigo-900/60 to-blue-900/60 backdrop-blur-xl rounded-3xl p-12 md:p-16 border border-indigo-600/30 shadow-2xl"
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 text-center">
+                    <h2 className="text-4xl md:text-6xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-center">
                         The Universal Law of Success
                     </h2>
-                    <div className="w-16 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 mx-auto mb-8"></div>
+                    <div className="w-24 h-2 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 mx-auto mb-12 rounded-full"></div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                         <motion.div
                             whileHover={{ scale: 1.03, y: -5 }}
-                            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
+                            className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:shadow-white/10 hover:-translate-y-2"
                         >
-                            <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-4">
+                            <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-xl ring-4 ring-blue-400/20">
                                 <FiStar className="w-6 h-6 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-3">The 3rd + 11th Alignment</h3>
-                            <p className="text-gray-300 leading-relaxed">
+                            <h3 className="text-2xl font-bold text-white mb-4">The 3rd + 11th Alignment</h3>
+                            <p className="text-gray-300 leading-relaxed text-lg">
                                 The gold standard for unlimited success. Connects effort (3rd House) with massive gains (11th House),
                                 creating a perpetual engine of wealth and achievement.
                             </p>
@@ -1193,13 +1072,13 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
 
                         <motion.div
                             whileHover={{ scale: 1.03, y: -5 }}
-                            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
+                            className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:shadow-white/10 hover:-translate-y-2"
                         >
-                            <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center mb-4">
+                            <div className="w-16 h-16 bg-gradient-to-r from-indigo-400 to-blue-500 rounded-2xl flex items-center justify-center mb-6 shadow-xl ring-4 ring-indigo-400/20">
                                 <FiCompass className="w-6 h-6 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-3">Alignment is Everything</h3>
-                            <p className="text-gray-300 leading-relaxed">
+                            <h3 className="text-2xl font-bold text-white mb-4">Alignment is Everything</h3>
+                            <p className="text-gray-300 leading-relaxed text-lg">
                                 When birth chart, personal name, and business name synchronize, success becomes not just
                                 possible—it becomes inevitable.
                             </p>
@@ -1207,13 +1086,13 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
 
                         <motion.div
                             whileHover={{ scale: 1.03, y: -5 }}
-                            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
+                            className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:shadow-2xl hover:shadow-white/10 hover:-translate-y-2"
                         >
-                            <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mb-4">
+                            <div className="w-16 h-16 bg-gradient-to-r from-teal-400 to-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-xl ring-4 ring-teal-400/20">
                                 <FiShield className="w-6 h-6 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-3">Cosmic Mathematics</h3>
-                            <p className="text-gray-300 leading-relaxed">
+                            <h3 className="text-2xl font-bold text-white mb-4">Cosmic Mathematics</h3>
+                            <p className="text-gray-300 leading-relaxed text-lg">
                                 These titans prove the cosmic mathematics works. The numbers don't lie—alignment creates destiny.
                             </p>
                         </motion.div>
@@ -1226,15 +1105,15 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                         transition={{ delay: 0.5 }}
                         className="text-center"
                     >
-                        <p className="text-xl text-gray-200 leading-relaxed max-w-4xl mx-auto mb-8">
+                        <p className="text-2xl text-gray-200 leading-relaxed max-w-4xl mx-auto mb-12 font-light">
                             "The cosmos doesn't reward the lucky—it rewards the aligned. These stories prove that when
                             your name vibrates in harmony with your celestial blueprint, you don't chase success—success
                             finds you."
                         </p>
                         <motion.button
-                            whileHover={{ scale: 1.05 }}
+                            whileHover={{ scale: 1.05, boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.5)" }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 py-4 rounded-full font-bold text-lg shadow-2xl hover:shadow-yellow-400/50 transition-all duration-300"
+                            className="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 text-white px-12 py-6 rounded-full font-black text-xl shadow-2xl hover:shadow-blue-400/50 transition-all duration-300 ring-4 ring-blue-400/20 hover:ring-blue-400/40"
                         >
                             Discover Your Stellar Fortune
                         </motion.button>
