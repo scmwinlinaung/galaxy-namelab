@@ -20,9 +20,9 @@ export interface Package {
     generatedNames: number;
   };
   submissionPolicy: {
-    totalSubmissions: number | string;
-    maxNamesPerSubmission: number | string;
-    submissionFormat: string;
+    totalSubmissions?: number | string;
+    maxNamesPerSubmission?: number | string;
+    submissionFormat?: string;
     submissionWindowDays?: number;
   };
   expectedOutcome: string;

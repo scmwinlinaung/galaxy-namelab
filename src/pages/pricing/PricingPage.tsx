@@ -130,7 +130,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                     className="mb-20"
                                 >
                                     <div className="text-center mb-12">
-                                        <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-amber-600 mb-6">
+                                        <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-amber-600 mb-10">
                                             {category}
                                         </h3>
                                         <p className="text-xl text-white max-w-4xl mx-auto leading-relaxed font-light">
@@ -214,14 +214,34 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                     )}
 
                                                     {/* Enhanced Submission Info with better styling */}
-                                                    {(pkg.submissionPolicy && (pkg.submissionPolicy.maxNamesPerSubmission !== 0 || pkg.submissionPolicy.submissionWindowDays)) && (
+                                                    {(pkg.submissionPolicy && (
+                                                        (pkg.submissionPolicy.totalSubmissions !== undefined && pkg.submissionPolicy.totalSubmissions !== 0) ||
+                                                        (pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission !== 0)
+                                                    )) && (
                                                         <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-purple-700/50">
                                                             <div className="flex items-center justify-center gap-2 mb-2">
                                                                 <FiPackage className="text-amber-400" />
                                                                 <span className="text-amber-400 font-semibold text-base">Submission Details</span>
                                                             </div>
                                                             <div className="space-y-2">
-                                                                {pkg.submissionPolicy.maxNamesPerSubmission !== 0 && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && (
+                                                                {/* Total Submissions */}
+                                                                {pkg.submissionPolicy.totalSubmissions !== undefined && pkg.submissionPolicy.totalSubmissions !== 0 && (
+                                                                    <div className="flex items-center justify-center text-white text-base">
+                                                                        <span className="font-medium text-white">Submissions:</span>
+                                                                        <span className={`ml-2 px-3 py-1 rounded-full font-semibold text-base ${
+                                                                            pkg.submissionPolicy.totalSubmissions === 'UNLIMITED'
+                                                                                ? 'bg-green-800/50 text-green-300'
+                                                                                : 'bg-blue-800/50 text-blue-300'
+                                                                        }`}>
+                                                                            {pkg.submissionPolicy.totalSubmissions === 'UNLIMITED'
+                                                                                ? 'Unlimited submissions'
+                                                                                : `${pkg.submissionPolicy.totalSubmissions} submission${pkg.submissionPolicy.totalSubmissions > 1 ? 's' : ''}`
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                                {/* Max Names Per Submission */}
+                                                                {pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission !== 0 && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && (
                                                                     <div className="flex items-center justify-center text-white text-base">
                                                                         <span className="font-medium text-white">Limit:</span>
                                                                         <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
@@ -301,7 +321,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                 )}
 
                                                                 {/* Enhanced collaborative features */}
-                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0 && (
+                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0 && (
                                                                     <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
                                                                         <div className="flex items-center gap-3">
                                                                             <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
@@ -316,7 +336,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                         </div>
                                                                     </div>
                                                                 )}
-                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
+                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
                                                                     <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
                                                                         <div className="flex items-center gap-3">
                                                                             <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
@@ -411,7 +431,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                         <div>
                                                                             <span className="text-primary-50 font-semibold text-sm">From You</span>
                                                                             <p className="text-white text-sm mt-1">
-                                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0
+                                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0
                                                                                     ? `Submit ${pkg.submissionPolicy.maxNamesPerSubmission} ideas for validation`
                                                                                     : 'Submit unlimited ideas for validation'
                                                                                 }
