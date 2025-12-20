@@ -54,7 +54,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
     // Sort packages by displayOrder
     const sortedPackages = [...packages].sort((a, b) => a.displayOrder - b.displayOrder);
 
-    // Group packages by category dynamically
+    // Group packages by categoryCode only
     const packagesByCategory = sortedPackages.reduce((acc, pkg) => {
         const category = pkg.categoryName || 'Other';
         if (!acc[category]) {
@@ -63,21 +63,6 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
         acc[category].push(pkg);
         return acc;
     }, {} as Record<string, Package[]>);
-
-    // Group packages by path within each category if paths exist
-    const packagesByPath = Object.entries(packagesByCategory).reduce((acc, [category, categoryPackages]) => {
-        const pathGroups = categoryPackages.reduce((pathAcc, pkg) => {
-            const path = pkg.plan?.name || 'Default';
-            if (!pathAcc[path]) {
-                pathAcc[path] = [];
-            }
-            pathAcc[path].push(pkg);
-            return pathAcc;
-        }, {} as Record<string, Package[]>);
-
-        acc[category] = pathGroups;
-        return acc;
-    }, {} as Record<string, Record<string, Package[]>>);
     return (
         <PageWrapper>
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
@@ -135,7 +120,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                     {!loading && !error && packages.length > 0 && (
                         <>
                             {/* Dynamic Category Rendering */}
-                            {Object.entries(packagesByPath).map(([category, paths], categoryIndex) => (
+                            {Object.entries(packagesByCategory).map(([category, categoryPackages], categoryIndex) => (
                                 <motion.div
                                     key={category}
                                     variants={fadeUp}
@@ -158,288 +143,252 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                         </p>
                                     </div>
 
-                                    {/* Dynamic Path Rendering */}
-                                    {Object.entries(paths).map(([path, pathPackages], pathIndex) => {
-                                        const isSignatureSeries = path.includes('Signature') || category === 'Business Naming Solutions' && pathIndex === 0;
-                                        const isPersonalCategory = category === 'Personal & Nickname Solutions';
-                                        const hasMultiplePackages = pathPackages.length > 1;
-
-                                        return (
-                                            <div key={path} className={hasMultiplePackages || !isSignatureSeries ? "mb-16" : ""}>
-                                                {/* Path Header - Only show if there are multiple paths or it's not the Personal category */}
-                                                {!isPersonalCategory && (Object.keys(paths).length > 1 || path) && (
-                                                    <div className="text-center mb-16">
-                                                        <h4 className="text-3xl font-semibold text-white mb-4">{path}</h4>
-                                                        <p className="text-lg text-white max-w-3xl mx-auto leading-relaxed">
-                                                            {path.includes('Signature') || isSignatureSeries
-                                                                ? 'Best for: Entrepreneurs who want a "Done-For-You" service. We do the heavy lifting, calculating and crafting names that are 100% scientifically aligned with your Cosmic Blueprint.'
-                                                                : path.includes('Validator')
-                                                                    ? 'Best for: Creative founders who love brainstorming. You use AI tools or your own creativity to generate lists based on our "Key Letter Guidance," and we filter them to find the hidden diamonds.'
-                                                                    : 'Professional service tailored to your specific needs and requirements.'
-                                                            }
-                                                        </p>
+                                    {/* Package Grid */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                                        {categoryPackages.map((pkg, pkgIndex) => (
+                                            <motion.div
+                                                // @ts-ignore
+                                                key={pkg._id || pkg.id}
+                                                variants={fadeUp}
+                                                initial="hidden"
+                                                animate="visible"
+                                                custom={0.3 + categoryIndex * 0.3 + pkgIndex * 0.1}
+                                                className={`relative ${pkg.plan?.isPopular ? 'scale-105' : ''
+                                                    } transition-all duration-300 hover:-translate-y-1 flex flex-col mb-10`}
+                                            >
+                                                {pkg.plan?.isPopular && (
+                                                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                                                        <span className="bg-gradient-to-r from-amber-400 to-orange-400 text-slate-900 px-6 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse">
+                                                            MOST POPULAR
+                                                        </span>
                                                     </div>
                                                 )}
 
-                                                {/* Dynamic Package Grid */}
-                                                <div className={`grid ${isSignatureSeries && !isPersonalCategory
-                                                    ? 'grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto'
-                                                    : isPersonalCategory
-                                                        ? 'grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto'
-                                                        : 'grid-cols-1 md:grid-cols-3 gap-6'
-                                                    }`}>
-                                                    {pathPackages.map((pkg, pkgIndex) => (
-                                                        <motion.div
-                                                            // @ts-ignore
-                                                            key={pkg._id || pkg.id}
-                                                            variants={fadeUp}
-                                                            initial="hidden"
-                                                            animate="visible"
-                                                            custom={0.3 + categoryIndex * 0.3 + pathIndex * 0.1 + pkgIndex * 0.1}
-                                                            className={`relative ${pkg.plan?.isPopular ? 'scale-105' : ''
-                                                                } transition-all duration-300 hover:-translate-y-1 flex flex-col`}
-                                                        >
-                                                            {pkg.plan?.isPopular && (
-                                                                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                                                                    <span className="bg-gradient-to-r from-amber-400 to-orange-400 text-slate-900 px-6 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse">
-                                                                        MOST POPULAR
-                                                                    </span>
-                                                                </div>
-                                                            )}
+                                                <div className={`h-full relative overflow-hidden group ${pkg.plan?.isPopular
+                                                    ? 'bg-gradient-to-br from-amber-900/30 via-purple-900/30 to-primary-900/50 hover:from-amber-900/20 hover:via-purple-900/20 hover:to-primary-900/30'
+                                                    : 'bg-gradient-to-br from-purple-900/30 via-amber-900/30 to-primary-900/50 hover:from-purple-900/20 hover:via-amber-900/20 hover:to-primary-900/30'
+                                                    } rounded-3xl p-8 border-2 ${pkg.plan?.isPopular ? 'border-amber-600/50' : 'border-primary-700/50'} shadow-xl hover:shadow-2xl backdrop-blur-sm hover:scale-105 transition-all duration-500 flex flex-col`}>
 
-                                                            <div className={`h-full relative overflow-hidden group ${pkg.plan?.isPopular
-                                                                ? 'bg-gradient-to-br from-amber-900/30 via-purple-900/30 to-primary-900/50 hover:from-amber-900/20 hover:via-purple-900/20 hover:to-primary-900/30'
-                                                                : 'bg-gradient-to-br from-purple-900/30 via-amber-900/30 to-primary-900/50 hover:from-purple-900/20 hover:via-amber-900/20 hover:to-primary-900/30'
-                                                                } rounded-3xl p-8 border-2 ${pkg.plan?.isPopular ? 'border-amber-600/50' : 'border-primary-700/50'} shadow-xl hover:shadow-2xl backdrop-blur-sm hover:scale-105 transition-all duration-500 flex flex-col`}>
+                                                    {/* Enhanced background effects */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-purple-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                    {pkg.plan?.isPopular && (
+                                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-600/20 to-transparent rounded-full blur-2xl"></div>
+                                                    )}
 
-                                                                {/* Enhanced background effects */}
-                                                                <div className="absolute inset-0 bg-gradient-to-t from-purple-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                                {pkg.plan?.isPopular && (
-                                                                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-600/20 to-transparent rounded-full blur-2xl"></div>
-                                                                )}
+                                                    {/* Header with improved styling */}
+                                                    <div className="relative text-center mb-6">
+                                                        {pkg.plan?.isPopular && (
+                                                            <div className="flex justify-center mb-4">
+                                                                <MdWorkspacePremium className="text-amber-600 text-3xl animate-pulse drop-shadow-lg" />
+                                                            </div>
+                                                        )}
+                                                        <h5 className="font-bold text-primary-50 mb-3 text-2xl">{pkg.plan?.name || 'Package'}</h5>
+                                                        <div className={`font-semibold text-white mb-3 text-lg opacity-80`}>
+                                                            {pkg.plan?.code || 'PREMIUM'}
+                                                        </div>
+                                                    </div>
 
-                                                                {/* Header with improved styling */}
-                                                                <div className="relative text-center mb-6">
-                                                                    {pkg.plan?.isPopular && (
-                                                                        <div className="flex justify-center mb-4">
-                                                                            <MdWorkspacePremium className="text-amber-600 text-3xl animate-pulse drop-shadow-lg" />
-                                                                        </div>
-                                                                    )}
-                                                                    <h5 className={`font-bold text-primary-50 mb-3 ${isSignatureSeries && !isPersonalCategory
-                                                                        ? 'text-3xl'
-                                                                        : isPersonalCategory
-                                                                            ? 'text-2xl'
-                                                                            : 'text-xl'
-                                                                        }`}>{pkg.plan?.name || 'Package'}</h5>
-                                                                    <div className={`font-semibold text-white mb-3 text-lg opacity-80`}>
-                                                                        {pkg.plan?.code || 'PREMIUM'}
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* Enhanced Submission Info with better styling */}
-                                                                {(pkg.submissionPolicy && (pkg.submissionPolicy.maxNamesPerSubmission !== 0 || pkg.submissionPolicy.submissionWindowDays)) && (
-                                                                    <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-purple-700/50">
-                                                                        <div className="flex items-center justify-center gap-2 mb-2">
-                                                                            <FiPackage className="text-amber-400" />
-                                                                            <span className="text-amber-400 font-semibold text-base">Submission Details</span>
-                                                                        </div>
-                                                                        <div className="space-y-2">
-                                                                            {pkg.submissionPolicy.maxNamesPerSubmission !== 0 && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && (
-                                                                                <div className="flex items-center justify-center text-white text-base">
-                                                                                    <span className="font-medium text-white">Limit:</span>
-                                                                                    <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
-                                                                                        {pkg.submissionPolicy.maxNamesPerSubmission} names
-                                                                                    </span>
-                                                                                </div>
-                                                                            )}
-                                                                            {pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
-                                                                                <div className="flex items-center justify-center text-white text-base">
-                                                                                    <span className="font-medium text-white">Limit:</span>
-                                                                                    <span className="ml-2 px-3 py-1 bg-green-800/50 rounded-full text-green-300 font-semibold text-base">
-                                                                                        Unlimited names
-                                                                                    </span>
-                                                                                </div>
-                                                                            )}
-                                                                            {pkg.submissionPolicy.submissionWindowDays && pkg.submissionPolicy.submissionWindowDays > 0 && (
-                                                                                <div className="flex items-center justify-center text-white text-base">
-                                                                                    <span className="font-medium text-white">Duration:</span>
-                                                                                    <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-white text-base">
-                                                                                        {pkg.submissionPolicy.submissionWindowDays} days
-                                                                                    </span>
-                                                                                </div>
-                                                                            )}
-                                                                        </div>
+                                                    {/* Enhanced Submission Info with better styling */}
+                                                    {(pkg.submissionPolicy && (pkg.submissionPolicy.maxNamesPerSubmission !== 0 || pkg.submissionPolicy.submissionWindowDays)) && (
+                                                        <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-purple-700/50">
+                                                            <div className="flex items-center justify-center gap-2 mb-2">
+                                                                <FiPackage className="text-amber-400" />
+                                                                <span className="text-amber-400 font-semibold text-base">Submission Details</span>
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                {pkg.submissionPolicy.maxNamesPerSubmission !== 0 && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && (
+                                                                    <div className="flex items-center justify-center text-white text-base">
+                                                                        <span className="font-medium text-white">Limit:</span>
+                                                                        <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
+                                                                            {pkg.submissionPolicy.maxNamesPerSubmission} names
+                                                                        </span>
                                                                     </div>
                                                                 )}
+                                                                {pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
+                                                                    <div className="flex items-center justify-center text-white text-base">
+                                                                        <span className="font-medium text-white">Limit:</span>
+                                                                        <span className="ml-2 px-3 py-1 bg-green-800/50 rounded-full text-green-300 font-semibold text-base">
+                                                                            Unlimited names
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                                {pkg.submissionPolicy.submissionWindowDays && pkg.submissionPolicy.submissionWindowDays > 0 && (
+                                                                    <div className="flex items-center justify-center text-white text-base">
+                                                                        <span className="font-medium text-white">Duration:</span>
+                                                                        <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-white text-base">
+                                                                            {pkg.submissionPolicy.submissionWindowDays} days
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
 
-                                                                {/* Enhanced Package Description */}
-                                                                {pkg.description && (
-                                                                    <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-amber-700/50">
-                                                                        <div className="flex items-start gap-3">
-                                                                            <FiZap className="text-amber-400 mt-1 flex-shrink-0" size={16} />
-                                                                            <p className="text-white text-sm leading-relaxed">
-                                                                                {pkg.description}
+                                                    {/* Enhanced Package Description */}
+                                                    {pkg.description && (
+                                                        <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-amber-700/50">
+                                                            <div className="flex items-start gap-3">
+                                                                <FiZap className="text-amber-400 mt-1 flex-shrink-0" size={16} />
+                                                                <p className="text-white text-sm leading-relaxed">
+                                                                    {pkg.description}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Enhanced Package Features with beautiful styling */}
+                                                    <div className="space-y-4 flex-grow">
+                                                        {/* Business Naming Solutions Features */}
+                                                        {category === 'Business Naming Solutions' && (
+                                                            <div className="space-y-3">
+                                                                {/* Enhanced collaborative features */}
+                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0 && (
+                                                                    <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
+                                                                                <FiPackage className="text-blue-400" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
+                                                                                <p className="text-white text-sm mt-1">
+                                                                                    Submit up to <span className="text-purple-400 font-semibold">{pkg.submissionPolicy.maxNamesPerSubmission}</span> names for our expert validation
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
+                                                                    <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
+                                                                                <FiPackage className="text-blue-400" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
+                                                                                <p className="text-white text-sm mt-1">
+                                                                                    Submit <span className="text-green-400 font-semibold">unlimited</span> names for our expert validation
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Enhanced expected outcome */}
+                                                                {pkg.expectedOutcome && pkg.expectedOutcome !== 'There is no Expected Outcome for this plan. ' && pkg.expectedOutcome !== 'There is no Expected Outcome' && (
+                                                                    <div className="relative bg-green-900/30 backdrop-blur-sm rounded-xl p-4 border border-green-700/50">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="w-10 h-10 bg-gradient-to-br from-green-800 to-emerald-800 rounded-lg flex items-center justify-center border border-green-600/50">
+                                                                                <FiTrendingUp className="text-green-400" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="text-primary-50 font-semibold text-sm">Expected Results</span>
+                                                                                <p className="text-white text-sm mt-1">
+                                                                                    {pkg.expectedOutcome}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Enhanced verification features */}
+                                                                <div className="space-y-2">
+                                                                    <div className="flex items-center gap-3 bg-amber-900/30 backdrop-blur-sm rounded-xl p-4 border border-amber-700/50">
+                                                                        <FiShield className="text-amber-400 flex-shrink-0" size={18} />
+                                                                        <div>
+
+                                                                            <p className="text-white text-sm mt-1">
+                                                                                Every name is validated using Stellar Fortune principles
                                                                             </p>
                                                                         </div>
                                                                     </div>
-                                                                )}
-
-                                                                {/* Enhanced Package Features with beautiful styling */}
-                                                                <div className={`space-y-${isSignatureSeries && !isPersonalCategory || isPersonalCategory ? '4' : '3'} flex-grow`}>
-                                                                    {/* Business Naming Solutions Features */}
-                                                                    {category === 'Business Naming Solutions' && (
-                                                                        <div className="space-y-3">
-                                                                            {/* Enhanced collaborative features */}
-                                                                            {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0 && (
-                                                                                <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
-                                                                                            <FiPackage className="text-blue-400" />
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
-                                                                                            <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
-                                                                                                Submit up to <span className="text-purple-400 font-semibold">{pkg.submissionPolicy.maxNamesPerSubmission}</span> names for our expert validation
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            )}
-                                                                            {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
-                                                                                <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-purple-800 rounded-lg flex items-center justify-center border border-blue-600/50">
-                                                                                            <FiPackage className="text-blue-400" />
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <span className="text-primary-50 font-semibold text-sm">Your Creative Input</span>
-                                                                                            <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
-                                                                                                Submit <span className="text-green-400 font-semibold">unlimited</span> names for our expert validation
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            )}
-
-                                                                            {/* Enhanced expected outcome */}
-                                                                            {pkg.expectedOutcome && pkg.expectedOutcome !== 'There is no Expected Outcome for this plan. ' && pkg.expectedOutcome !== 'There is no Expected Outcome' && (
-                                                                                <div className="relative bg-green-900/30 backdrop-blur-sm rounded-xl p-4 border border-green-700/50">
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="w-10 h-10 bg-gradient-to-br from-green-800 to-emerald-800 rounded-lg flex items-center justify-center border border-green-600/50">
-                                                                                            <FiTrendingUp className="text-green-400" />
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <span className="text-primary-50 font-semibold text-sm">Expected Results</span>
-                                                                                            <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
-                                                                                                {isSignatureSeries ? 'Complete Cosmic Blueprint analysis' : pkg.expectedOutcome}
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            )}
-
-                                                                            {/* Enhanced verification features */}
-                                                                            <div className="space-y-2">
-                                                                                <div className="flex items-center gap-3 bg-amber-900/30 backdrop-blur-sm rounded-xl p-4 border border-amber-700/50">
-                                                                                    <FiShield className="text-amber-400 flex-shrink-0" size={18} />
-                                                                                    <div>
-
-                                                                                        <p className={`text-white ${isSignatureSeries ? 'text-sm' : 'text-sm'} mt-1`}>
-                                                                                            Every name is validated using Stellar Fortune principles
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
 
 
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-
-                                                                    {/* Enhanced Personal & Nickname Solutions Features */}
-                                                                    {category === 'Personal & Nickname Solutions' && (
-                                                                        <div className="space-y-3">
-                                                                            <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50">
-                                                                                <div className="flex items-center gap-3">
-                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-purple-800 to-pink-800 rounded-lg flex items-center justify-center border border-purple-600/50">
-                                                                                        <FiGift className="text-purple-400" />
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <span className="text-primary-50 font-semibold text-sm">From Galaxy NameLab</span>
-                                                                                        <p className="text-white text-sm mt-1">Expert suggestions crafted by our naming specialists</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
-                                                                                <div className="flex items-center gap-3">
-                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-cyan-800 rounded-lg flex items-center justify-center border border-blue-600/50">
-                                                                                        <FiPackage className="text-blue-400" />
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <span className="text-primary-50 font-semibold text-sm">From You</span>
-                                                                                        <p className="text-white text-sm mt-1">
-                                                                                            {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0
-                                                                                                ? `Submit ${pkg.submissionPolicy.maxNamesPerSubmission} ideas for validation`
-                                                                                                : 'Submit unlimited ideas for validation'
-                                                                                            }
-                                                                                            {pkg.expectedOutcome && <span className="block text-amber-400 font-medium mt-1">Expected: {pkg.expectedOutcome}</span>}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-xl p-4 border border-amber-700/50">
-                                                                                <div className="flex items-center gap-3">
-                                                                                    <div className="w-10 h-10 bg-gradient-to-br from-amber-800 to-yellow-800 rounded-lg flex items-center justify-center border border-amber-600/50">
-                                                                                        <FiStar className="text-amber-400" />
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <span className="text-primary-50 font-semibold text-sm">Total Result</span>
-                                                                                        <p className="text-white text-sm mt-1">{pkg.expectedOutcome || 'Complete analysis and validation'}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-
-                                                                    {/* Default Features for other categories */}
-                                                                    {category !== 'Business Naming Solutions' && category !== 'Personal & Nickname Solutions' && (
-                                                                        <>
-                                                                            {pkg.expectedOutcome && (
-                                                                                <div className="flex items-center text-primary-50">
-                                                                                    <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
-                                                                                    <span className="text-white">{pkg.expectedOutcome}</span>
-                                                                                </div>
-                                                                            )}
-                                                                        </>
-                                                                    )}
-                                                                </div>
-
-                                                                {/* Enhanced Button Container - Always at bottom */}
-                                                                <div className="mt-8 relative z-10">
-                                                                    <Button
-                                                                        className={`w-full relative overflow-hidden group ${pkg.plan?.isPopular
-                                                                            ? 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-900 font-bold shadow-lg hover:shadow-amber-400/50 text-lg py-4'
-                                                                            : 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-400 hover:to-purple-500 text-white font-semibold shadow-lg hover:shadow-purple-500/50 text-base py-3'
-                                                                            } font-semibold px-6 rounded-full transition-all duration-500 transform hover:scale-105 hover:-translate-y-1`}
-                                                                        onClick={() => console.log(`Selected: ${pkg.plan?.name}`)}
-                                                                    >
-                                                                        <span className="relative z-10">Get Started</span>
-                                                                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                                        {pkg.plan?.isPopular && (
-                                                                            <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                                                                                <MdWorkspacePremium className="text-primary-900/60 text-sm animate-pulse" />
-                                                                            </div>
-                                                                        )}
-                                                                    </Button>
                                                                 </div>
                                                             </div>
-                                                        </motion.div>
-                                                    ))}
+                                                        )}
+
+                                                        {/* Enhanced Personal & Nickname Solutions Features */}
+                                                        {category === 'Personal & Nickname Solutions' && (
+                                                            <div className="space-y-3">
+                                                                <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50">
+                                                                    <div className="flex items-center gap-3">
+                                                                        <div className="w-10 h-10 bg-gradient-to-br from-purple-800 to-pink-800 rounded-lg flex items-center justify-center border border-purple-600/50">
+                                                                            <FiGift className="text-purple-400" />
+                                                                        </div>
+                                                                        <div>
+                                                                            <span className="text-primary-50 font-semibold text-sm">From Galaxy NameLab</span>
+                                                                            <p className="text-white text-sm mt-1">Expert suggestions crafted by our naming specialists</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
+                                                                    <div className="flex items-center gap-3">
+                                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-800 to-cyan-800 rounded-lg flex items-center justify-center border border-blue-600/50">
+                                                                            <FiPackage className="text-blue-400" />
+                                                                        </div>
+                                                                        <div>
+                                                                            <span className="text-primary-50 font-semibold text-sm">From You</span>
+                                                                            <p className="text-white text-sm mt-1">
+                                                                                {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0
+                                                                                    ? `Submit ${pkg.submissionPolicy.maxNamesPerSubmission} ideas for validation`
+                                                                                    : 'Submit unlimited ideas for validation'
+                                                                                }
+                                                                                {pkg.expectedOutcome && <span className="block text-amber-400 font-medium mt-1">Expected: {pkg.expectedOutcome}</span>}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="relative bg-amber-900/30 backdrop-blur-sm rounded-xl p-4 border border-amber-700/50">
+                                                                    <div className="flex items-center gap-3">
+                                                                        <div className="w-10 h-10 bg-gradient-to-br from-amber-800 to-yellow-800 rounded-lg flex items-center justify-center border border-amber-600/50">
+                                                                            <FiStar className="text-amber-400" />
+                                                                        </div>
+                                                                        <div>
+                                                                            <span className="text-primary-50 font-semibold text-sm">Total Result</span>
+                                                                            <p className="text-white text-sm mt-1">{pkg.expectedOutcome || 'Complete analysis and validation'}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Default Features for other categories */}
+                                                        {category !== 'Business Naming Solutions' && category !== 'Personal & Nickname Solutions' && (
+                                                            <>
+                                                                {pkg.expectedOutcome && (
+                                                                    <div className="flex items-center text-primary-50">
+                                                                        <FiCheck className="text-purple-400 mr-3 flex-shrink-0" size={18} />
+                                                                        <span className="text-white">{pkg.expectedOutcome}</span>
+                                                                    </div>
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Enhanced Button Container - Always at bottom */}
+                                                    <div className="mt-8 relative z-10">
+                                                        <Button
+                                                            className={`w-full relative overflow-hidden group ${pkg.plan?.isPopular
+                                                                ? 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-900 font-bold shadow-lg hover:shadow-amber-400/50 text-lg py-4'
+                                                                : 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-400 hover:to-purple-500 text-white font-semibold shadow-lg hover:shadow-purple-500/50 text-base py-3'
+                                                                } font-semibold px-6 rounded-full transition-all duration-500 transform hover:scale-105 hover:-translate-y-1`}
+                                                            onClick={() => console.log(`Selected: ${pkg.plan?.name}`)}
+                                                        >
+                                                            <span className="relative z-10">Get Started</span>
+                                                            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                                            {pkg.plan?.isPopular && (
+                                                                <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                                                                    <MdWorkspacePremium className="text-primary-900/60 text-sm animate-pulse" />
+                                                                </div>
+                                                            )}
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
+                                            </motion.div>
+                                        ))}
+                                    </div>
                                 </motion.div>
                             ))}
 
