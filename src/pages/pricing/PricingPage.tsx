@@ -218,56 +218,55 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                         (pkg.submissionPolicy.totalSubmissions !== undefined && pkg.submissionPolicy.totalSubmissions !== 0) ||
                                                         (pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission !== 0)
                                                     )) && (
-                                                        <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-purple-700/50">
-                                                            <div className="flex items-center justify-center gap-2 mb-2">
-                                                                <FiPackage className="text-amber-400" />
-                                                                <span className="text-amber-400 font-semibold text-base">Submission Details</span>
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                {/* Total Submissions */}
-                                                                {pkg.submissionPolicy.totalSubmissions !== undefined && pkg.submissionPolicy.totalSubmissions !== 0 && (
-                                                                    <div className="flex items-center justify-center text-white text-base">
-                                                                        <span className="font-medium text-white">Submissions:</span>
-                                                                        <span className={`ml-2 px-3 py-1 rounded-full font-semibold text-base ${
-                                                                            pkg.submissionPolicy.totalSubmissions === 'UNLIMITED'
+                                                            <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-purple-700/50">
+                                                                <div className="flex items-center justify-center gap-2 mb-2">
+                                                                    <FiPackage className="text-amber-400" />
+                                                                    <span className="text-amber-400 font-semibold text-base">Submission Details</span>
+                                                                </div>
+                                                                <div className="space-y-2">
+                                                                    {/* Total Submissions */}
+                                                                    {pkg.submissionPolicy.totalSubmissions !== undefined && pkg.submissionPolicy.totalSubmissions !== 0 && (
+                                                                        <div className="flex items-center justify-center text-white text-base">
+                                                                            <span className="font-medium text-white">Submissions:</span>
+                                                                            <span className={`ml-2 px-3 py-1 rounded-full font-semibold text-base ${pkg.submissionPolicy.totalSubmissions === 'UNLIMITED'
                                                                                 ? 'bg-green-800/50 text-green-300'
                                                                                 : 'bg-blue-800/50 text-blue-300'
-                                                                        }`}>
-                                                                            {pkg.submissionPolicy.totalSubmissions === 'UNLIMITED'
-                                                                                ? 'Unlimited submissions'
-                                                                                : `${pkg.submissionPolicy.totalSubmissions} submission${pkg.submissionPolicy.totalSubmissions > 1 ? 's' : ''}`
-                                                                            }
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                                {/* Max Names Per Submission */}
-                                                                {pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission !== 0 && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && (
-                                                                    <div className="flex items-center justify-center text-white text-base">
-                                                                        <span className="font-medium text-white">Limit:</span>
-                                                                        <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
-                                                                            {pkg.submissionPolicy.maxNamesPerSubmission} names
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                                {pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
-                                                                    <div className="flex items-center justify-center text-white text-base">
-                                                                        <span className="font-medium text-white">Limit:</span>
-                                                                        <span className="ml-2 px-3 py-1 bg-green-800/50 rounded-full text-green-300 font-semibold text-base">
-                                                                            Unlimited names
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                                {pkg.submissionPolicy.submissionWindowDays && pkg.submissionPolicy.submissionWindowDays > 0 && (
-                                                                    <div className="flex items-center justify-center text-white text-base">
-                                                                        <span className="font-medium text-white">Duration:</span>
-                                                                        <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-white text-base">
-                                                                            {pkg.submissionPolicy.submissionWindowDays} days
-                                                                        </span>
-                                                                    </div>
-                                                                )}
+                                                                                }`}>
+                                                                                {pkg.submissionPolicy.totalSubmissions === 'UNLIMITED'
+                                                                                    ? 'Unlimited submissions'
+                                                                                    : `${pkg.submissionPolicy.totalSubmissions} submission${parseInt(pkg.submissionPolicy.totalSubmissions.toString()) > 1 ? 's' : ''}`
+                                                                                }
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
+                                                                    {/* Max Names Per Submission */}
+                                                                    {pkg.submissionPolicy.maxNamesPerSubmission !== undefined && pkg.submissionPolicy.maxNamesPerSubmission !== 0 && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && (
+                                                                        <div className="flex items-center justify-center text-white text-base">
+                                                                            <span className="font-medium text-white">Limit:</span>
+                                                                            <span className="ml-2 px-3 py-1 bg-amber-800/50 rounded-full text-amber-300 font-semibold text-base">
+                                                                                {pkg.submissionPolicy.maxNamesPerSubmission} names
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
+                                                                    {pkg.submissionPolicy.maxNamesPerSubmission === 'UNLIMITED' && (
+                                                                        <div className="flex items-center justify-center text-white text-base">
+                                                                            <span className="font-medium text-white">Limit:</span>
+                                                                            <span className="ml-2 px-3 py-1 bg-green-800/50 rounded-full text-green-300 font-semibold text-base">
+                                                                                Unlimited names
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
+                                                                    {pkg.submissionPolicy.submissionWindowDays && pkg.submissionPolicy.submissionWindowDays > 0 && (
+                                                                        <div className="flex items-center justify-center text-white text-base">
+                                                                            <span className="font-medium text-white">Duration:</span>
+                                                                            <span className="ml-2 px-3 py-1 bg-purple-800/50 rounded-full text-white text-base">
+                                                                                {pkg.submissionPolicy.submissionWindowDays} days
+                                                                            </span>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    )}
+                                                        )}
 
                                                     {/* Enhanced Package Description */}
                                                     {pkg.description && (
