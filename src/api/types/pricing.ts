@@ -1,13 +1,23 @@
 export interface Package {
   _id: string;
-  isPopular: boolean;
-  status: string;
   categoryCode: string;
   categoryName: string;
+  path: {
+    code: string;
+    name: string;
+    description: string;
+  };
   plan: {
     code: string;
     name: string;
     isPopular: boolean;
+  };
+  price: {
+    amount: number;
+    currency: string;
+  };
+  deliverables: {
+    generatedNames: number;
   };
   submissionPolicy: {
     totalSubmissions: number | string;
@@ -21,6 +31,7 @@ export interface Package {
   active: boolean;
   createdAt: string;
   updatedAt: string;
+  __v: number;
 }
 
 export enum PackageCategory {

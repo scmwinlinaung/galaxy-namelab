@@ -186,7 +186,32 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                         <div className={`font-semibold text-white mb-3 text-lg opacity-80`}>
                                                             {pkg.plan?.code || 'PREMIUM'}
                                                         </div>
+                                                        {pkg.path?.name && (
+                                                            <div className="text-amber-400 font-medium text-sm mb-2">
+                                                                {pkg.path.name}
+                                                            </div>
+                                                        )}
+                                                        <div className="text-3xl font-bold text-white mb-1">
+                                                            ${pkg.price?.amount || 0}
+                                                        </div>
+                                                        <div className="text-sm text-primary-300 opacity-80">
+                                                            {pkg.price?.currency || 'USD'}
+                                                        </div>
                                                     </div>
+
+                                                    {/* Deliverables Info */}
+                                                    {pkg.deliverables?.generatedNames > 0 && (
+                                                        <div className="relative bg-green-900/30 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-green-700/50">
+                                                            <div className="flex items-center justify-center gap-2 mb-2">
+                                                                <FiStar className="text-green-400" />
+                                                                <span className="text-green-400 font-semibold text-base">Generated Names</span>
+                                                            </div>
+                                                            <div className="text-center">
+                                                                <span className="text-2xl font-bold text-white">{pkg.deliverables.generatedNames}</span>
+                                                                <span className="text-green-300 font-medium ml-2">expert-crafted names</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
 
                                                     {/* Enhanced Submission Info with better styling */}
                                                     {(pkg.submissionPolicy && (pkg.submissionPolicy.maxNamesPerSubmission !== 0 || pkg.submissionPolicy.submissionWindowDays)) && (
@@ -241,6 +266,40 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                         {/* Business Naming Solutions Features */}
                                                         {category === 'Business Naming Solutions' && (
                                                             <div className="space-y-3">
+                                                                {/* Generated Names Display */}
+                                                                {pkg.deliverables?.generatedNames > 0 && (
+                                                                    <div className="relative bg-green-900/30 backdrop-blur-sm rounded-xl p-4 border border-green-700/50">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="w-10 h-10 bg-gradient-to-br from-green-800 to-emerald-800 rounded-lg flex items-center justify-center border border-green-600/50">
+                                                                                <FiStar className="text-green-400" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="text-primary-50 font-semibold text-sm">Expert-Crafted Names</span>
+                                                                                <p className="text-white text-sm mt-1">
+                                                                                    Receive <span className="text-green-400 font-semibold">{pkg.deliverables.generatedNames}</span> professionally curated names
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Path Information */}
+                                                                {pkg.path?.description && (
+                                                                    <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="w-10 h-10 bg-gradient-to-br from-purple-800 to-indigo-800 rounded-lg flex items-center justify-center border border-purple-600/50">
+                                                                                <FiAward className="text-purple-400" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="text-primary-50 font-semibold text-sm">Service Type</span>
+                                                                                <p className="text-white text-sm mt-1">
+                                                                                    {pkg.path.description}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
                                                                 {/* Enhanced collaborative features */}
                                                                 {pkg.submissionPolicy && pkg.submissionPolicy.maxNamesPerSubmission !== 'UNLIMITED' && typeof pkg.submissionPolicy.maxNamesPerSubmission === 'number' && pkg.submissionPolicy.maxNamesPerSubmission > 0 && (
                                                                     <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
@@ -310,17 +369,39 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                         {/* Enhanced Personal & Nickname Solutions Features */}
                                                         {category === 'Personal & Nickname Solutions' && (
                                                             <div className="space-y-3">
-                                                                <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50">
-                                                                    <div className="flex items-center gap-3">
-                                                                        <div className="w-10 h-10 bg-gradient-to-br from-purple-800 to-pink-800 rounded-lg flex items-center justify-center border border-purple-600/50">
-                                                                            <FiGift className="text-purple-400" />
-                                                                        </div>
-                                                                        <div>
-                                                                            <span className="text-primary-50 font-semibold text-sm">From Galaxy NameLab</span>
-                                                                            <p className="text-white text-sm mt-1">Expert suggestions crafted by our naming specialists</p>
+                                                                {/* Expert-Crafted Names */}
+                                                                {pkg.deliverables?.generatedNames > 0 && (
+                                                                    <div className="relative bg-purple-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-700/50">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="w-10 h-10 bg-gradient-to-br from-purple-800 to-pink-800 rounded-lg flex items-center justify-center border border-purple-600/50">
+                                                                                <FiGift className="text-purple-400" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="text-primary-50 font-semibold text-sm">From Galaxy NameLab</span>
+                                                                                <p className="text-white text-sm mt-1">
+                                                                                    Receive <span className="text-purple-400 font-semibold">{pkg.deliverables.generatedNames}</span> expert-crafted names
+                                                                                </p>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                )}
+
+                                                                {/* Path Information */}
+                                                                {pkg.path?.description && (
+                                                                    <div className="relative bg-indigo-900/30 backdrop-blur-sm rounded-xl p-4 border border-indigo-700/50">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-800 to-purple-800 rounded-lg flex items-center justify-center border border-indigo-600/50">
+                                                                                <FiAward className="text-indigo-400" />
+                                                                            </div>
+                                                                            <div>
+                                                                                <span className="text-primary-50 font-semibold text-sm">Service Type</span>
+                                                                                <p className="text-white text-sm mt-1">
+                                                                                    {pkg.path.description}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
 
                                                                 <div className="relative bg-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-blue-700/50">
                                                                     <div className="flex items-center gap-3">
