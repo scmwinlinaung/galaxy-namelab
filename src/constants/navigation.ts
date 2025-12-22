@@ -8,6 +8,7 @@ export const ROUTES = {
   SUCCESS: '/success',
   PRICING: '/pricing',
   CONTACT: '/contact',
+  FAQ: '/faq',
 } as const;
 
 export const NAVIGATION = {
@@ -15,6 +16,7 @@ export const NAVIGATION = {
     { to: ROUTES.HOME, label: 'Home' },
     { to: ROUTES.INSIGHT, label: 'Insight' },
     { to: ROUTES.PRICING, label: 'pricing' },
+    { to: ROUTES.FAQ, label: 'FAQ' },
     { to: ROUTES.CONTACT, label: 'Contact' },
   ],
   LOGIN_BUTTON: 'Login',
@@ -26,5 +28,6 @@ export const ROUTE_COMPONENTS = {
   [ROUTES.INSIGHT]: 'InsightPage',
   [ROUTES.SUCCESS]: 'SuccessPage',
   [ROUTES.PRICING]: 'PricingPage',
+  [ROUTES.FAQ]: 'FAQPage',
   [ROUTES.CONTACT]: 'ContactInfoPage',
 } as const;
