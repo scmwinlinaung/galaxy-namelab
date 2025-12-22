@@ -1,7 +1,7 @@
 // src/pages/faq/FAQPage.tsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiChevronDown, FiChevronUp, FiStar, FiShield, FiTrendingUp, FiUsers, FiPackage, FiClock, FiCheckCircle } from 'react-icons/fi';
+import { FiChevronDown, FiChevronUp, FiStar, FiShield, FiTrendingUp, FiUsers, FiPackage, FiClock, FiCheckCircle, FiAlertCircle, FiInfo, FiArrowRight, FiPercent } from 'react-icons/fi';
 
 import PageWrapper from '../../components/layouts/PageWrapper';
 import Header from '../../components/layouts/Header';
@@ -31,6 +31,134 @@ interface FAQCategory {
     icon: React.ReactNode;
     items: FAQItem[];
 }
+
+// Enhanced Answer Content Component
+const AnswerContent: React.FC<{ content: string }> = ({ content }) => {
+    // Parse content for special formatting
+    const parseContent = (text: string) => {
+        // Handle bullet points (•)
+        const bulletPointRegex = /^•\s+(.+)$/gm;
+        const hasBulletPoints = bulletPointRegex.test(text);
+
+        // Handle percentages and numbers
+        const percentageRegex = /\b(\d+)%\b/g;
+        const timeRegex = /(\d+)\s*(?:hours?|days?|minutes?)/g;
+
+        // Handle key phrases
+        const keyPhrases = [
+            'Law of Cosmic Resonance',
+            '3rd + 11th Sextile Alignment',
+            'Stellar Fortune Naming System',
+            'Galaxy Naming Package',
+            'Self-Naming',
+            'Cosmic Validator',
+            'Stellar Key Letters'
+        ];
+
+        return text
+            .split('\n')
+            .map((line, index) => {
+                if (line.trim() === '') return null;
+
+                // Check for bullet points
+                const bulletMatch = line.match(/^•\s+(.+)$/);
+                if (bulletMatch) {
+                    return (
+                        <div key={index} className="flex items-start gap-3 mb-3 group">
+                            <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-amber-500 flex items-center justify-center mt-0.5 group-hover:scale-110 transition-transform">
+                                <div className="w-2 h-2 bg-white rounded-full"></div>
+                            </div>
+                            <span className="text-primary-100 leading-relaxed flex-1">
+                                {highlightKeyPhrases(bulletMatch[1])}
+                            </span>
+                        </div>
+                    );
+                }
+
+                // Check for note/limit sections
+                if (line.toLowerCase().includes('note:') || line.toLowerCase().includes('limit:')) {
+                    return (
+                        <div key={index} className="mt-4 p-4 bg-amber-900/20 border border-amber-700/30 rounded-xl">
+                            <div className="flex items-start gap-2">
+                                {line.toLowerCase().includes('note:') ? (
+                                    <FiInfo className="text-amber-400 mt-1 flex-shrink-0" />
+                                ) : (
+                                    <FiAlertCircle className="text-amber-400 mt-1 flex-shrink-0" />
+                                )}
+                                <span className="text-amber-100 text-sm leading-relaxed">
+                                    {highlightSpecialTerms(line)}
+                                </span>
+                            </div>
+                        </div>
+                    );
+                }
+
+                // Regular paragraph
+                return (
+                    <p key={index} className="text-primary-100 leading-relaxed mb-4 last:mb-0">
+                        {highlightSpecialTerms(line)}
+                    </p>
+                );
+            })
+            .filter(Boolean);
+    };
+
+    // Highlight key phrases with gradient text
+    const highlightKeyPhrases = (text: string) => {
+        const phrases = [
+            'Law of Cosmic Resonance',
+            '3rd + 11th Sextile Alignment',
+            'Stellar Fortune Naming System',
+            'Galaxy Naming Package',
+            'Self-Naming',
+            'Cosmic Validator',
+            'Stellar Key Letters',
+            'Stellar Fortune Nickname'
+        ];
+
+        let highlightedText = text;
+        phrases.forEach(phrase => {
+            const regex = new RegExp(`(${phrase})`, 'g');
+            highlightedText = highlightedText.replace(
+                regex,
+                '<span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-amber-400 font-semibold">$1</span>'
+            );
+        });
+
+        return <span dangerouslySetInnerHTML={{ __html: highlightedText }} />;
+    };
+
+    // Highlight percentages, time periods, and numbers
+    const highlightSpecialTerms = (text: string) => {
+        let processedText = text;
+
+        // Highlight percentages
+        processedText = processedText.replace(
+            /(\d+)%/g,
+            '<span class="text-amber-400 font-bold">$1%</span>'
+        );
+
+        // Highlight time periods
+        processedText = processedText.replace(
+            /(\d+)\s*(hours?|days?|minutes?)/gi,
+            '<span class="text-blue-400 font-semibold">$1 $2</span>'
+        );
+
+        // Highlight key success metrics
+        processedText = processedText.replace(
+            /(80% success rate|30%|20%|27 years)/g,
+            '<span class="text-green-400 font-bold">$1</span>'
+        );
+
+        return <span dangerouslySetInnerHTML={{ __html: processedText }} />;
+    };
+
+    return (
+        <div className="space-y-2">
+            {parseContent(content)}
+        </div>
+    );
+};
 
 const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
     const [openItems, setOpenItems] = useState<{ [key: string]: boolean }>({});
@@ -263,9 +391,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen
                                                         className="overflow-hidden"
                                                     >
                                                         <div className="px-6 pb-6 pl-[4.5rem]">
-                                                            <div className="text-primary-200 leading-relaxed whitespace-pre-line">
-                                                                {item.answer}
-                                                            </div>
+                                                            <AnswerContent content={item.answer} />
                                                         </div>
                                                     </motion.div>
                                                 )}
