@@ -419,20 +419,6 @@ const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen
                         <p className="text-xl text-primary-200 mb-6">
                             Our cosmic experts are here to help guide you on your journey to stellar success.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            {/* <button
-                                onClick={() => setIsLoginModalOpen(true)}
-                                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-400 hover:to-purple-500 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
-                            >
-                                Login to Chat with Experts
-                            </button> */}
-                            <button
-                                onClick={() => window.location.href = '/contact'}
-                                className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50"
-                            >
-                                Contact Us
-                            </button>
-                        </div>
                     </div>
                 </motion.div>
             </section>

@@ -766,20 +766,8 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                             Explore the cosmic alignment and name analysis of history's most successful individuals through the lens of stellar fortune and cosmic mathematics.
                         </p>
 
-                        {/* Search and Filters */}
+                        {/* Filters */}
                         <div className="max-w-3xl mx-auto space-y-6">
-                            {/* Search Bar */}
-                            <div className="relative">
-                                <FiSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                                <input
-                                    type="text"
-                                    placeholder="Search by name, title, or company..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-14 pr-6 py-4 rounded-2xl border border-gray-700/50 bg-gray-800/50 backdrop-blur-sm text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 text-lg shadow-lg"
-                                />
-                            </div>
-
                             {/* Category Filters */}
                             <div className="flex flex-wrap gap-3 justify-center">
                                 {categories.map((category) => {
@@ -835,7 +823,7 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                 </motion.div>
 
                 {/* Billionaires Grid */}
-                <div className="space-y-12">
+                <div className="space-y-16">
                     <div className="max-w-6xl mx-auto">
                         <AnimatePresence>
                             {filteredAndSortedBillionaires.map((person, index) => (
@@ -848,7 +836,7 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     viewport={{ once: true }}
                                     custom={0.5 + index * 0.1}
-                                    className="group"
+                                    className="group mb-16"
                                 >
                                     <div className="bg-gray-900/60 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-800/50 hover:shadow-3xl hover:shadow-purple-900/20 transition-all duration-500 hover:-translate-y-1">
                                         {/* Header Section */}
@@ -896,17 +884,23 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                     </div>
                                                 </div>
 
-                                                {/* Expand/Collapse Button */}
+                                                {/* View More / View Less Button - Show on all screen sizes */}
                                                 <motion.button
-                                                    whileHover={{ scale: 1.1 }}
-                                                    whileTap={{ scale: 0.9 }}
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
                                                     onClick={() => toggleCardExpansion(person.name)}
-                                                    className="lg:hidden bg-white/20 backdrop-blur-sm p-4 rounded-full hover:bg-white/30 transition-colors"
+                                                    className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-white/30 transition-all font-semibold text-white whitespace-nowrap border-2 border-white/30 shadow-lg hover:shadow-xl"
                                                 >
                                                     {expandedCard === person.name ? (
-                                                        <FiChevronUp className="w-6 h-6" />
+                                                        <span className="flex items-center gap-2">
+                                                            View Less
+                                                            <FiChevronUp className="w-5 h-5" />
+                                                        </span>
                                                     ) : (
-                                                        <FiChevronDown className="w-6 h-6" />
+                                                        <span className="flex items-center gap-2">
+                                                            View More
+                                                            <FiChevronDown className="w-5 h-5" />
+                                                        </span>
                                                     )}
                                                 </motion.button>
                                             </div>
@@ -914,7 +908,7 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
 
                                         {/* Analysis Section */}
                                         <AnimatePresence>
-                                            {(expandedCard === person.name || window.innerWidth >= 1024) && (
+                                            {expandedCard === person.name && (
                                                 <motion.div
                                                     initial={{ height: 0, opacity: 0 }}
                                                     animate={{ height: "auto", opacity: 1 }}
