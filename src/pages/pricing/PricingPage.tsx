@@ -8,6 +8,7 @@ import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import Section from '@components/ui/Section';
 import Button from '@components/ui/Button';
+import CheckoutModal from '@components/payment/CheckoutModal';
 import { PricingService } from '@api/services/pricingService';
 import { Package } from '@api/types/pricing';
 
@@ -29,6 +30,8 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
     const [packages, setPackages] = useState<Package[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+    const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
 
 
     useEffect(() => {
@@ -50,6 +53,16 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
 
         fetchPackages();
     }, []);
+
+    const handleGetStarted = (pkg: Package) => {
+        setSelectedPackage(pkg);
+        setIsCheckoutModalOpen(true);
+    };
+
+    const handleCloseCheckoutModal = () => {
+        setIsCheckoutModalOpen(false);
+        setSelectedPackage(null);
+    };
 
     // Sort packages by displayOrder
     const sortedPackages = [...packages].sort((a, b) => a.displayOrder - b.displayOrder);
@@ -474,7 +487,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                 ? 'bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-900 font-bold shadow-lg hover:shadow-amber-400/50 text-lg py-4'
                                                                 : 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-400 hover:to-purple-500 text-white font-semibold shadow-lg hover:shadow-purple-500/50 text-base py-3'
                                                                 } font-semibold px-6 rounded-full transition-all duration-500 transform hover:scale-105 hover:-translate-y-1`}
-                                                            onClick={() => console.log(`Selected: ${pkg.plan?.name}`)}
+                                                            onClick={() => handleGetStarted(pkg)}
                                                         >
                                                             <span className="relative z-10">Get Started</span>
                                                             <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -562,6 +575,13 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                     )}
                 </div>
             </section>
+
+            {/* Checkout Modal */}
+            <CheckoutModal
+                isOpen={isCheckoutModalOpen}
+                onClose={handleCloseCheckoutModal}
+                selectedPackage={selectedPackage}
+            />
         </PageWrapper>
     );
 };
