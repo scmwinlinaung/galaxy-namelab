@@ -6,6 +6,8 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { PaymentService } from '@api/services/paymentService';
 import { Package } from '@api/types/pricing';
 import { BusinessInfoForm, CheckoutState } from '@api/types/payment';
+import LoginModal from '@components/auth/LoginModal';
+import { STORAGE_KEYS } from '@constants/api';
 
 // Initialize Stripe with publishable key from environment variable
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -76,11 +78,6 @@ const CheckoutForm: React.FC<{
   const [businessInfo, setBusinessInfo] = useState<BusinessInfoForm>({
     businessName: '',
     dateOfBirth: '',
-  });
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    email: '',
-    password: '',
   });
   const [isElementsReady, setIsElementsReady] = useState(false);
   const isInitializingRef = useRef(false);
@@ -226,12 +223,15 @@ const CheckoutForm: React.FC<{
 
   // Step 3: Create Order in backend
   const createOrder = async (paymentIntentId: string) => {
-    const authToken = localStorage.getItem('authToken') || undefined;
-
+    const authToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) || undefined;
+    const userEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || undefined;
+    const password = localStorage.getItem(STORAGE_KEYS.USER_PASSWORD) || undefined;
+    // For authenticated users, backend will get user info from token
+    // Send empty strings for name, email, password as backend will populate them
     const orderData = {
-      name: userInfo.name,
-      email: userInfo.email,
-      password: userInfo.password,
+      name: userEmail?.split('@')[0],
+      email: userEmail,
+      password: password,
       packageId: selectedPackage._id,
       paymentMethod: 'stripe' as const,
       paymentDetails: {
@@ -243,7 +243,7 @@ const CheckoutForm: React.FC<{
       },
     };
 
-    const response = await PaymentService.createOrder(orderData, authToken);
+    const response = await PaymentService.createOrder(orderData);
 
     if (!isMountedRef.current) return;
 
@@ -277,11 +277,6 @@ const CheckoutForm: React.FC<{
   const handleBusinessInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setBusinessInfo((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleUserInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   // --- RENDER STATES ---
@@ -350,63 +345,6 @@ const CheckoutForm: React.FC<{
       {checkoutState.loading && (
         <div className="absolute inset-0 bg-primary-950/20 z-10 rounded-xl cursor-wait" />
       )}
-
-      {/* Account Information Section */}
-      <div className="space-y-4">
-        <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-          <FiUser className="text-purple-400" />
-          Account Information
-        </h4>
-
-        <div>
-          <label className="block text-sm font-medium text-primary-300 mb-2">
-            Full Name *
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={userInfo.name}
-            onChange={handleUserInfoChange}
-            placeholder="Enter your full name"
-            disabled={checkoutState.loading}
-            required
-            className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-primary-300 mb-2">
-            Email Address *
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={userInfo.email}
-            onChange={handleUserInfoChange}
-            placeholder="Enter your email"
-            disabled={checkoutState.loading}
-            required
-            className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-primary-300 mb-2">
-            Password *
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={userInfo.password}
-            onChange={handleUserInfoChange}
-            placeholder="Create a password"
-            disabled={checkoutState.loading}
-            required
-            minLength={6}
-            className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-          />
-        </div>
-      </div>
 
       {/* Business Info Section */}
       <div className="space-y-4">
@@ -570,6 +508,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   selectedPackage,
 }) => {
   const [isComplete, setIsComplete] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // Check if user is authenticated
+  const isAuthenticated = () => {
+    return !!localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+  };
 
   const handleComplete = () => {
     setIsComplete(true);
@@ -577,10 +521,24 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setTimeout(() => setIsComplete(false), 500);
   };
 
+  const handleLoginModalClose = () => {
+    setShowLoginModal(false);
+    onClose();
+  };
+
+  // Check authentication when modal opens
+  useEffect(() => {
+    if (isOpen && !isAuthenticated()) {
+      setShowLoginModal(true);
+    }
+  }, [isOpen]);
+
   return (
-    <Elements stripe={stripePromise}>
-      <AnimatePresence>
-        {isOpen && selectedPackage && (
+    <>
+      <LoginModal isOpen={showLoginModal} onClose={handleLoginModalClose} />
+      <Elements stripe={stripePromise}>
+        <AnimatePresence>
+          {isOpen && selectedPackage && isAuthenticated() && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -645,6 +603,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
         )}
       </AnimatePresence>
     </Elements>
+    </>
   );
 };
 

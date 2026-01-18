@@ -10,7 +10,7 @@ export const API_CONFIG = {
     CONTENT_TYPE: 'application/json',
   },
   ENDPOINTS: {
-    PACKAGES: '/api/packages',
+    PACKAGES: '/packages',
     AUTH: '/auth',
     LOGIN: '/auth/login',
     REGISTER: '/auth/register',
@@ -47,4 +47,14 @@ export const ERROR_MESSAGES = {
   PARSE: 'Failed to parse server response',
   UNEXPECTED: 'An unexpected error occurred',
   GENERIC: 'An error occurred',
+} as const;
+
+// LocalStorage keys for authentication
+export const STORAGE_KEYS = {
+  AUTH_TOKEN: 'authToken',
+  USER_EMAIL: 'userEmail',
+  USER_PASSWORD: 'userPassword',
+  USER_ROLE: 'userRole',
+  USER_NAME: 'userName',
+  REFRESH_TOKEN: 'refreshToken',
 } as const;

@@ -1,9 +1,9 @@
 // API Host Configuration
-export const API_HOST = 'https://api.galaxynamelab.com/name-lab';
+export const API_HOST = 'https://api.galaxynamelab.com/name-lab/api';
 
 // API Endpoints
 export const API_ENDPOINTS = {
-  PACKAGES: '/api/packages',
+  PACKAGES: '/packages',
   // Add other endpoints here as needed
 } as const;
 

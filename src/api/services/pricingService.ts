@@ -9,7 +9,7 @@ export class PricingService {
 
   // Get available packages
   static async getPackages(): Promise<ApiResponse<Package[]>> {
-    const response = await fetch(`${this.baseURL}/api/packages`);
+    const response = await fetch(`${this.baseURL}/packages`);
 
     if (!response.ok) {
       return {

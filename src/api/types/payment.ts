@@ -26,7 +26,7 @@ export interface CreateOrderRequest {
   };
   paymentMethod: 'stripe';
   paymentDetails: {
-    paymentIntentId: string;
+    paymentId: string;
   };
 }
 

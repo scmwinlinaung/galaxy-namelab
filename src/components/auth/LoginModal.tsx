@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiCalendar, FiStar, FiMoon, FiSun, FiX } from 'react-icons/fi';
 
 import Button from '@components/ui/Button';
-import { ANIMATION, VALIDATION, FORM_TEXT, MODAL_TEXT } from '../../constants';
+import { ANIMATION, VALIDATION, FORM_TEXT, MODAL_TEXT, STORAGE_KEYS } from '../../constants';
+import { API_HOST } from '@api/config/host';
+import { hashPassword } from '@api/utils/crypto';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -23,6 +25,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [apiError, setApiError] = useState('');
 
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
@@ -52,13 +56,96 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (validateForm()) {
-            // Handle authentication logic here
-            console.log('Form submitted:', formData);
-            // For demo purposes, close the modal
-            onClose();
+        setApiError('');
+
+        if (!validateForm()) {
+            return;
+        }
+
+        if (isLogin) {
+            // Handle login
+            setIsLoading(true);
+            try {
+                const hashedPassword = await hashPassword(formData.password);
+                const response = await fetch(`${API_HOST}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: formData.email,
+                        password: hashedPassword,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token and role in localStorage
+                    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
+                    localStorage.setItem(STORAGE_KEYS.USER_ROLE, data.role);
+                    localStorage.setItem(STORAGE_KEYS.USER_EMAIL, formData.email);
+                    localStorage.setItem(STORAGE_KEYS.USER_PASSWORD, hashedPassword);
+                    // Close modal on success
+                    onClose();
+                    // Optionally refresh or redirect
+                    window.location.reload();
+                } else {
+                    // Handle error response
+                    setApiError(data.message || 'Invalid credentials. Please try again.');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                setApiError('An error occurred. Please try again later.');
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            // Handle registration
+            setIsLoading(true);
+            try {
+                const hashedPassword = await hashPassword(formData.password);
+                const response = await fetch(`${API_HOST}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.name,
+                        email: formData.email,
+                        password: hashedPassword,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token in localStorage
+                    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
+                    localStorage.setItem(STORAGE_KEYS.USER_EMAIL, formData.email);
+                    localStorage.setItem(STORAGE_KEYS.USER_NAME, formData.name);
+                    localStorage.setItem(STORAGE_KEYS.USER_PASSWORD, hashedPassword);
+
+                    // Close modal on success
+                    onClose();
+                    // Optionally refresh or redirect
+                    window.location.reload();
+                } else {
+                    // Handle error response
+                    if (response.status === 400) {
+                        setApiError(data.message || 'User already exists. Please try logging in.');
+                    } else {
+                        setApiError(data.message || 'Registration failed. Please try again.');
+                    }
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                setApiError('An error occurred. Please try again later.');
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -73,11 +160,16 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
+        // Clear API error when user starts typing
+        if (apiError) {
+            setApiError('');
+        }
     };
 
     const toggleAuthMode = () => {
         setIsLogin(!isLogin);
         setErrors({});
+        setApiError('');
         setFormData({
             name: '',
             email: '',
@@ -87,9 +179,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         });
     };
 
-    const handleContinue = () => {
-        // Continue without function binding as requested
-        console.log('Continue clicked without function binding');
+
+    const handleGoogleLogin = () => {
+        // Redirect to Google OAuth endpoint
+        window.location.href = `${API_HOST}/auth/google`;
     };
 
     return (
@@ -148,6 +241,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                     : MODAL_TEXT.SUBTITLE.REGISTER
                                 }
                             </p>
+
+                            {/* API Error Message */}
+                            {apiError && (
+                                <div className="bg-red-500/20 border border-red-500/50 rounded-2xl p-4 mb-6">
+                                    <p className="text-red-300 text-sm text-center">{apiError}</p>
+                                </div>
+                            )}
 
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* Name Field (Registration Only) */}
@@ -266,20 +366,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                 {/* Submit Button */}
                                 <Button
                                     type="submit"
-                                    className="w-full bg-gradient-to-r from-primary-600 to-secondary text-white font-semibold py-4 rounded-2xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                                    disabled={isLoading}
+                                    className="w-full bg-gradient-to-r from-primary-600 to-secondary text-white font-semibold py-4 rounded-2xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {isLogin ? 'Sign In to Your Cosmic Account' : 'Create Your Cosmic Account'}
-                                    <FiStar className="w-5 h-5" />
+                                    {isLoading ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            {isLogin ? 'Signing In...' : 'Creating Account...'}
+                                        </>
+                                    ) : (
+                                        <>
+                                            {isLogin ? 'Sign In to Your Cosmic Account' : 'Create Your Cosmic Account'}
+                                            <FiStar className="w-5 h-5" />
+                                        </>
+                                    )}
                                 </Button>
 
-                                {/* Continue Button (without function binding) */}
-                                <Button
-                                    type="button"
-                                    onClick={handleContinue}
-                                    className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-2xl transition-all duration-300 border border-primary-600/30"
-                                >
-                                    Continue
-                                </Button>
                             </form>
 
                             {/* Toggle Login/Register */}
@@ -306,19 +408,19 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                     </div>
                                 </div>
 
-                                <div className="mt-6 grid grid-cols-2 gap-3">
+                                <div className="mt-6 grid gap-3">
                                     <Button
                                         className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all duration-300 border border-primary-600/30"
-                                        onClick={() => console.log('Google login')}
+                                        onClick={handleGoogleLogin}
                                     >
                                         Google
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                         className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all duration-300 border border-primary-600/30"
                                         onClick={() => console.log('Facebook login')}
                                     >
                                         Facebook
-                                    </Button>
+                                    </Button> */}
                                 </div>
                             </div>
 

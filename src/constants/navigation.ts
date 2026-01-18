@@ -9,6 +9,7 @@ export const ROUTES = {
   PRICING: '/pricing',
   ABOUT: '/about',
   FAQ: '/faq',
+  ORDERS: '/orders',
 } as const;
 
 export const NAVIGATION = {
@@ -18,6 +19,7 @@ export const NAVIGATION = {
     { to: ROUTES.PRICING, label: 'pricing' },
     { to: ROUTES.FAQ, label: 'FAQ' },
     { to: ROUTES.ABOUT, label: 'About' },
+    { to: ROUTES.ORDERS, label: 'My Orders' },
   ],
   LOGIN_BUTTON: 'Login',
   MENU_TOGGLE_ARIA_LABEL: 'Toggle menu',
@@ -30,4 +32,5 @@ export const ROUTE_COMPONENTS = {
   [ROUTES.PRICING]: 'PricingPage',
   [ROUTES.FAQ]: 'FAQPage',
   [ROUTES.ABOUT]: 'ContactInfoPage',
+  [ROUTES.ORDERS]: 'OrdersPage',
 } as const;

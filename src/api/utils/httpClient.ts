@@ -1,8 +1,9 @@
 import { ApiResponse, ApiError, RequestConfig } from '../types';
+import { STORAGE_KEYS } from '@constants/api';
 
 // Get API base URL from environment variables
 // @ts-ignore
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.galaxynamelab.com/name-lab/api';
 
 // Default request configuration
 const DEFAULT_CONFIG: RequestConfig = {
@@ -24,60 +25,60 @@ class HttpClient {
 
   // Get authentication token from localStorage
   private getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
   }
 
   // Set authentication token
   setAuthToken(token: string): void {
-    localStorage.setItem('authToken', token);
+    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
   }
 
   // Remove authentication token
   removeAuthToken(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
   }
 
-  // Build request headers
+  // Build request headers with common auth interceptor
   private buildHeaders(customHeaders?: Record<string, string>): Record<string, string> {
-    const headers = {
+    const headers: Record<string, string> = {
       ...this.defaultConfig.headers,
       ...customHeaders,
     };
 
-    // Add authorization header if token exists
+    // Common auth interceptor: Add x-auth-token header if token exists
     const token = this.getAuthToken();
     if (token) {
-      headers.Authorization = `Bearer ${token}`;
+      headers['x-auth-token'] = token;
     }
 
     return headers;
   }
 
   // Handle API response
-  private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  private async handleResponse<T>(response: Response, isBlob: boolean = false): Promise<ApiResponse<T>> {
     try {
-      const data = await response.json();
+      const data = isBlob ? await response.blob() : await response.json();
 
       if (!response.ok) {
         const error: ApiError = {
-          message: data.message || data.error || 'An error occurred',
+          message: isBlob ? response.statusText : (data.message || data.error || 'An error occurred'),
           statusCode: response.status,
-          code: data.code,
-          details: data.details,
+          code: isBlob ? undefined : data.code,
+          details: isBlob ? undefined : data.details,
         };
 
         return {
           success: false,
           error: error.message,
-          ...data,
+          ...(isBlob ? {} : { ...data }),
         };
       }
 
       return {
         success: true,
-        data: data.data || data,
-        message: data.message,
+        data: isBlob ? (data as T) : (data.data || data),
+        message: isBlob ? undefined : data.message,
         statusCode: response.status,
       };
     } catch (parseError) {
@@ -115,7 +116,8 @@ class HttpClient {
   private async makeRequest<T>(
     url: string,
     options: RequestInit,
-    config?: RequestConfig
+    config?: RequestConfig,
+    isBlob: boolean = false
   ): Promise<ApiResponse<T>> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), config?.timeout || this.defaultConfig.timeout);
@@ -127,7 +129,7 @@ class HttpClient {
       });
 
       clearTimeout(timeoutId);
-      return await this.handleResponse<T>(response);
+      return await this.handleResponse<T>(response, isBlob);
     } catch (error) {
       clearTimeout(timeoutId);
       return this.handleNetworkError(error);
@@ -142,7 +144,18 @@ class HttpClient {
     return this.makeRequest<T>(url, {
       method: 'GET',
       headers,
-    }, config);
+    }, config, false);
+  }
+
+  // GET request with blob response
+  async getBlob<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
+    const url = `${this.baseURL}${endpoint}`;
+    const headers = this.buildHeaders(config?.headers);
+
+    return this.makeRequest<T>(url, {
+      method: 'GET',
+      headers,
+    }, config, true);
   }
 
   // POST request
@@ -154,7 +167,7 @@ class HttpClient {
       method: 'POST',
       headers,
       body: data ? JSON.stringify(data) : undefined,
-    }, config);
+    }, config, false);
   }
 
   // PUT request
@@ -166,7 +179,7 @@ class HttpClient {
       method: 'PUT',
       headers,
       body: data ? JSON.stringify(data) : undefined,
-    }, config);
+    }, config, false);
   }
 
   // PATCH request
@@ -178,7 +191,7 @@ class HttpClient {
       method: 'PATCH',
       headers,
       body: data ? JSON.stringify(data) : undefined,
-    }, config);
+    }, config, false);
   }
 
   // DELETE request
@@ -189,7 +202,7 @@ class HttpClient {
     return this.makeRequest<T>(url, {
       method: 'DELETE',
       headers,
-    }, config);
+    }, config, false);
   }
 
   // File upload (multipart/form-data)
@@ -219,7 +232,7 @@ class HttpClient {
       method: 'POST',
       headers,
       body: formData,
-    }, config);
+    }, config, false);
   }
 }
 

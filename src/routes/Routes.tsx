@@ -8,6 +8,7 @@ import SuccessPage from '../pages/success/SuccessPage';
 import PricingPage from '../pages/pricing/PricingPage';
 import InsightPage from '../pages/insights/InsightPage';
 import FAQPage from '../pages/faq/FAQPage';
+import OrdersPage from '../pages/orders/OrdersPage';
 
 interface AppRoutesProps {
     isLoginModalOpen: boolean;
@@ -24,6 +25,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ isLoginModalOpen, setIsLoginModal
                 <Route path={ROUTES.PRICING} element={<PricingPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
                 <Route path={ROUTES.FAQ} element={<FAQPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
                 <Route path={ROUTES.ABOUT} element={<AboutPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+                <Route path={ROUTES.ORDERS} element={<OrdersPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
             </Routes>
         </Router>
     );

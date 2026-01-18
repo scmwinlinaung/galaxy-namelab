@@ -29,7 +29,7 @@
       "@components/*": [
         "src/components/*"
       ],
-        "@styles/*": [
+      "@styles/*": [
         "src/styles/*"
       ],
       "@pages/*": [
@@ -40,6 +40,9 @@
       ],
       "@api/*": [
         "src/api/*"
+      ],
+      "@constants/*": [
+        "src/constants/*"
       ]
       // Add any other aliases you need here
     },
