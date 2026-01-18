@@ -223,13 +223,13 @@ const CheckoutForm: React.FC<{
 
   // Step 3: Create Order in backend
   const createOrder = async (paymentIntentId: string) => {
-    const authToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) || undefined;
-    const userEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || undefined;
-    const password = localStorage.getItem(STORAGE_KEYS.USER_PASSWORD) || undefined;
+    const authToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) || '';
+    const userEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || '';
+    const password = localStorage.getItem(STORAGE_KEYS.USER_PASSWORD) || '';
     // For authenticated users, backend will get user info from token
     // Send empty strings for name, email, password as backend will populate them
     const orderData = {
-      name: userEmail?.split('@')[0],
+      name: userEmail?.split('@')[0] || '',
       email: userEmail,
       password: password,
       packageId: selectedPackage._id,
