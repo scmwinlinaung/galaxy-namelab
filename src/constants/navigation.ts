@@ -7,7 +7,7 @@ export const ROUTES = {
   INSIGHT: '/insight',
   SUCCESS: '/success',
   PRICING: '/pricing',
-  CONTACT: '/contact',
+  ABOUT: '/about',
   FAQ: '/faq',
 } as const;
 
@@ -17,7 +17,7 @@ export const NAVIGATION = {
     { to: ROUTES.INSIGHT, label: 'Insight' },
     { to: ROUTES.PRICING, label: 'pricing' },
     { to: ROUTES.FAQ, label: 'FAQ' },
-    { to: ROUTES.CONTACT, label: 'Contact' },
+    { to: ROUTES.ABOUT, label: 'About' },
   ],
   LOGIN_BUTTON: 'Login',
   MENU_TOGGLE_ARIA_LABEL: 'Toggle menu',
@@ -29,5 +29,5 @@ export const ROUTE_COMPONENTS = {
   [ROUTES.SUCCESS]: 'SuccessPage',
   [ROUTES.PRICING]: 'PricingPage',
   [ROUTES.FAQ]: 'FAQPage',
-  [ROUTES.CONTACT]: 'ContactInfoPage',
+  [ROUTES.ABOUT]: 'ContactInfoPage',
 } as const;

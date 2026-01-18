@@ -1,194 +1,223 @@
-// import React from 'react';
-// import { Container, Typography, Box, Grid } from '@mui/material';
+import React from 'react';
+import { motion } from 'framer-motion';
+import PageWrapper from '@components/layouts/PageWrapper';
+import Header from '@components/layouts/Header';
+import { FiStar, FiUsers, FiTrendingUp, FiAward, FiClock } from 'react-icons/fi';
 
-// const AboutPage: React.FC = () => {
-//   return (
-//     <Container maxWidth="lg" sx={{ py: 8 }}>
-//       <Typography variant="h2" component="h1" gutterBottom align="center" sx={{ fontWeight: 'bold', mb: 2 }}>
-//         About Galaxy NameLab
-//       </Typography>
+interface ContactInfoPageProps {
+    isLoginModalOpen: boolean;
+    setIsLoginModalOpen: (open: boolean) => void;
+}
 
-//       <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ mb: 6, color: 'primary.main' }}>
-//         The Legacy. The Science. The Result.
-//       </Typography>
+const ContactInfoPage: React.FC<ContactInfoPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.15,
+            },
+        },
+    };
 
-//       <Box sx={{ mb: 8 }}>
-//         <Typography variant="h3" component="h2" gutterBottom sx={{ mb: 3 }}>
-//           The Architect Behind the System
-//         </Typography>
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.6, ease: 'easeOut' },
+        },
+    };
 
-//         <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//           Galaxy NameLab is led by a Master Astrologer and Scholar with over 46 years of esoteric experience. He is a published author of authoritative texts on astrological naming sciences and has dedicated nearly half a century to decoding the relationship between cosmic vibrations and human success.
-//         </Typography>
+    return (
+        <PageWrapper>
+            <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
+            <main className="min-h-screen w-full bg-primary-950 text-primary-50">
+                {/* Background Overlay */}
+                <div className="absolute inset-0 bg-primary-900/70"></div>
 
-//         <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//           Founded in 1998, Galaxy NameLab has stood the test of time for 27 years. We are not a new startup experimenting with trends; we are a deeply established institution with a massive empirical dataset.
-//         </Typography>
-//       </Box>
+                <motion.div
+                    className="relative z-10 container mx-auto px-6 py-24"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    {/* Page Title */}
+                    {/* @ts-ignore */}
+                    <motion.div className="text-center mb-16" variants={itemVariants}>
+                        <h1 className="text-4xl md:text-6xl font-extrabold text-primary-50 mb-4 drop-shadow-lg">
+                            The <span className="text-primary-300">Legacy</span>. The <span className="text-primary-300">Science</span>. The <span className="text-primary-300">Result</span>.
+                        </h1>
+                        <h2 className="text-3xl md:text-4xl font-bold text-primary-200 mb-4">About Galaxy NameLab</h2>
+                    </motion.div>
 
-//       <Box sx={{ mb: 8 }}>
-//         <Typography variant="h3" component="h2" gutterBottom sx={{ mb: 3 }}>
-//           Our Impact by the Numbers
-//         </Typography>
+                    {/* The Architect Section */}
+                    {/* @ts-ignore */}
+                    <motion.div className="max-w-4xl mx-auto mb-20" variants={itemVariants}>
+                        <div className="bg-primary-900/50 border border-primary-800 p-8 rounded-3xl">
+                            <h3 className="text-2xl font-bold text-primary-50 mb-4">The Architect Behind the System</h3>
+                            <p className="text-primary-100 leading-relaxed mb-4">
+                                Galaxy NameLab is led by a Master Astrologer and Scholar with over <span className="text-primary-300 font-bold">46 years of esoteric experience</span>. He is a published author of authoritative texts on astrological naming sciences and has dedicated nearly half a century to decoding the relationship between cosmic vibrations and human success.
+                            </p>
+                            <p className="text-primary-100 leading-relaxed">
+                                Founded in <span className="text-primary-300 font-bold">1998</span>, Galaxy NameLab has stood the test of time for <span className="text-primary-300 font-bold">27 years</span>. We are not a new startup experimenting with trends; we are a deeply established institution with a massive empirical dataset.
+                            </p>
+                        </div>
+                    </motion.div>
 
-//         <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//           Over nearly three decades, we have engineered the destiny of:
-//         </Typography>
+                    {/* Impact Numbers */}
+                    {/* @ts-ignore */}
+                    <motion.div className="mb-20" variants={itemVariants}>
+                        <h3 className="text-3xl font-bold text-primary-50 text-center mb-12">Our Impact by the Numbers</h3>
+                        <p className="text-primary-100 text-center mb-12 max-w-3xl mx-auto text-lg">
+                            Over nearly three decades, we have engineered the destiny of:
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                            {/* @ts-ignore */}
+                            <motion.div className="bg-primary-900/50 border border-primary-800 p-8 rounded-2xl text-center" variants={itemVariants}>
+                                <FiUsers className="text-5xl text-primary-300 mx-auto mb-4" />
+                                <h4 className="text-4xl font-bold text-primary-50 mb-2">300,000+</h4>
+                                <p className="text-primary-200">Individuals: Helping people align with their true purpose</p>
+                            </motion.div>
+                            {/* @ts-ignore */}
+                            <motion.div className="bg-primary-900/50 border border-primary-800 p-8 rounded-2xl text-center" variants={itemVariants}>
+                                <FiTrendingUp className="text-5xl text-primary-300 mx-auto mb-4" />
+                                <h4 className="text-4xl font-bold text-primary-50 mb-2">7,000+</h4>
+                                <p className="text-primary-200">Businesses: Ranging from SMEs to large corporations</p>
+                            </motion.div>
+                            {/* @ts-ignore */}
+                            <motion.div className="bg-primary-900/50 border border-primary-800 p-8 rounded-2xl text-center" variants={itemVariants}>
+                                <FiAward className="text-5xl text-primary-300 mx-auto mb-4" />
+                                <h4 className="text-4xl font-bold text-primary-50 mb-2">307,000+</h4>
+                                <p className="text-primary-200">Total Impact: Names crafted and delivered</p>
+                            </motion.div>
+                        </div>
+                    </motion.div>
 
-//         <Grid container spacing={3} sx={{ mb: 4 }}>
-//           <Grid item xs={12} md={4}>
-//             <Box sx={{ textAlign: 'center', p: 3 }}>
-//               <Typography variant="h3" component="div" sx={{ color: 'primary.main', fontWeight: 'bold', mb: 1 }}>
-//                 300,000+
-//               </Typography>
-//               <Typography variant="h6" component="div">
-//                 Individuals
-//               </Typography>
-//               <Typography variant="body2" color="text.secondary">
-//                 Helping people align with their true purpose
-//               </Typography>
-//             </Box>
-//           </Grid>
+                    {/* Success Rate Section */}
+                    {/* @ts-ignore */}
+                    <motion.div className="mb-20" variants={itemVariants}>
+                        <h3 className="text-3xl font-bold text-primary-50 text-center mb-12">The Success Rate: Radical Honesty</h3>
+                        <div className="max-w-4xl mx-auto bg-primary-900/50 border border-primary-800 p-8 rounded-3xl">
+                            <p className="text-primary-100 leading-relaxed mb-6">
+                                We believe in transparency. Based on our <span className="text-primary-300 font-bold">27 years of data</span>, businesses utilizing our <span className="text-primary-300 font-bold">Stellar Fortune Names</span> show a remarkable success rate:
+                            </p>
+                            <div className="text-center mb-8">
+                                <div className="inline-block">
+                                    <h4 className="text-5xl font-bold text-primary-300 mb-2">80%</h4>
+                                    <p className="text-primary-200 text-lg">Success Rate: Approximately 8 out of 10 businesses achieve stability and profit</p>
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <h4 className="text-2xl font-bold text-primary-300 mb-2">The "Wildly Successful" Tier</h4>
+                                <p className="text-primary-200">Out of those, about <span className="text-primary-300 font-bold">30%</span> achieve explosive, market-dominating success.</p>
+                            </div>
+                        </div>
+                    </motion.div>
 
-//           <Grid item xs={12} md={4}>
-//             <Box sx={{ textAlign: 'center', p: 3 }}>
-//               <Typography variant="h3" component="div" sx={{ color: 'primary.main', fontWeight: 'bold', mb: 1 }}>
-//                 7,000+
-//               </Typography>
-//               <Typography variant="h6" component="div">
-//                 Businesses
-//               </Typography>
-//               <Typography variant="body2" color="text.secondary">
-//                 Ranging from SMEs to large corporations
-//               </Typography>
-//             </Box>
-//           </Grid>
+                    {/* Why Others Fail Section */}
+                    {/* @ts-ignore */}
+                    <motion.div className="mb-20" variants={itemVariants}>
+                        <div className="max-w-4xl mx-auto bg-red-900/20 border border-red-800 p-8 rounded-3xl">
+                            <h3 className="text-2xl font-bold text-primary-50 mb-4">Why do the other 20% fail?</h3>
+                            <p className="text-primary-100 leading-relaxed mb-4">
+                                Even a powerful name cannot override two critical errors:
+                            </p>
+                            <div className="space-y-4">
+                                <div className="flex items-start space-x-3">
+                                    <span className="bg-red-500/20 text-red-300 px-3 py-1 rounded-lg font-semibold">1</span>
+                                    <div>
+                                        <h4 className="text-primary-300 font-bold mb-1">Karmic Mismatch</h4>
+                                        <p className="text-primary-200">Engaging in a business industry that fundamentally contradicts the owner's birth chart.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start space-x-3">
+                                    <span className="bg-red-500/20 text-red-300 px-3 py-1 rounded-lg font-semibold">2</span>
+                                    <div>
+                                        <h4 className="text-primary-300 font-bold mb-1">Wrong Timing</h4>
+                                        <p className="text-primary-200">Launching the business during a "prohibited astrological period" of the owner's life.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-6 p-4 bg-primary-800/50 rounded-xl border border-primary-700">
+                                <p className="text-primary-100 italic">
+                                    <span className="text-primary-300 font-bold">Note:</span> If these two negative factors are present, even a Stellar Fortune Name has limits. We advise checking these factors before branding.
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
 
-//           <Grid item xs={12} md={4}>
-//             <Box sx={{ textAlign: 'center', p: 3 }}>
-//               <Typography variant="h3" component="div" sx={{ color: 'primary.main', fontWeight: 'bold', mb: 1 }}>
-//                 307,000+
-//               </Typography>
-//               <Typography variant="h6" component="div">
-//                 Total Impact
-//               </Typography>
-//               <Typography variant="body2" color="text.secondary">
-//                 Names crafted and delivered
-//               </Typography>
-//             </Box>
-//           </Grid>
-//         </Grid>
-//       </Box>
+                    {/* Methodology Section */}
+                    {/* @ts-ignore */}
+                    <motion.div className="mb-20" variants={itemVariants}>
+                        <h3 className="text-3xl font-bold text-primary-50 text-center mb-12">About Our Methodology: The "Hidden Code"</h3>
+                        <div className="max-w-4xl mx-auto">
+                            <div className="bg-primary-900/50 border border-primary-800 p-8 rounded-3xl mb-8">
+                                <h4 className="text-xl font-bold text-primary-300 mb-4">The Stellar Fortune Naming System</h4>
+                                <p className="text-primary-100 leading-relaxed">
+                                    The Stellar Fortune Naming System is a <span className="text-primary-300 font-bold">proprietary methodology unique to Galaxy NameLab</span>.
+                                </p>
+                            </div>
 
-//       <Box sx={{ mb: 8 }}>
-//         <Typography variant="h3" component="h2" gutterBottom sx={{ mb: 3 }}>
-//           The Success Rate: Radical Honesty
-//         </Typography>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                {/* @ts-ignore */}
+                                <motion.div className="bg-red-900/20 border border-red-800 p-6 rounded-2xl" variants={itemVariants}>
+                                    <h4 className="text-lg font-bold text-red-300 mb-3">What It Is NOT:</h4>
+                                    <ul className="text-primary-200 space-y-2">
+                                        <li>• It is NOT Numerology</li>
+                                        <li>• It is NOT Western Tropical Astrology</li>
+                                        <li>• It is NOT standard Eastern Sidereal Astrology</li>
+                                    </ul>
+                                </motion.div>
+                                {/* @ts-ignore */}
+                                <motion.div className="bg-green-900/20 border border-green-800 p-6 rounded-2xl" variants={itemVariants}>
+                                    <h4 className="text-lg font-bold text-green-300 mb-3">What It Is:</h4>
+                                    <p className="text-primary-200 leading-relaxed">
+                                        It is an advanced evolution of a guarded esoteric tradition from a specific lineage of Eastern Wisdom. We have upgraded this ancient secret to match the modern commercial world.
+                                    </p>
+                                </motion.div>
+                            </div>
 
-//         <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//           We believe in transparency. Based on our 27 years of data, businesses utilizing our Stellar Fortune Names show a remarkable success rate:
-//         </Typography>
+                            <div className="bg-primary-900/50 border border-primary-800 p-8 rounded-3xl">
+                                <h4 className="text-xl font-bold text-primary-300 mb-4">The Core Algorithm:</h4>
+                                <p className="text-primary-100 leading-relaxed mb-4">
+                                    We calculate the <span className="text-primary-300 font-bold">"Sextile Alignment"</span> between the <span className="text-primary-300 font-bold">3rd House</span> (Effort/Enterprise) and the <span className="text-primary-300 font-bold">11th House</span> (Gains/Fulfillment). We construct names using only the alphabets commanded by the stars in these specific geometric positions.
+                                </p>
+                                <p className="text-primary-100 leading-relaxed">
+                                    This method has been reverse-engineered and verified against hundreds of global billionaires, showing a <span className="text-primary-300 font-bold">90% accuracy match</span> with their success patterns.
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
 
-//         <Box sx={{ mb: 4 }}>
-//           <Typography variant="h4" component="div" sx={{ color: 'primary.main', mb: 2 }}>
-//             80% Success Rate
-//           </Typography>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//             Approximately 8 out of 10 businesses achieve stability and profit.
-//           </Typography>
-//         </Box>
+                    {/* Critical Requirement */}
+                    {/* @ts-ignore */}
+                    <motion.div className="mb-20" variants={itemVariants}>
+                        <div className="max-w-4xl mx-auto bg-yellow-900/20 border border-yellow-800 p-8 rounded-3xl">
+                            <h3 className="text-2xl font-bold text-primary-50 mb-4 flex items-center">
+                                <FiClock className="text-yellow-300 mr-3" />
+                                A Critical Requirement
+                            </h3>
+                            <p className="text-primary-100 leading-relaxed">
+                                Because this system relies on precise planetary geometry, we require your <span className="text-yellow-300 font-bold">EXACT Birth Time (Hour and Minute)</span>. Without the birth time, the Stellar Fortune calculation is mathematically impossible.
+                            </p>
+                        </div>
+                    </motion.div>
 
-//         <Box sx={{ mb: 4 }}>
-//           <Typography variant="h4" component="div" sx={{ color: 'primary.main', mb: 2 }}>
-//             The "Wildly Successful" Tier
-//           </Typography>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//             Out of those, about 30% achieve explosive, market-dominating success.
-//           </Typography>
-//         </Box>
+                    {/* Galaxy NameLab Footer */}
+                    {/* @ts-ignore */}
+                    <motion.div className="text-center" variants={itemVariants}>
+                        <div className="inline-flex items-center space-x-2">
+                            <FiStar className="text-3xl text-primary-300" />
+                            <h2 className="text-4xl font-bold text-primary-50">Galaxy NameLab</h2>
+                            <FiStar className="text-3xl text-primary-300" />
+                        </div>
+                    </motion.div>
 
-//         <Box sx={{ mb: 4 }}>
-//           <Typography variant="h4" component="div" sx={{ mb: 2 }}>
-//             Why do the other 20% fail?
-//           </Typography>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//             Even a powerful name cannot override two critical errors:
-//           </Typography>
-//           <ul>
-//             <li>
-//               <Typography variant="body1" sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//                 <strong>Karmic Mismatch:</strong> Engaging in a business industry that fundamentally contradicts the owner's birth chart.
-//               </Typography>
-//             </li>
-//             <li>
-//               <Typography variant="body1" sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//                 <strong>Wrong Timing:</strong> Launching the business during a "prohibited astrological period" of the owner's life.
-//               </Typography>
-//             </li>
-//           </ul>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8, fontStyle: 'italic' }}>
-//             <strong>Note:</strong> If these two negative factors are present, even a Stellar Fortune Name has limits. We advise checking these factors before branding.
-//           </Typography>
-//         </Box>
-//       </Box>
+                </motion.div>
+            </main>
+        </PageWrapper>
+    );
+};
 
-//       <Box sx={{ mb: 8 }}>
-//         <Typography variant="h3" component="h2" gutterBottom sx={{ mb: 3 }}>
-//           About Our Methodology: The "Hidden Code"
-//         </Typography>
-
-//         <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//           The Stellar Fortune Naming System is a proprietary methodology unique to Galaxy NameLab.
-//         </Typography>
-
-//         <Box sx={{ mb: 4 }}>
-//           <Typography variant="h4" component="div" sx={{ mb: 2 }}>
-//             What It Is Not:
-//           </Typography>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//             It is NOT Numerology. It is NOT Western Tropical Astrology. It is NOT standard Eastern Sidereal Astrology.
-//           </Typography>
-//         </Box>
-
-//         <Box sx={{ mb: 4 }}>
-//           <Typography variant="h4" component="div" sx={{ mb: 2 }}>
-//             What It Is:
-//           </Typography>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//             It is an advanced evolution of a guarded esoteric tradition from a specific lineage of Eastern Wisdom. We have upgraded this ancient secret to match the modern commercial world.
-//           </Typography>
-//         </Box>
-
-//         <Box sx={{ mb: 4 }}>
-//           <Typography variant="h4" component="div" sx={{ mb: 2 }}>
-//             The Core Algorithm:
-//           </Typography>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//             We calculate the "Sextile Alignment" between the 3rd House (Effort/Enterprise) and the 11th House (Gains/Fulfillment). We construct names using only the alphabets commanded by the stars in these specific geometric positions.
-//           </Typography>
-//           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//             This method has been reverse-engineered and verified against hundreds of global billionaires, showing a 90% accuracy match with their success patterns.
-//           </Typography>
-//         </Box>
-//       </Box>
-
-//       <Box sx={{ mb: 8 }}>
-//         <Typography variant="h3" component="h2" gutterBottom sx={{ mb: 3, color: 'error.main' }}>
-//           A Critical Requirement
-//         </Typography>
-
-//         <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-//           Because this system relies on precise planetary geometry, we require your EXACT Birth Time (Hour and Minute). Without the birth time, the Stellar Fortune calculation is mathematically impossible.
-//         </Typography>
-//       </Box>
-
-//       <Box sx={{ textAlign: 'center', mt: 6 }}>
-//         <Typography variant="h3" component="div" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-//           Galaxy NameLab
-//         </Typography>
-//       </Box>
-//     </Container>
-//   );
-// };
-
-// export default AboutPage;
+export default ContactInfoPage;
