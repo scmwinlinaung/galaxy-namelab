@@ -16,9 +16,9 @@ export interface CreateStripeIntentResponse {
 
 // Step 3: Create Order Request
 export interface CreateOrderRequest {
-  name: string;
-  email: string;
-  password: string;
+  name?: string;
+  email?: string;
+  password?: string;
   packageId: string;
   businessInfo: {
     businessName: string;

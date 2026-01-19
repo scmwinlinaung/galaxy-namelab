@@ -10,6 +10,7 @@ export const ROUTES = {
   ABOUT: '/about',
   FAQ: '/faq',
   ORDERS: '/orders',
+  GOOGLE_CALLBACK: '/auth/google/callback'
 } as const;
 
 export const NAVIGATION = {

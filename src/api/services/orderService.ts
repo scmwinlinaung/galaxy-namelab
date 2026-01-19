@@ -95,4 +95,51 @@ export class OrderService {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
   }
+
+  /**
+   * Upload a PDF submission for an order
+   * POST /submissions/{orderId}
+   */
+  static async uploadSubmission(
+    orderId: string,
+    file: File
+  ): Promise<{ success: boolean; data?: any; error?: string }> {
+    try {
+      const response = await httpClient.upload<any>(
+        `/submissions/${orderId}`,
+        file
+      );
+
+      if (response.success && response.data) {
+        return {
+          success: true,
+          data: response.data,
+        };
+      }
+
+      // Handle specific error cases
+      if (response.statusCode === 401) {
+        return {
+          success: false,
+          error: 'Not authorized. Please login.',
+        };
+      }
+      if (response.statusCode === 404) {
+        return {
+          success: false,
+          error: 'Order not found.',
+        };
+      }
+
+      return {
+        success: false,
+        error: response.error || 'Failed to upload submission',
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.message || 'Failed to upload submission',
+      };
+    }
+  }
 }

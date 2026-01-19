@@ -226,12 +226,11 @@ const CheckoutForm: React.FC<{
     const authToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) || '';
     const userEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || '';
     const password = localStorage.getItem(STORAGE_KEYS.USER_PASSWORD) || '';
+
     // For authenticated users, backend will get user info from token
-    // Send empty strings for name, email, password as backend will populate them
-    const orderData = {
-      name: userEmail?.split('@')[0] || '',
-      email: userEmail,
-      password: password,
+    // Only send name, email, password if user is NOT authenticated (guest checkout scenario)
+    // For Google login users (no password stored), backend gets user info from token
+    const orderData: any = {
       packageId: selectedPackage._id,
       paymentMethod: 'stripe' as const,
       paymentDetails: {
@@ -242,6 +241,22 @@ const CheckoutForm: React.FC<{
         dateOfBirth: businessInfo.dateOfBirth,
       },
     };
+
+    // Only include name, email, password for non-Google authenticated users
+    // Google users will have token but no password in localStorage
+    if (authToken && password) {
+      // Regular authenticated user with password
+      orderData.name = userEmail?.split('@')[0] || '';
+      orderData.email = userEmail;
+      orderData.password = password;
+    } else if (!authToken) {
+      // Guest checkout - send name, email, password if available
+      orderData.name = userEmail?.split('@')[0] || '';
+      orderData.email = userEmail;
+      orderData.password = password;
+    }
+    // For Google auth users (token exists but no password): don't send name, email, password
+    // Backend will extract user info from the JWT token
 
     const response = await PaymentService.createOrder(orderData);
 

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import {
   FiPackage,
   FiDownload,
+  FiUpload,
   FiCalendar,
   FiCheckCircle,
   FiClock,
@@ -36,6 +37,8 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [downloadingOrderId, setDownloadingOrderId] = useState<string | null>(null);
+  const [uploadingOrderId, setUploadingOrderId] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<{ orderId: string; file: File } | null>(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -74,6 +77,38 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
       alert('An unexpected error occurred while downloading');
     } finally {
       setDownloadingOrderId(null);
+    }
+  };
+
+  const handleFileSelect = (orderId: string, file: File) => {
+    // Validate PDF file
+    if (file.type !== 'application/pdf') {
+      alert('Please select a PDF file');
+      return;
+    }
+    setSelectedFile({ orderId, file });
+  };
+
+  const handleUploadPdf = async (orderId: string) => {
+    if (!selectedFile || selectedFile.orderId !== orderId) {
+      alert('Please select a PDF file first');
+      return;
+    }
+
+    try {
+      setUploadingOrderId(orderId);
+      const response = await OrderService.uploadSubmission(orderId, selectedFile.file);
+
+      if (response.success) {
+        alert('PDF uploaded successfully!');
+        setSelectedFile(null);
+      } else {
+        alert(response.error || 'Failed to upload PDF');
+      }
+    } catch (err) {
+      alert('An unexpected error occurred while uploading');
+    } finally {
+      setUploadingOrderId(null);
     }
   };
 
@@ -260,7 +295,8 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                             {order.payment.status}
                           </p>
                         </div>
-                        <div className="pt-2">
+                        <div className="space-y-2 pt-2">
+                          {/* Download Button */}
                           {canDownload ? (
                             <button
                               onClick={() => handleDownloadPdf(order._id)}
@@ -285,6 +321,41 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                               Report will be available once confirmed
                             </div>
                           )}
+
+                          {/* Upload Button */}
+                          <div className="flex gap-2">
+                            <input
+                              type="file"
+                              id={`file-input-${order._id}`}
+                              accept=".pdf,application/pdf"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  handleFileSelect(order._id, file);
+                                }
+                              }}
+                            />
+                            <button
+                              onClick={() => document.getElementById(`file-input-${order._id}`)?.click()}
+                              disabled={uploadingOrderId === order._id}
+                              className="flex-1 px-4 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-xl font-semibold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            >
+                              <FiFileText className="text-lg" />
+                              {selectedFile?.orderId === order._id ? selectedFile.file.name : 'Select PDF'}
+                            </button>
+                            <button
+                              onClick={() => handleUploadPdf(order._id)}
+                              disabled={!selectedFile || selectedFile.orderId !== order._id || uploadingOrderId === order._id}
+                              className="px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-green-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            >
+                              {uploadingOrderId === order._id ? (
+                                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                              ) : (
+                                <FiUpload className="text-lg" />
+                              )}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>

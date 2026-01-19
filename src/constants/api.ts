@@ -56,5 +56,6 @@ export const STORAGE_KEYS = {
   USER_PASSWORD: 'userPassword',
   USER_ROLE: 'userRole',
   USER_NAME: 'userName',
+  USER_ID: 'userId',
   REFRESH_TOKEN: 'refreshToken',
 } as const;
