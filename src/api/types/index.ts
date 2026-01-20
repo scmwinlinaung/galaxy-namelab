@@ -74,3 +74,6 @@ export interface RequestConfig {
   params?: Record<string, any>;
   timeout?: number;
 }
+
+// Export email types
+export type { SendEmailRequest, SendEmailResponse } from './email';

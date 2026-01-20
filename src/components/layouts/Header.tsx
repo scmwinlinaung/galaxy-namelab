@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { NAVIGATION, ANIMATION } from '../../constants';
+import { STORAGE_KEYS } from '../../constants/api';
 
 interface HeaderProps {
     isLoginModalOpen: boolean;
@@ -11,14 +12,65 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     const navLinks = NAVIGATION.ITEMS;
 
+    // Check authentication status
+    const checkAuthStatus = () => {
+        const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+        setIsAuthenticated(!!token);
+    };
+
+    // Check auth status on mount and when storage changes
+    useEffect(() => {
+        checkAuthStatus();
+
+        // Listen for storage changes (e.g., when user logs in from another tab)
+        const handleStorageChange = () => {
+            checkAuthStatus();
+        };
+
+        // Listen for custom auth change event (from LoginModal)
+        const handleAuthChange = () => {
+            checkAuthStatus();
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        window.addEventListener('authChange', handleAuthChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('authChange', handleAuthChange);
+        };
+    }, []);
+
     const handleLoginClick = () => {
         setIsLoginModalOpen(true);
         setIsMenuOpen(false);
+    };
+
+    const handleLogout = () => {
+        // Clear all auth-related items from localStorage
+        localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.USER_EMAIL);
+        localStorage.removeItem(STORAGE_KEYS.USER_PASSWORD);
+        localStorage.removeItem(STORAGE_KEYS.USER_ROLE);
+        localStorage.removeItem(STORAGE_KEYS.USER_NAME);
+        localStorage.removeItem(STORAGE_KEYS.USER_ID);
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+
+        setIsAuthenticated(false);
+        setIsMenuOpen(false);
+
+        // Dispatch custom event to notify other components about logout
+        window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: false } }));
+
+        // Navigate to home page
+        navigate('/');
     };
 
     return (
@@ -50,10 +102,10 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                         </NavLink>
                     ))}
                     <button
-                        onClick={handleLoginClick}
+                        onClick={isAuthenticated ? handleLogout : handleLoginClick}
                         className="ml-6 border border-primary-400 text-primary-400 px-4 py-1.5 rounded-full hover:bg-primary-400 hover:text-white transition-all duration-300 font-semibold"
                     >
-                        {NAVIGATION.LOGIN_BUTTON}
+                        {isAuthenticated ? NAVIGATION.LOGOUT_BUTTON : NAVIGATION.LOGIN_BUTTON}
                     </button>
                 </div>
 
@@ -95,10 +147,10 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                             </NavLink>
                         ))}
                         <button
-                            onClick={handleLoginClick}
+                            onClick={isAuthenticated ? handleLogout : handleLoginClick}
                             className="transition-colors duration-300 px-4 py-2 rounded-lg text-white hover:text-primary-300 hover:bg-primary-800/30 text-left font-semibold"
                         >
-                            Login
+                            {isAuthenticated ? NAVIGATION.LOGOUT_BUTTON : NAVIGATION.LOGIN_BUTTON}
                         </button>
                     </nav>
                 </motion.div>

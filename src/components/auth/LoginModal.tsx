@@ -88,10 +88,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                     localStorage.setItem(STORAGE_KEYS.USER_ROLE, data.role);
                     localStorage.setItem(STORAGE_KEYS.USER_EMAIL, formData.email);
                     localStorage.setItem(STORAGE_KEYS.USER_PASSWORD, hashedPassword);
+
+                    // Dispatch custom event to notify components about login
+                    window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+
                     // Close modal on success
                     onClose();
-                    // Optionally refresh or redirect
-                    window.location.reload();
                 } else {
                     // Handle error response
                     setApiError(data.message || 'Invalid credentials. Please try again.');
@@ -128,10 +130,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                     localStorage.setItem(STORAGE_KEYS.USER_NAME, formData.name);
                     localStorage.setItem(STORAGE_KEYS.USER_PASSWORD, hashedPassword);
 
+                    // Dispatch custom event to notify components about login
+                    window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+
                     // Close modal on success
                     onClose();
-                    // Optionally refresh or redirect
-                    window.location.reload();
                 } else {
                     // Handle error response
                     if (response.status === 400) {

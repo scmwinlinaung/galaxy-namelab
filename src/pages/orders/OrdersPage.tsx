@@ -11,12 +11,14 @@ import {
   FiXCircle,
   FiAlertCircle,
   FiFileText,
+  FiLock,
 } from 'react-icons/fi';
 
 import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import { OrderService } from '@api/services/orderService';
 import { Order, OrderStatus } from '@api/types/order';
+import { STORAGE_KEYS } from '@constants/api';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -39,27 +41,72 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
   const [downloadingOrderId, setDownloadingOrderId] = useState<string | null>(null);
   const [uploadingOrderId, setUploadingOrderId] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<{ orderId: string; file: File } | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check authentication status
+  const checkAuthStatus = () => {
+    const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
+    const isAuthenticated = !!token;
+    setIsAuthenticated(isAuthenticated);
+
+    // Open login modal if not authenticated
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+    }
+
+    return isAuthenticated;
+  };
+
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const response = await OrderService.getMyOrders();
+      console.log("RESPONSE = " + JSON.stringify(response.data))
+      if (response.success && response.data) {
+        setOrders(response.data);
+      } else {
+        setError(response.error || 'Failed to load orders');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setLoading(true);
-        const response = await OrderService.getMyOrders();
-        console.log("RESPONSE = " + JSON.stringify(response.data))
-        if (response.success && response.data) {
-          setOrders(response.data);
-        } else {
-          setError(response.error || 'Failed to load orders');
-        }
-      } catch (err) {
-        setError('An unexpected error occurred');
-      } finally {
-        setLoading(false);
+    // Check auth status on mount
+    const isAuth = checkAuthStatus();
+
+    // Listen for auth change events
+    const handleAuthChange = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const loggedIn = customEvent.detail?.authenticated;
+
+      if (loggedIn) {
+        setIsAuthenticated(true);
+        // Fetch orders after login
+        fetchOrders();
+      } else {
+        setIsAuthenticated(false);
       }
     };
 
-    fetchOrders();
+    window.addEventListener('authChange', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
   }, []);
+
+  useEffect(() => {
+    // Only fetch orders if authenticated
+    if (isAuthenticated) {
+      fetchOrders();
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
 
   const handleDownloadPdf = async (orderId: string) => {
     try {
@@ -188,15 +235,38 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
 
         {/* Main Content */}
         <div className="w-full max-w-6xl mx-auto mb-16">
+          {/* Not Authenticated State */}
+          {!isAuthenticated && !loading && (
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={0.2}
+              className="text-center py-16 bg-primary-900/30 backdrop-blur-sm rounded-3xl p-12 border border-primary-800"
+            >
+              <FiLock className="text-6xl text-primary-400 mx-auto mb-6" />
+              <h3 className="text-2xl font-bold text-white mb-4">Login Required</h3>
+              <p className="text-lg text-primary-300 mb-8">
+                Please log in to view your orders.
+              </p>
+              <button
+                onClick={() => setIsLoginModalOpen(true)}
+                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-full font-bold shadow-lg hover:shadow-purple-500/50 transition-all"
+              >
+                Login to Continue
+              </button>
+            </motion.div>
+          )}
+
           {/* Loading State */}
-          {loading && (
+          {loading && isAuthenticated && (
             <div className="text-center py-12">
               <div className="text-2xl text-primary-300 font-medium animate-pulse">Loading your orders...</div>
             </div>
           )}
 
           {/* Error State */}
-          {error && (
+          {error && isAuthenticated && (
             <div className="text-center py-12">
               <div className="text-2xl text-red-400 font-medium bg-red-900/20 backdrop-blur-sm rounded-2xl p-6 border border-red-800 max-w-2xl mx-auto">
                 {error}
@@ -205,7 +275,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
           )}
 
           {/* Empty State */}
-          {!loading && !error && orders.length === 0 && (
+          {!loading && !error && isAuthenticated && orders.length === 0 && (
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -228,7 +298,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
           )}
 
           {/* Orders List */}
-          {!loading && !error && orders.length > 0 && (
+          {!loading && !error && isAuthenticated && orders.length > 0 && (
             <div className="space-y-6">
               {orders.map((order, index) => {
                 const statusBadge = getStatusBadge(order.status);

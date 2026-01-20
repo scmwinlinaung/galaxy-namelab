@@ -27,6 +27,9 @@ const GoogleCallbackPage: React.FC = () => {
       // Clear the password since Google users don't have one
       localStorage.removeItem(STORAGE_KEYS.USER_PASSWORD);
 
+      // Dispatch custom event to notify components about login
+      window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+
       // Redirect to home page or pricing page
       navigate('/', { replace: true });
     } else {
