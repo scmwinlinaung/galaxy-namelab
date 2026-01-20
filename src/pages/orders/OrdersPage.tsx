@@ -81,7 +81,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
     // Listen for auth change events
     const handleAuthChange = (e: Event) => {
       const customEvent = e as CustomEvent;
-      const loggedIn = customEvent.detail?.authenticated;
+      const loggedIn = customEvent.detail?.isAuthenticated;
 
       if (loggedIn) {
         setIsAuthenticated(true);
