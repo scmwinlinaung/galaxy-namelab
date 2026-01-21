@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiStar, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
 
@@ -7,6 +7,7 @@ import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import Section from '@components/ui/Section';
 import { ANIMATION, IMAGES } from '../../constants';
+import { STORAGE_KEYS } from '@constants/api';
 
 interface HomePageProps {
     isLoginModalOpen: boolean;
@@ -15,6 +16,28 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        // Check if user is returning from OAuth callback (Google or Facebook)
+        const token = searchParams.get('token');
+        const userId = searchParams.get('userId');
+
+        if (token && userId) {
+            // Store authentication data in localStorage
+            localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+            localStorage.setItem(STORAGE_KEYS.USER_ID, userId);
+
+            // Clear the password since OAuth users don't have one
+            localStorage.removeItem(STORAGE_KEYS.USER_PASSWORD);
+
+            // Dispatch custom event to notify components about login
+            window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+
+            // Clean URL by removing query parameters
+            window.history.replaceState({}, '', '/');
+        }
+    }, [searchParams]);
 
     return (
         <PageWrapper>

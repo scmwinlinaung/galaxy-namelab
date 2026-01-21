@@ -188,6 +188,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         window.location.href = `${API_HOST}/auth/google`;
     };
 
+    const handleFacebookLogin = () => {
+        // Redirect to Facebook OAuth endpoint
+        window.location.href = `${API_HOST}/auth/facebook`;
+    };
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -418,12 +423,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                     >
                                         Google
                                     </Button>
-                                    {/* <Button
+                                    <Button
                                         className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all duration-300 border border-primary-600/30"
-                                        onClick={() => console.log('Facebook login')}
+                                        onClick={handleFacebookLogin}
                                     >
                                         Facebook
-                                    </Button> */}
+                                    </Button>
                                 </div>
                             </div>
 

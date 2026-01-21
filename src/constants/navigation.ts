@@ -11,7 +11,8 @@ export const ROUTES = {
   FAQ: '/faq',
   ORDERS: '/orders',
   CHECK_YOUR_NAME: '/check-your-name',
-  GOOGLE_CALLBACK: '/auth/google/callback'
+  GOOGLE_CALLBACK: '/auth/google/callback',
+  FACEBOOK_CALLBACK: '/auth/facebook/callback'
 } as const;
 
 export const NAVIGATION = {
