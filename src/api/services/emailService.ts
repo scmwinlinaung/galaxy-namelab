@@ -5,6 +5,6 @@ import { ApiResponse, SendEmailRequest, SendEmailResponse } from '../types';
 export class EmailService {
   // Send email
   static async sendEmail(data: SendEmailRequest): Promise<ApiResponse<SendEmailResponse>> {
-    return httpClient.post<SendEmailResponse>('/email/send', data);
+    return httpClient.post<SendEmailResponse>('/mail/send', data);
   }
 }

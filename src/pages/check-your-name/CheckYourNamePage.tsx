@@ -88,9 +88,9 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
         try {
             // Send email to admin via backend API
             const emailData = {
-                to: 'winlinaung2813@gmail.com',
+                to: 'chantharzay2025@gmail.com',
                 subject: `Free Audit Request - ${formData.fullName}`,
-                body: `
+                text: `
 Free Name Audit Request
 
 Full Name: ${formData.fullName}

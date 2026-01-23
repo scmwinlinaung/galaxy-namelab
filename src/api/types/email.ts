@@ -2,7 +2,7 @@
 export interface SendEmailRequest {
   to: string;
   subject: string;
-  body: string;
+  text: string;
 }
 
 export interface SendEmailResponse {
