@@ -58,20 +58,59 @@ class HttpClient {
   // Handle API response
   private async handleResponse<T>(response: Response, isBlob: boolean = false): Promise<ApiResponse<T>> {
     try {
-      const data = isBlob ? await response.blob() : await response.json();
+      // Handle blob responses
+      if (isBlob) {
+        if (!response.ok) {
+          const error: ApiError = {
+            message: response.statusText || 'An error occurred',
+            statusCode: response.status,
+          };
+          return {
+            success: false,
+            error: error.message,
+            statusCode: response.status,
+          };
+        }
+        const blob = await response.blob();
+        return {
+          success: true,
+          data: blob as T,
+          statusCode: response.status,
+        };
+      }
+
+      // Try to parse as JSON for non-blob responses
+      let data;
+      let textData;
+      try {
+        textData = await response.text();
+        data = textData ? JSON.parse(textData) : {};
+      } catch {
+        data = { message: textData || response.statusText };
+      }
 
       if (!response.ok) {
         const error: ApiError = {
-          message: isBlob ? response.statusText : (data.message || data.error || 'An error occurred'),
+          message: data.message || data.error || response.statusText || 'An error occurred',
           statusCode: response.status,
-          code: isBlob ? undefined : data.code,
-          details: isBlob ? undefined : data.details,
+          code: data.code,
+          details: data.details,
         };
+
+        // Log detailed error information for debugging
+        console.error('API Error Details:', {
+          url: response.url,
+          status: response.status,
+          statusText: response.statusText,
+          responseData: data,
+          rawResponse: textData,
+          error: error,
+        });
 
         return {
           success: false,
           error: error.message,
-          ...(isBlob ? {} : { ...data }),
+          ...data,
         };
       }
 
@@ -150,7 +189,9 @@ class HttpClient {
   // GET request with blob response
   async getBlob<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
+    // Build headers without Content-Type for blob downloads
     const headers = this.buildHeaders(config?.headers);
+    delete headers['Content-Type'];
 
     return this.makeRequest<T>(url, {
       method: 'GET',
@@ -230,6 +271,38 @@ class HttpClient {
 
     return this.makeRequest<T>(url, {
       method: 'POST',
+      headers,
+      body: formData,
+    }, config, false);
+  }
+
+  // File upload with PUT (multipart/form-data)
+  async uploadWithPut<T>(endpoint: string, file?: File, additionalData?: Record<string, any>, config?: RequestConfig): Promise<ApiResponse<T>> {
+    const url = `${this.baseURL}${endpoint}`;
+    const formData = new FormData();
+
+    if (file) {
+      formData.append('file', file);
+    }
+
+    if (additionalData) {
+      Object.entries(additionalData).forEach(([key, value]) => {
+        formData.append(key, String(value));
+      });
+    }
+
+    const headers = this.buildHeaders({
+      // Remove Content-Type to let browser set it with boundary
+      // @ts-ignore
+      "Content-Type": undefined,
+      ...config?.headers,
+    });
+
+    // Remove Content-Type from headers for FormData
+    delete headers['Content-Type'];
+
+    return this.makeRequest<T>(url, {
+      method: 'PUT',
       headers,
       body: formData,
     }, config, false);

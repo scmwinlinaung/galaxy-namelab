@@ -46,3 +46,31 @@ export interface MyOrdersResponse {
 
 // Download PDF Response (Blob)
 export type DownloadPdfResponse = Blob;
+
+// Submission Status
+export type SubmissionStatus = 'pending' | 'reviewed' | 'approved' | 'rejected';
+
+// User Info (simplified)
+export interface UserInfo {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+// Submission Model
+export interface Submission {
+  _id: string;
+  adminComment?: string;
+  adminPdfPath?: string;
+  createdAt: string;
+  filePath: string;
+  originalName: string;
+  status: SubmissionStatus;
+  user: string | UserInfo;
+  order: Order;
+}
+
+// Get Submissions for Order Response
+export interface OrderSubmissionsResponse {
+  submissions: Submission[];
+}

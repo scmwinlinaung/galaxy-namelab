@@ -12,12 +12,15 @@ import {
   FiAlertCircle,
   FiFileText,
   FiLock,
+  FiEdit,
+  FiRefreshCw,
+  FiX,
 } from 'react-icons/fi';
 
 import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import { OrderService } from '@api/services/orderService';
-import { Order, OrderStatus } from '@api/types/order';
+import { Order, OrderStatus, Submission } from '@api/types/order';
 import { STORAGE_KEYS } from '@constants/api';
 
 const fadeUp = {
@@ -42,6 +45,25 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
   const [uploadingOrderId, setUploadingOrderId] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<{ orderId: string; file: File } | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [submissions, setSubmissions] = useState<Record<string, Submission[]>>({});
+  const [expandedOrders, setExpandedOrders] = useState<Record<string, boolean>>({});
+  const [loadingSubmissions, setLoadingSubmissions] = useState<Record<string, boolean>>({});
+
+  // New state for submission actions
+  const [submissionFileInputs, setSubmissionFileInputs] = useState<Record<string, File | null>>({});
+  const [replacingSubmissionId, setReplacingSubmissionId] = useState<string | null>(null);
+  const [isUpdatingSubmission, setIsUpdatingSubmission] = useState<string | null>(null);
+  const [adminUpdateModal, setAdminUpdateModal] = useState<{
+    isOpen: boolean;
+    submissionId: string;
+    orderId: string;
+  } | null>(null);
+  const [adminUpdateData, setAdminUpdateData] = useState({
+    status: 'pending',
+    adminComment: '',
+    file: null as File | null,
+  });
+  const [downloadingAdminResponse, setDownloadingAdminResponse] = useState<string | null>(null);
 
   // Check authentication status
   const checkAuthStatus = () => {
@@ -127,6 +149,25 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
     }
   };
 
+  const handleDownloadAdminResponse = async (submissionId: string) => {
+    try {
+      setDownloadingAdminResponse(submissionId);
+      const response = await OrderService.downloadAdminResponsePdf(submissionId);
+
+      if (response.success && response.blob) {
+        // Generate filename using submission ID
+        const filename = `admin-response-${submissionId}.pdf`;
+        OrderService.downloadBlob(response.blob, filename);
+      } else {
+        alert(response.error || 'Failed to download admin response');
+      }
+    } catch (err) {
+      alert('An unexpected error occurred while downloading');
+    } finally {
+      setDownloadingAdminResponse(null);
+    }
+  };
+
   const handleFileSelect = (orderId: string, file: File) => {
     // Validate PDF file
     if (file.type !== 'application/pdf') {
@@ -149,6 +190,8 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
       if (response.success) {
         alert('PDF uploaded successfully!');
         setSelectedFile(null);
+        // Refresh submissions for this order
+        fetchSubmissionsForOrder(orderId);
       } else {
         alert(response.error || 'Failed to upload PDF');
       }
@@ -156,6 +199,133 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
       alert('An unexpected error occurred while uploading');
     } finally {
       setUploadingOrderId(null);
+    }
+  };
+
+  const fetchSubmissionsForOrder = async (orderId: string) => {
+    try {
+      setLoadingSubmissions(prev => ({ ...prev, [orderId]: true }));
+      const response = await OrderService.getOrderSubmissions(orderId);
+      if (response.success && response.data) {
+        const submissionsData = response.data;
+        setSubmissions(prev => ({ ...prev, [orderId]: submissionsData }));
+      }
+    } catch (err) {
+      console.error('Failed to fetch submissions:', err);
+    } finally {
+      setLoadingSubmissions(prev => ({ ...prev, [orderId]: false }));
+    }
+  };
+
+  // Handle file selection for submission replacement
+  const handleSubmissionFileSelect = (submissionId: string, file: File) => {
+    if (file.type !== 'application/pdf') {
+      alert('Please select a PDF file');
+      return;
+    }
+    setSubmissionFileInputs(prev => ({ ...prev, [submissionId]: file }));
+  };
+
+  // Handle replacing submission file
+  const handleReplaceSubmissionFile = async (orderId: string, submissionId: string) => {
+    const file = submissionFileInputs[submissionId];
+    if (!file) {
+      alert('Please select a PDF file first');
+      return;
+    }
+
+    try {
+      setReplacingSubmissionId(submissionId);
+      const response = await OrderService.replaceSubmissionFile(orderId, file);
+
+      if (response.success) {
+        alert('Submission file replaced successfully!');
+        setSubmissionFileInputs(prev => ({ ...prev, [submissionId]: null }));
+        // Refresh submissions for this order
+        await fetchSubmissionsForOrder(orderId);
+      } else {
+        alert(response.error || 'Failed to replace submission file');
+      }
+    } catch (err) {
+      alert('An unexpected error occurred while replacing file');
+    } finally {
+      setReplacingSubmissionId(null);
+    }
+  };
+
+  // Open admin update modal
+  const openAdminUpdateModal = (submissionId: string, orderId: string, currentStatus: string) => {
+    setAdminUpdateModal({
+      isOpen: true,
+      submissionId,
+      orderId,
+    });
+    setAdminUpdateData({
+      status: currentStatus,
+      adminComment: '',
+      file: null,
+    });
+  };
+
+  // Close admin update modal
+  const closeAdminUpdateModal = () => {
+    setAdminUpdateModal(null);
+    setAdminUpdateData({
+      status: 'pending',
+      adminComment: '',
+      file: null,
+    });
+  };
+
+  // Handle admin update submission
+  const handleAdminUpdateSubmission = async () => {
+    if (!adminUpdateModal) return;
+
+    try {
+      setIsUpdatingSubmission(adminUpdateModal.submissionId);
+      const response = await OrderService.updateSubmission(
+        adminUpdateModal.submissionId,
+        adminUpdateData.status,
+        adminUpdateData.adminComment,
+        adminUpdateData.file || undefined
+      );
+
+      if (response.success) {
+        alert('Submission updated successfully!');
+        closeAdminUpdateModal();
+        // Refresh submissions for this order
+        await fetchSubmissionsForOrder(adminUpdateModal.orderId);
+      } else {
+        alert(response.error || 'Failed to update submission');
+      }
+    } catch (err) {
+      alert('An unexpected error occurred while updating');
+    } finally {
+      setIsUpdatingSubmission(null);
+    }
+  };
+
+  const toggleExpanded = (orderId: string) => {
+    setExpandedOrders(prev => {
+      const newState = { ...prev, [orderId]: !prev[orderId] };
+      // Fetch submissions when expanding for the first time
+      if (newState[orderId] && !submissions[orderId]) {
+        fetchSubmissionsForOrder(orderId);
+      }
+      return newState;
+    });
+  };
+
+  const getSubmissionStatusColor = (status: string) => {
+    switch (status) {
+      case 'reviewed':
+        return 'bg-blue-900/30 text-blue-400 border-blue-700/50';
+      case 'approved':
+        return 'bg-green-900/30 text-green-400 border-green-700/50';
+      case 'rejected':
+        return 'bg-red-900/30 text-red-400 border-red-700/50';
+      default:
+        return 'bg-gray-900/30 text-gray-400 border-gray-700/50';
     }
   };
 
@@ -429,6 +599,152 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                         </div>
                       </div>
                     </div>
+
+                    {/* Submissions Section */}
+                    <div className="mt-6 pt-6 border-t border-primary-700">
+                      <button
+                        onClick={() => toggleExpanded(order._id)}
+                        className="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium transition-colors"
+                      >
+                        <FiFileText className="text-lg" />
+                        {expandedOrders[order._id] ? 'Hide Submissions' : 'View Submissions'}
+                        {submissions[order._id] && (
+                          <span className="px-2 py-1 bg-purple-900/50 rounded-full text-xs">
+                            {submissions[order._id].length}
+                          </span>
+                        )}
+                      </button>
+
+                      {expandedOrders[order._id] && (
+                        <div className="mt-4 space-y-3">
+                          {loadingSubmissions[order._id] ? (
+                            <div className="text-center py-8 text-primary-400">Loading submissions...</div>
+                          ) : submissions[order._id]?.length > 0 ? (
+                            submissions[order._id].map((submission) => (
+                              <div
+                                key={submission._id}
+                                className="bg-primary-800/30 rounded-xl p-4 border border-primary-700"
+                              >
+                                <div className="flex flex-wrap items-start justify-between gap-4">
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-3 mb-2">
+                                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getSubmissionStatusColor(submission.status)}`}>
+                                        Status: {submission.status}
+                                      </span>
+                                    </div>
+                                    <div className="space-y-1 text-sm">
+                                      <p className="text-primary-400">
+                                        File: <span className="text-white">{submission.originalName}</span>
+                                      </p>
+                                      <p className="text-primary-400">
+                                        Submitted: <span className="text-white">{formatDate(submission.createdAt)}</span>
+                                      </p>
+                                      {submission.adminComment && (
+                                        <p className="text-primary-400">
+                                          Admin Comment: <span className="text-white">{submission.adminComment}</span>
+                                        </p>
+                                      )}
+                                      {submission.adminPdfPath && (
+                                        <p className="text-green-400">
+                                          ✓ Admin response available
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col gap-2">
+                                    {/* Action Buttons */}
+                                    <div className="flex gap-2">
+                                      {/* Upload/Replace PDF Button */}
+                                      <input
+                                        type="file"
+                                        id={`submission-file-${submission._id}`}
+                                        accept=".pdf,application/pdf"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                          const file = e.target.files?.[0];
+                                          if (file) {
+                                            handleSubmissionFileSelect(submission._id, file);
+                                          }
+                                        }}
+                                      />
+                                      <button
+                                        onClick={() => document.getElementById(`submission-file-${submission._id}`)?.click()}
+                                        disabled={replacingSubmissionId === submission._id}
+                                        className="px-3 py-2 bg-primary-700 hover:bg-primary-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        title="Upload/Replace PDF"
+                                      >
+                                        {submissionFileInputs[submission._id] ? (
+                                          <>
+                                            <FiCheckCircle className="text-sm text-green-400" />
+                                            {submissionFileInputs[submission._id]!.name.length > 10
+                                              ? submissionFileInputs[submission._id]!.name.substring(0, 10) + '...'
+                                              : submissionFileInputs[submission._id]!.name}
+                                          </>
+                                        ) : (
+                                          <>
+                                            <FiRefreshCw className="text-sm" />
+                                            Replace
+                                          </>
+                                        )}
+                                      </button>
+                                      {submissionFileInputs[submission._id] && (
+                                        <button
+                                          onClick={() => handleReplaceSubmissionFile(order._id, submission._id)}
+                                          disabled={replacingSubmissionId === submission._id}
+                                          className="px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                          {replacingSubmissionId === submission._id ? (
+                                            <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
+                                          ) : (
+                                            <FiUpload className="text-sm" />
+                                          )}
+                                        </button>
+                                      )}
+
+                                      {/* Update Status (Admin) Button */}
+                                      <button
+                                        onClick={() => openAdminUpdateModal(submission._id, order._id, submission.status)}
+                                        disabled={isUpdatingSubmission === submission._id}
+                                        className="px-3 py-2 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        title="Update Status (Admin)"
+                                      >
+                                        <FiEdit className="text-sm" />
+                                        Update
+                                      </button>
+
+                                      {/* Download Admin Response Button */}
+                                      {submission.adminPdfPath ? (
+                                        <button
+                                          onClick={() => handleDownloadAdminResponse(submission._id)}
+                                          disabled={downloadingAdminResponse === submission._id}
+                                          className="px-3 py-2 bg-green-700 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                          title="Download Admin Response"
+                                        >
+                                          {downloadingAdminResponse === submission._id ? (
+                                            <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
+                                          ) : (
+                                            <FiDownload className="text-sm" />
+                                          )}
+                                          Response
+                                        </button>
+                                      ) : (
+                                        <span className="px-3 py-2 bg-primary-800/50 text-primary-400 rounded-lg text-sm font-medium">
+                                          No Response
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-center py-8 text-primary-400">
+                              No submissions yet for this order
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </motion.div>
                 );
               })}
@@ -436,6 +752,112 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
           )}
         </div>
       </section>
+
+      {/* Admin Update Modal */}
+      {adminUpdateModal?.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-primary-900 rounded-2xl p-6 border border-primary-700 shadow-2xl w-full max-w-md"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-white">Update Submission</h3>
+              <button
+                onClick={closeAdminUpdateModal}
+                className="text-primary-400 hover:text-white transition-colors"
+              >
+                <FiX className="text-xl" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Status Select */}
+              <div>
+                <label className="block text-sm font-medium text-primary-300 mb-2">
+                  Status
+                </label>
+                <select
+                  value={adminUpdateData.status}
+                  onChange={(e) => setAdminUpdateData(prev => ({ ...prev, status: e.target.value }))}
+                  className="w-full px-4 py-3 bg-primary-800 border border-primary-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="reviewed">Reviewed</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+
+              {/* Admin Comment */}
+              <div>
+                <label className="block text-sm font-medium text-primary-300 mb-2">
+                  Admin Comment
+                </label>
+                <textarea
+                  value={adminUpdateData.adminComment}
+                  onChange={(e) => setAdminUpdateData(prev => ({ ...prev, adminComment: e.target.value }))}
+                  rows={3}
+                  placeholder="Add a comment for the user..."
+                  className="w-full px-4 py-3 bg-primary-800 border border-primary-700 rounded-xl text-white placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                />
+              </div>
+
+              {/* Admin Response File */}
+              <div>
+                <label className="block text-sm font-medium text-primary-300 mb-2">
+                  Response PDF (Optional)
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf,application/pdf"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      if (file.type !== 'application/pdf') {
+                        alert('Please select a PDF file');
+                        return;
+                      }
+                      setAdminUpdateData(prev => ({ ...prev, file }));
+                    }
+                  }}
+                  className="w-full px-4 py-3 bg-primary-800 border border-primary-700 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white file:cursor-pointer hover:file:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                {adminUpdateData.file && (
+                  <p className="mt-2 text-sm text-green-400">
+                    Selected: {adminUpdateData.file.name}
+                  </p>
+                )}
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={handleAdminUpdateSubmission}
+                  disabled={isUpdatingSubmission === adminUpdateModal.submissionId}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-purple-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isUpdatingSubmission === adminUpdateModal.submissionId ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      Updating...
+                    </>
+                  ) : (
+                    'Update Submission'
+                  )}
+                </button>
+                <button
+                  onClick={closeAdminUpdateModal}
+                  className="px-4 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-xl font-semibold shadow-lg transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </PageWrapper>
   );
 };
