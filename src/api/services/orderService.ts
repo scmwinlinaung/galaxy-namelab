@@ -177,64 +177,6 @@ export class OrderService {
   }
 
   /**
-   * Update submission status and admin response (Admin)
-   * PUT /submissions/{id}
-   */
-  static async updateSubmission(
-    submissionId: string,
-    status: string,
-    adminComment?: string,
-    file?: File
-  ): Promise<{ success: boolean; data?: any; error?: string }> {
-    try {
-      const additionalData: Record<string, string> = {
-        status,
-      };
-
-      if (adminComment) {
-        additionalData.adminComment = adminComment;
-      }
-
-      const response = await httpClient.uploadWithPut<any>(
-        `/submissions/${submissionId}`,
-        file,
-        additionalData
-      );
-
-      if (response.success && response.data) {
-        return {
-          success: true,
-          data: response.data,
-        };
-      }
-
-      // Handle specific error cases
-      if (response.statusCode === 401) {
-        return {
-          success: false,
-          error: 'Not authorized. Please login.',
-        };
-      }
-      if (response.statusCode === 404) {
-        return {
-          success: false,
-          error: 'Submission not found.',
-        };
-      }
-
-      return {
-        success: false,
-        error: response.error || 'Failed to update submission',
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        error: error.message || 'Failed to update submission',
-      };
-    }
-  }
-
-  /**
    * Replace submission file (User)
    * POST /submissions/{orderId} (creates new submission)
    */

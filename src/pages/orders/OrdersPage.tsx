@@ -52,17 +52,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
   // New state for submission actions
   const [submissionFileInputs, setSubmissionFileInputs] = useState<Record<string, File | null>>({});
   const [replacingSubmissionId, setReplacingSubmissionId] = useState<string | null>(null);
-  const [isUpdatingSubmission, setIsUpdatingSubmission] = useState<string | null>(null);
-  const [adminUpdateModal, setAdminUpdateModal] = useState<{
-    isOpen: boolean;
-    submissionId: string;
-    orderId: string;
-  } | null>(null);
-  const [adminUpdateData, setAdminUpdateData] = useState({
-    status: 'pending',
-    adminComment: '',
-    file: null as File | null,
-  });
+
   const [downloadingAdminResponse, setDownloadingAdminResponse] = useState<string | null>(null);
 
   // Check authentication status
@@ -253,57 +243,35 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
     }
   };
 
-  // Open admin update modal
-  const openAdminUpdateModal = (submissionId: string, orderId: string, currentStatus: string) => {
-    setAdminUpdateModal({
-      isOpen: true,
-      submissionId,
-      orderId,
-    });
-    setAdminUpdateData({
-      status: currentStatus,
-      adminComment: '',
-      file: null,
-    });
-  };
 
-  // Close admin update modal
-  const closeAdminUpdateModal = () => {
-    setAdminUpdateModal(null);
-    setAdminUpdateData({
-      status: 'pending',
-      adminComment: '',
-      file: null,
-    });
-  };
 
   // Handle admin update submission
-  const handleAdminUpdateSubmission = async () => {
-    if (!adminUpdateModal) return;
+  // const handleAdminUpdateSubmission = async () => {
+  //   if (!adminUpdateModal) return;
 
-    try {
-      setIsUpdatingSubmission(adminUpdateModal.submissionId);
-      const response = await OrderService.updateSubmission(
-        adminUpdateModal.submissionId,
-        adminUpdateData.status,
-        adminUpdateData.adminComment,
-        adminUpdateData.file || undefined
-      );
+  //   try {
+  //     setIsUpdatingSubmission(adminUpdateModal.submissionId);
+  //     const response = await OrderService.updateSubmission(
+  //       adminUpdateModal.submissionId,
+  //       adminUpdateData.status,
+  //       adminUpdateData.adminComment,
+  //       adminUpdateData.file || undefined
+  //     );
 
-      if (response.success) {
-        alert('Submission updated successfully!');
-        closeAdminUpdateModal();
-        // Refresh submissions for this order
-        await fetchSubmissionsForOrder(adminUpdateModal.orderId);
-      } else {
-        alert(response.error || 'Failed to update submission');
-      }
-    } catch (err) {
-      alert('An unexpected error occurred while updating');
-    } finally {
-      setIsUpdatingSubmission(null);
-    }
-  };
+  //     if (response.success) {
+  //       alert('Submission updated successfully!');
+  //       closeAdminUpdateModal();
+  //       // Refresh submissions for this order
+  //       await fetchSubmissionsForOrder(adminUpdateModal.orderId);
+  //     } else {
+  //       alert(response.error || 'Failed to update submission');
+  //     }
+  //   } catch (err) {
+  //     alert('An unexpected error occurred while updating');
+  //   } finally {
+  //     setIsUpdatingSubmission(null);
+  //   }
+  // };
 
   const toggleExpanded = (orderId: string) => {
     setExpandedOrders(prev => {
@@ -682,8 +650,8 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                                           </>
                                         ) : (
                                           <>
-                                            <FiRefreshCw className="text-sm" />
-                                            Replace
+                                            <FiUpload className="text-sm" />
+                                            Upload
                                           </>
                                         )}
                                       </button>
@@ -700,17 +668,6 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                                           )}
                                         </button>
                                       )}
-
-                                      {/* Update Status (Admin) Button */}
-                                      <button
-                                        onClick={() => openAdminUpdateModal(submission._id, order._id, submission.status)}
-                                        disabled={isUpdatingSubmission === submission._id}
-                                        className="px-3 py-2 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        title="Update Status (Admin)"
-                                      >
-                                        <FiEdit className="text-sm" />
-                                        Update
-                                      </button>
 
                                       {/* Download Admin Response Button */}
                                       {submission.adminPdfPath ? (
@@ -753,111 +710,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
         </div>
       </section>
 
-      {/* Admin Update Modal */}
-      {adminUpdateModal?.isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-primary-900 rounded-2xl p-6 border border-primary-700 shadow-2xl w-full max-w-md"
-          >
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-white">Update Submission</h3>
-              <button
-                onClick={closeAdminUpdateModal}
-                className="text-primary-400 hover:text-white transition-colors"
-              >
-                <FiX className="text-xl" />
-              </button>
-            </div>
 
-            <div className="space-y-4">
-              {/* Status Select */}
-              <div>
-                <label className="block text-sm font-medium text-primary-300 mb-2">
-                  Status
-                </label>
-                <select
-                  value={adminUpdateData.status}
-                  onChange={(e) => setAdminUpdateData(prev => ({ ...prev, status: e.target.value }))}
-                  className="w-full px-4 py-3 bg-primary-800 border border-primary-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="reviewed">Reviewed</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-              </div>
-
-              {/* Admin Comment */}
-              <div>
-                <label className="block text-sm font-medium text-primary-300 mb-2">
-                  Admin Comment
-                </label>
-                <textarea
-                  value={adminUpdateData.adminComment}
-                  onChange={(e) => setAdminUpdateData(prev => ({ ...prev, adminComment: e.target.value }))}
-                  rows={3}
-                  placeholder="Add a comment for the user..."
-                  className="w-full px-4 py-3 bg-primary-800 border border-primary-700 rounded-xl text-white placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-                />
-              </div>
-
-              {/* Admin Response File */}
-              <div>
-                <label className="block text-sm font-medium text-primary-300 mb-2">
-                  Response PDF (Optional)
-                </label>
-                <input
-                  type="file"
-                  accept=".pdf,application/pdf"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      if (file.type !== 'application/pdf') {
-                        alert('Please select a PDF file');
-                        return;
-                      }
-                      setAdminUpdateData(prev => ({ ...prev, file }));
-                    }
-                  }}
-                  className="w-full px-4 py-3 bg-primary-800 border border-primary-700 rounded-xl text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white file:cursor-pointer hover:file:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-                {adminUpdateData.file && (
-                  <p className="mt-2 text-sm text-green-400">
-                    Selected: {adminUpdateData.file.name}
-                  </p>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-3 pt-2">
-                <button
-                  onClick={handleAdminUpdateSubmission}
-                  disabled={isUpdatingSubmission === adminUpdateModal.submissionId}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-purple-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isUpdatingSubmission === adminUpdateModal.submissionId ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                      Updating...
-                    </>
-                  ) : (
-                    'Update Submission'
-                  )}
-                </button>
-                <button
-                  onClick={closeAdminUpdateModal}
-                  className="px-4 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-xl font-semibold shadow-lg transition-all"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
     </PageWrapper>
   );
 };

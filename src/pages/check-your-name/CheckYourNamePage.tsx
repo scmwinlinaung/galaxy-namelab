@@ -91,16 +91,16 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                 to: 'chantharzay2025@gmail.com',
                 subject: `Free Audit Request - ${formData.fullName}`,
                 text: `
-Free Name Audit Request
+                Free Name Audit Request
 
-Full Name: ${formData.fullName}
-Date of Birth: ${formData.dateOfBirth}
-Time of Birth: ${formData.timeOfBirth}
-Place of Birth: ${formData.placeOfBirth}
+                Full Name: ${formData.fullName}
+                Date of Birth: ${formData.dateOfBirth}
+                Time of Birth: ${formData.timeOfBirth}
+                Place of Birth: ${formData.placeOfBirth}
 
----
-Requested at: ${new Date().toISOString()}
-                `.trim()
+                ---
+                Requested at: ${new Date().toISOString()}
+                                `.trim()
             };
 
             await EmailService.sendEmail(emailData);
