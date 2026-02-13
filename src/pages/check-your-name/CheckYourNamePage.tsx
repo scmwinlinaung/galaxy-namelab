@@ -14,6 +14,7 @@ interface CheckYourNamePageProps {
 }
 
 interface FormData {
+    email: string;
     fullName: string;
     dateOfBirth: string;
     timeOfBirth: string;
@@ -21,6 +22,7 @@ interface FormData {
 }
 
 interface FormErrors {
+    email?: string;
     fullName?: string;
     dateOfBirth?: string;
     timeOfBirth?: string;
@@ -32,6 +34,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
     setIsLoginModalOpen
 }) => {
     const [formData, setFormData] = useState<FormData>({
+        email: '',
         fullName: '',
         dateOfBirth: '',
         timeOfBirth: '',
@@ -88,8 +91,8 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
         try {
             // Send email to admin via backend API
             const emailData = {
-                to: 'chantharzay2025@gmail.com',
-                subject: `Free Audit Request - ${formData.fullName}`,
+                to: 'winlinaung2813@gmail.com',
+                subject: `Free Audit Request - ${formData.email}`,
                 text: `
                 Free Name Audit Request
 
@@ -110,6 +113,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
             // Reset form after 3 seconds
             setTimeout(() => {
                 setFormData({
+                    email: '',
                     fullName: '',
                     dateOfBirth: '',
                     timeOfBirth: '',
@@ -222,6 +226,27 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                         </p>
 
                         <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
+                               {/* Email */}
+                            <div className="mb-6">
+                                <label htmlFor="email" className="block text-white font-semibold mb-2">
+                                    Email <span className="text-primary-300">*</span>
+                                </label>
+                                <p className="text-primary-200 text-sm mb-2">The email you use most frequently</p>
+                                <input
+                                    type="text"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${
+                                        errors.email ? 'border-red-400' : 'border-white/30'
+                                    } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
+                                    placeholder="Enter your full name"
+                                />
+                                {errors.email && (
+                                    <p className="text-red-300 text-sm mt-1">{errors.email}</p>
+                                )}
+                            </div>
                             {/* Full Name */}
                             <div className="mb-6">
                                 <label htmlFor="fullName" className="block text-white font-semibold mb-2">
