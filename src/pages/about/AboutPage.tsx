@@ -32,12 +32,12 @@ const ContactInfoPage: React.FC<ContactInfoPageProps> = ({ isLoginModalOpen, set
     return (
         <PageWrapper>
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
-            <main className="min-h-screen w-full bg-primary-950 text-primary-50">
+            <main className="min-h-screen w-full bg-primary-950 text-primary-50 py-32">
                 {/* Background Overlay */}
                 <div className="absolute inset-0 bg-primary-900/70"></div>
 
                 <motion.div
-                    className="relative z-10 container mx-auto px-6 py-24"
+                    className="relative z-10 container mx-auto px-6"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"

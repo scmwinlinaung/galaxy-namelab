@@ -6,7 +6,6 @@ import { MdWorkspacePremium } from 'react-icons/md';
 
 import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
-import Section from '@components/ui/Section';
 import Button from '@components/ui/Button';
 import CheckoutModal from '@components/payment/CheckoutModal';
 import { PricingService } from '@api/services/pricingService';
@@ -81,7 +80,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
 
             {/* Hero Section - Beautiful Dark Cosmic Design */}
-            <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center bg-primary-950 text-primary-50 overflow-hidden px-4 py-12">
+            <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center bg-primary-950 text-primary-50 overflow-hidden px-4 py-32">
                 {/* Background Blobs - Updated for dark theme */}
                 <motion.div
                     className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply blur-3xl opacity-20"

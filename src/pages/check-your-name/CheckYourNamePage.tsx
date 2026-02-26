@@ -144,7 +144,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
 
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white py-20 px-4 md:px-8">
+            <section className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white py-32 px-4 md:px-8">
                 <div className="max-w-6xl mx-auto text-center">
                     <motion.h1
                         className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
@@ -226,7 +226,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                         </p>
 
                         <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
-                               {/* Email */}
+                            {/* Email */}
                             <div className="mb-6">
                                 <label htmlFor="email" className="block text-white font-semibold mb-2">
                                     Email <span className="text-primary-300">*</span>
@@ -238,10 +238,9 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                                     name="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${
-                                        errors.email ? 'border-red-400' : 'border-white/30'
-                                    } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
-                                    placeholder="Enter your full name"
+                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${errors.email ? 'border-red-400' : 'border-white/30'
+                                        } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
+                                    placeholder="Enter your email"
                                 />
                                 {errors.email && (
                                     <p className="text-red-300 text-sm mt-1">{errors.email}</p>
@@ -259,9 +258,8 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                                     name="fullName"
                                     value={formData.fullName}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${
-                                        errors.fullName ? 'border-red-400' : 'border-white/30'
-                                    } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
+                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${errors.fullName ? 'border-red-400' : 'border-white/30'
+                                        } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                                     placeholder="Enter your full name"
                                 />
                                 {errors.fullName && (
@@ -281,9 +279,8 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                                     name="dateOfBirth"
                                     value={formData.dateOfBirth}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${
-                                        errors.dateOfBirth ? 'border-red-400' : 'border-white/30'
-                                    } text-white focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
+                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${errors.dateOfBirth ? 'border-red-400' : 'border-white/30'
+                                        } text-white focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                                 />
                                 {errors.dateOfBirth && (
                                     <p className="text-red-300 text-sm mt-1">{errors.dateOfBirth}</p>
@@ -302,9 +299,8 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                                     name="timeOfBirth"
                                     value={formData.timeOfBirth}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${
-                                        errors.timeOfBirth ? 'border-red-400' : 'border-white/30'
-                                    } text-white focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
+                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${errors.timeOfBirth ? 'border-red-400' : 'border-white/30'
+                                        } text-white focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                                 />
                                 {errors.timeOfBirth && (
                                     <p className="text-red-300 text-sm mt-1">{errors.timeOfBirth}</p>
@@ -323,9 +319,8 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                                     name="placeOfBirth"
                                     value={formData.placeOfBirth}
                                     onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${
-                                        errors.placeOfBirth ? 'border-red-400' : 'border-white/30'
-                                    } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
+                                    className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${errors.placeOfBirth ? 'border-red-400' : 'border-white/30'
+                                        } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
                                     placeholder="e.g., Yangon, Myanmar"
                                 />
                                 {errors.placeOfBirth && (
