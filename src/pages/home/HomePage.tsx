@@ -8,6 +8,7 @@ import Header from '@components/layouts/Header';
 import Section from '@components/ui/Section';
 import { ANIMATION, IMAGES } from '../../constants';
 import { STORAGE_KEYS } from '@constants/api';
+import { AuthService } from '@api/index';
 
 interface HomePageProps {
     isLoginModalOpen: boolean;
@@ -25,6 +26,31 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
         if (token && userId) {
             // Store authentication data in localStorage
+
+            AuthService.getUserById(userId, token)
+                .then((userData) => {
+                    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+                    localStorage.setItem(STORAGE_KEYS.USER_NAME, userData?.data?.name || "");
+                    localStorage.setItem(STORAGE_KEYS.USER_EMAIL, userData?.data?.email || "");
+                    localStorage.setItem(STORAGE_KEYS.USER_ID, userId);
+
+                    // Clear the password since OAuth users don't have one
+                    localStorage.removeItem(STORAGE_KEYS.USER_PASSWORD);
+
+                    // Dispatch custom event to notify components about login
+                    window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+
+                    // Clean URL by removing query parameters
+                    window.history.replaceState({}, '', '/');
+                })
+                .catch((error) => {
+                    console.error('Failed to fetch user data:', error);
+                    // Still dispatch auth change and redirect even if fetching user data fails
+                    window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+                    navigate('/', { replace: true });
+                });
+
+
             localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
             localStorage.setItem(STORAGE_KEYS.USER_ID, userId);
 
