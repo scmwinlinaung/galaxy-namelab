@@ -8,6 +8,9 @@ import { Package } from '@api/types/pricing';
 import { BusinessInfoForm, CheckoutState, OrderType } from '@api/types/payment';
 import LoginModal from '@components/auth/LoginModal';
 import { STORAGE_KEYS } from '@constants/api';
+import { EmailService } from '@api/index';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@constants/navigation';
 
 // Initialize Stripe with publishable key from environment variable
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -67,6 +70,7 @@ const CheckoutForm: React.FC<{
 }> = ({ selectedPackage, onComplete, onCancel }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
   const [checkoutState, setCheckoutState] = useState<CheckoutState>({
     step: 'initialize',
     packageId: selectedPackage._id,
@@ -273,6 +277,36 @@ const CheckoutForm: React.FC<{
     if (!isMountedRef.current) return;
 
     if (response.success) {
+      const emailData = {
+        to: userEmail,
+        subject: `We've Received Your Naming Request - Stellar Fortune Name`,
+        text: `
+Thank you for choosing **Stellar Fortune Name** for your naming needs. ✨
+
+We have successfully received your information and payment.
+
+Our senior consultant, with **over 28 years of expertise**, is now carefully reviewing your astrological data to find the most auspicious and meaningful names for you.
+
+**WHAT HAPPENS NEXT?**
+
+• **REVIEW PERIOD**
+  We will perform detailed calculations based on your provided data.
+
+• **DELIVERY**
+  You will receive your personalized Naming Report via email within **3 business days**.
+  If we need any further information, we will reach out to you directly.
+
+Thank you for trusting us with this important milestone.
+
+Best regards,
+
+**The Stellar Fortune Name Team**
+(Galaxy NameLab, LLC)
+        `
+      };
+
+      await EmailService.sendEmail(emailData);
+
       setCheckoutState({
         step: 'complete',
         packageId: selectedPackage._id,
@@ -282,11 +316,11 @@ const CheckoutForm: React.FC<{
         loading: false,
       });
 
-      setTimeout(() => {
-        if (isMountedRef.current) {
-          onComplete();
-        }
-      }, 2000);
+      if (isMountedRef.current) {
+        onComplete();
+        navigate(ROUTES.ORDERS)
+      }
+
     } else {
       setCheckoutState({
         step: 'error',
@@ -409,11 +443,10 @@ const CheckoutForm: React.FC<{
               type="button"
               onClick={() => setOrderType('business')}
               disabled={checkoutState.loading}
-              className={`px-4 py-3 rounded-xl font-semibold transition-all ${
-                orderType === 'business'
-                  ? 'bg-purple-600 text-white border-2 border-purple-400'
-                  : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-4 py-3 rounded-xl font-semibold transition-all ${orderType === 'business'
+                ? 'bg-purple-600 text-white border-2 border-purple-400'
+                : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Business Name
             </button>
@@ -421,11 +454,10 @@ const CheckoutForm: React.FC<{
               type="button"
               onClick={() => setOrderType('nickname')}
               disabled={checkoutState.loading}
-              className={`px-4 py-3 rounded-xl font-semibold transition-all ${
-                orderType === 'nickname'
-                  ? 'bg-purple-600 text-white border-2 border-purple-400'
-                  : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-4 py-3 rounded-xl font-semibold transition-all ${orderType === 'nickname'
+                ? 'bg-purple-600 text-white border-2 border-purple-400'
+                : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               NickName (Personal Name)
             </button>
@@ -548,11 +580,10 @@ const CheckoutForm: React.FC<{
                 type="button"
                 onClick={() => handleSyllableToggle(syllable)}
                 disabled={checkoutState.loading}
-                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                  businessInfo.preferredSyllables.includes(syllable)
-                    ? 'bg-purple-600 text-white border-2 border-purple-400'
-                    : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                className={`px-4 py-2 rounded-lg font-semibold transition-all ${businessInfo.preferredSyllables.includes(syllable)
+                  ? 'bg-purple-600 text-white border-2 border-purple-400'
+                  : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {syllable}
               </button>

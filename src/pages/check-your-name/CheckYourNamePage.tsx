@@ -95,7 +95,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                 subject: `Free Audit Request - ${formData.email}`,
                 text: `
                 Free Name Audit Request
-
+                Gmail: ${formData.email}
                 Full Name: ${formData.fullName}
                 Date of Birth: ${formData.dateOfBirth}
                 Time of Birth: ${formData.timeOfBirth}
