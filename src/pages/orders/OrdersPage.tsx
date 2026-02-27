@@ -474,6 +474,10 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                           <p className="text-white font-medium">{order.package.plan.name}</p>
                         </div>
                         <div>
+                          <p className="text-sm text-primary-400 mb-1">Price</p>
+                          <p className="text-white font-semibold text-lg">${order.package.price.amount}</p>
+                        </div>
+                        <div>
                           <p className="text-sm text-primary-400 mb-1">Business Name</p>
                           <p className="text-white">{order.businessInfo.businessName}</p>
                         </div>
@@ -529,60 +533,12 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                               Report will be available once confirmed
                             </div>
                           )}
-
-                          {/* Upload Button */}
-                          <div className="flex gap-2">
-                            <input
-                              type="file"
-                              id={`file-input-${order._id}`}
-                              accept=".pdf,application/pdf"
-                              className="hidden"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  handleFileSelect(order._id, file);
-                                }
-                              }}
-                            />
-                            <button
-                              onClick={() => document.getElementById(`file-input-${order._id}`)?.click()}
-                              disabled={uploadingOrderId === order._id}
-                              className="flex-1 px-4 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-xl font-semibold shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                              <FiFileText className="text-lg" />
-                              {selectedFile?.orderId === order._id ? selectedFile.file.name : 'Select PDF'}
-                            </button>
-                            <button
-                              onClick={() => handleUploadPdf(order._id)}
-                              disabled={!selectedFile || selectedFile.orderId !== order._id || uploadingOrderId === order._id}
-                              className="px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-green-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                              {uploadingOrderId === order._id ? (
-                                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                              ) : (
-                                <FiUpload className="text-lg" />
-                              )}
-                            </button>
-                          </div>
                         </div>
                       </div>
                     </div>
 
                     {/* Submissions Section */}
                     <div className="mt-6 pt-6 border-t border-primary-700">
-                      <button
-                        onClick={() => toggleExpanded(order._id)}
-                        className="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium transition-colors"
-                      >
-                        <FiFileText className="text-lg" />
-                        {expandedOrders[order._id] ? 'Hide Submissions' : 'View Submissions'}
-                        {submissions[order._id] && (
-                          <span className="px-2 py-1 bg-purple-900/50 rounded-full text-xs">
-                            {submissions[order._id].length}
-                          </span>
-                        )}
-                      </button>
-
                       {expandedOrders[order._id] && (
                         <div className="mt-4 space-y-3">
                           {loadingSubmissions[order._id] ? (
