@@ -1,4 +1,5 @@
 import { httpClient } from '../utils/httpClient';
+import { API_HOST } from '../config/host';
 import { ApiResponse, LoginRequest, RegisterRequest, AuthResponse, User } from '../types';
 
 // Authentication service
@@ -56,5 +57,11 @@ export class AuthService {
   // Resend verification email
   static async resendVerificationEmail(): Promise<ApiResponse> {
     return httpClient.post('/auth/resend-verification');
+  }
+
+  // Get user by ID
+  static async getUserById(userId: string, token: string): Promise<ApiResponse<User>> {
+    return httpClient.get(`/auth/user/${userId}`);
+
   }
 }

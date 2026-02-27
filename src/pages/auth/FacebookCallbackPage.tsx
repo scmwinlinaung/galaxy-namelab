@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { STORAGE_KEYS } from '@constants/api';
+import { AuthService } from '@api/services/authService';
 
 /**
  * Facebook OAuth Callback Handler
@@ -27,11 +28,24 @@ const FacebookCallbackPage: React.FC = () => {
       // Clear the password since Facebook users don't have one
       localStorage.removeItem(STORAGE_KEYS.USER_PASSWORD);
 
-      // Dispatch custom event to notify components about login
-      window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+      // Fetch user data and save name and email
+      AuthService.getUserById(userId, token)
+        .then((userData) => {
+          localStorage.setItem(STORAGE_KEYS.USER_NAME, userData?.data?.name || "");
+          localStorage.setItem(STORAGE_KEYS.USER_EMAIL, userData?.data?.email || "");
 
-      // Redirect to home page or pricing page
-      navigate('/', { replace: true });
+          // Dispatch custom event to notify components about login
+          window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+
+          // Redirect to home page or pricing page
+          navigate('/', { replace: true });
+        })
+        .catch((error) => {
+          console.error('Failed to fetch user data:', error);
+          // Still dispatch auth change and redirect even if fetching user data fails
+          window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
+          navigate('/', { replace: true });
+        });
     } else {
       // Handle error - missing token or userId
       console.error('Facebook OAuth callback failed: missing token or userId');

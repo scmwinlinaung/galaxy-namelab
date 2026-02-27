@@ -21,8 +21,12 @@ export interface CreateOrderRequest {
   password?: string;
   packageId: string;
   businessInfo: {
-    businessName: string;
-    dateOfBirth: string;
+    fullName: string;
+    dob: string;
+    birthTime: string;
+    birthPlace: string;
+    details: string;
+    preferredSyllables: number[];
   };
   paymentMethod: 'stripe';
   paymentDetails: {
@@ -33,27 +37,41 @@ export interface CreateOrderRequest {
 // Step 3: Create Order Response
 export interface CreateOrderResponse {
   order: {
-    _id: string;
-    packageId: string;
-    paymentMethod: string;
-    paymentStatus: string;
-    amount: number;
-    currency: string;
-    businessInfo?: {
-      businessName?: string;
-      dateOfBirth?: string;
+    id: string;
+    user: string;
+    package: string;
+    businessInfo: {
+      fullName: string;
+      dob: string;
+      birthTime: string;
+      birthPlace: string;
+      details: string;
+      preferredSyllables: number[];
     };
+    status: string;
+    payment: {
+      paymentId: string;
+      gateway: string;
+      status: string;
+    };
+    pdfPath?: string;
     createdAt: string;
-    updatedAt: string;
   };
   message: string;
 }
 
 // Business Info for Order Form
 export interface BusinessInfoForm {
-  businessName: string;
-  dateOfBirth: string;
+  fullName: string;
+  dob: string;
+  birthTime: string;
+  birthPlace: string;
+  details: string;
+  preferredSyllables: number[];
 }
+
+// Order Type: 'business' for Business Name, 'nickname' for Personal Name
+export type OrderType = 'business' | 'nickname';
 
 // Checkout State
 export interface CheckoutState {

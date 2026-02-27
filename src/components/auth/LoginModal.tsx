@@ -7,6 +7,7 @@ import Button from '@components/ui/Button';
 import { ANIMATION, VALIDATION, FORM_TEXT, MODAL_TEXT, STORAGE_KEYS } from '../../constants';
 import { API_HOST } from '@api/config/host';
 import { hashPassword } from '@api/utils/crypto';
+import { AuthService } from '@api/services/authService';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -88,6 +89,20 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                     localStorage.setItem(STORAGE_KEYS.USER_ROLE, data.role);
                     localStorage.setItem(STORAGE_KEYS.USER_EMAIL, formData.email);
                     localStorage.setItem(STORAGE_KEYS.USER_PASSWORD, hashedPassword);
+                    localStorage.setItem(STORAGE_KEYS.USER_ID, data.userId || data.user?._id || data.userId);
+
+                    // Fetch user data and save name and email
+                    if (data.userid || data.user?._id) {
+                        try {
+                            const userId = data.userid || data.user._id;
+                            const userData = await AuthService.getUserById(userId, data.token);
+                            console.log("user Data = " + userData);
+                            localStorage.setItem(STORAGE_KEYS.USER_NAME, userData.data?.name || "");
+                            localStorage.setItem(STORAGE_KEYS.USER_EMAIL, userData.data?.email || "");
+                        } catch (error) {
+                            console.error('Failed to fetch user data:', error);
+                        }
+                    }
 
                     // Dispatch custom event to notify components about login
                     window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
@@ -126,9 +141,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                 if (response.ok) {
                     // Store token in localStorage
                     localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, data.token);
+                    localStorage.setItem(STORAGE_KEYS.USER_ID, data.userId || data.user?._id || data.userId);
                     localStorage.setItem(STORAGE_KEYS.USER_EMAIL, formData.email);
                     localStorage.setItem(STORAGE_KEYS.USER_NAME, formData.name);
                     localStorage.setItem(STORAGE_KEYS.USER_PASSWORD, hashedPassword);
+
+                    // Fetch user data and save name and email
+                    if (data.userId || data.user?._id) {
+                        try {
+                            const userId = data.userId || data.user._id;
+                            const userData = await AuthService.getUserById(userId, data.token);
+                            localStorage.setItem(STORAGE_KEYS.USER_NAME, userData.data?.name || "");
+                            localStorage.setItem(STORAGE_KEYS.USER_EMAIL, userData.data?.email || "");
+                        } catch (error) {
+                            console.error('Failed to fetch user data:', error);
+                        }
+                    }
 
                     // Dispatch custom event to notify components about login
                     window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
@@ -268,11 +296,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                             value={formData.name}
                                             onChange={handleInputChange}
                                             placeholder={FORM_TEXT.PLACEHOLDERS.NAME}
-                                            className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${
-                                                errors.name
-                                                    ? 'border-red-500 focus:border-red-400'
-                                                    : 'border-primary-600 focus:border-primary-400'
-                                            }`}
+                                            className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${errors.name
+                                                ? 'border-red-500 focus:border-red-400'
+                                                : 'border-primary-600 focus:border-primary-400'
+                                                }`}
                                         />
                                         {errors.name && (
                                             <p className="text-red-400 text-sm mt-2 text-left">{errors.name}</p>
@@ -289,11 +316,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                         value={formData.email}
                                         onChange={handleInputChange}
                                         placeholder={FORM_TEXT.PLACEHOLDERS.EMAIL}
-                                        className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${
-                                            errors.email
-                                                ? 'border-red-500 focus:border-red-400'
-                                                : 'border-primary-600 focus:border-primary-400'
-                                        }`}
+                                        className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${errors.email
+                                            ? 'border-red-500 focus:border-red-400'
+                                            : 'border-primary-600 focus:border-primary-400'
+                                            }`}
                                     />
                                     {errors.email && (
                                         <p className="text-red-400 text-sm mt-2 text-left">{errors.email}</p>
@@ -309,11 +335,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                             name="birthdate"
                                             value={formData.birthdate}
                                             onChange={handleInputChange}
-                                            className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${
-                                                errors.birthdate
-                                                    ? 'border-red-500 focus:border-red-400'
-                                                    : 'border-primary-600 focus:border-primary-400'
-                                            }`}
+                                            className={`w-full bg-primary-800/50 text-white pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${errors.birthdate
+                                                ? 'border-red-500 focus:border-red-400'
+                                                : 'border-primary-600 focus:border-primary-400'
+                                                }`}
                                             style={{ colorScheme: 'dark' }}
                                         />
                                         {errors.birthdate && (
@@ -331,11 +356,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                         value={formData.password}
                                         onChange={handleInputChange}
                                         placeholder="Password"
-                                        className={`w-full bg-primary-800/50 text-white pl-12 pr-12 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${
-                                            errors.password
-                                                ? 'border-red-500 focus:border-red-400'
-                                                : 'border-primary-600 focus:border-primary-400'
-                                        }`}
+                                        className={`w-full bg-primary-800/50 text-white pl-12 pr-12 py-4 rounded-2xl border-2 focus:outline-none transition-colors duration-300 ${errors.password
+                                            ? 'border-red-500 focus:border-red-400'
+                                            : 'border-primary-600 focus:border-primary-400'
+                                            }`}
                                     />
                                     <button
                                         type="button"

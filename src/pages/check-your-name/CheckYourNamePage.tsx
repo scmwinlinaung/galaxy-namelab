@@ -91,7 +91,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
         try {
             // Send email to admin via backend API
             const emailData = {
-                to: 'winlinaung2813@gmail.com',
+                to: 'consult@galaxynamelab.com',
                 subject: `Free Audit Request - ${formData.email}`,
                 text: `
                 Free Name Audit Request

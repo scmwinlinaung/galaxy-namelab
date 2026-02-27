@@ -5,7 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { PaymentService } from '@api/services/paymentService';
 import { Package } from '@api/types/pricing';
-import { BusinessInfoForm, CheckoutState } from '@api/types/payment';
+import { BusinessInfoForm, CheckoutState, OrderType } from '@api/types/payment';
 import LoginModal from '@components/auth/LoginModal';
 import { STORAGE_KEYS } from '@constants/api';
 
@@ -76,9 +76,14 @@ const CheckoutForm: React.FC<{
     loading: true,
   });
   const [businessInfo, setBusinessInfo] = useState<BusinessInfoForm>({
-    businessName: '',
-    dateOfBirth: '',
+    fullName: '',
+    dob: '',
+    birthTime: '',
+    birthPlace: '',
+    details: '',
+    preferredSyllables: [],
   });
+  const [orderType, setOrderType] = useState<OrderType>('business');
   const [isElementsReady, setIsElementsReady] = useState(false);
   const isInitializingRef = useRef(false);
   const isMountedRef = useRef(true);
@@ -189,7 +194,7 @@ const CheckoutForm: React.FC<{
           payment_method: {
             card: cardElement,
             billing_details: {
-              name: businessInfo.businessName || 'Customer',
+              name: businessInfo.fullName || 'Customer',
             },
           },
         }
@@ -208,6 +213,7 @@ const CheckoutForm: React.FC<{
 
       if (paymentIntent?.id) {
         await createOrder(paymentIntent.id);
+
       }
     } catch (err) {
       console.error("Payment Error:", err);
@@ -237,8 +243,12 @@ const CheckoutForm: React.FC<{
         paymentIntentId,
       },
       businessInfo: {
-        businessName: businessInfo.businessName,
-        dateOfBirth: businessInfo.dateOfBirth,
+        fullName: businessInfo.fullName,
+        dob: businessInfo.dob,
+        birthTime: businessInfo.birthTime,
+        birthPlace: businessInfo.birthPlace,
+        details: businessInfo.details,
+        preferredSyllables: businessInfo.preferredSyllables,
       },
     };
 
@@ -289,9 +299,30 @@ const CheckoutForm: React.FC<{
     }
   };
 
-  const handleBusinessInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBusinessInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setBusinessInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSyllableToggle = (syllable: number) => {
+    setBusinessInfo((prev) => {
+      const exists = prev.preferredSyllables.includes(syllable);
+      if (exists) {
+        // Prevent removing if less than 2 selected
+        if (prev.preferredSyllables.length <= 2) {
+          return prev;
+        }
+        return {
+          ...prev,
+          preferredSyllables: prev.preferredSyllables.filter(s => s !== syllable),
+        };
+      } else {
+        return {
+          ...prev,
+          preferredSyllables: [...prev.preferredSyllables, syllable].sort((a, b) => a - b),
+        };
+      }
+    });
   };
 
   // --- RENDER STATES ---
@@ -365,38 +396,180 @@ const CheckoutForm: React.FC<{
       <div className="space-y-4">
         <h4 className="text-lg font-semibold text-white flex items-center gap-2">
           <FiUser className="text-purple-400" />
-          Business Information
+          Information Required at Time of Payment
         </h4>
 
+        {/* Order Type Selection */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            Business Name *
+            Select Service Type *
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setOrderType('business')}
+              disabled={checkoutState.loading}
+              className={`px-4 py-3 rounded-xl font-semibold transition-all ${
+                orderType === 'business'
+                  ? 'bg-purple-600 text-white border-2 border-purple-400'
+                  : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              Business Name
+            </button>
+            <button
+              type="button"
+              onClick={() => setOrderType('nickname')}
+              disabled={checkoutState.loading}
+              className={`px-4 py-3 rounded-xl font-semibold transition-all ${
+                orderType === 'nickname'
+                  ? 'bg-purple-600 text-white border-2 border-purple-400'
+                  : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              NickName (Personal Name)
+            </button>
+          </div>
+        </div>
+
+        {/* Full Name */}
+        <div>
+          <label className="block text-sm font-medium text-primary-300 mb-2">
+            {orderType === 'business' ? '1. Contact Email' : '1. Contact Email'} *
+          </label>
+          <input
+            type="email"
+            name="email"
+            value={localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || ''}
+            disabled
+            className="w-full px-4 py-3 bg-primary-800/30 border border-primary-700 rounded-xl text-primary-300 cursor-not-allowed"
+          />
+        </div>
+
+        {/* Full Name */}
+        <div>
+          <label className="block text-sm font-medium text-primary-300 mb-2">
+            {orderType === 'business' ? '2. Your Full Name' : '2. Your Full Name'} *
           </label>
           <input
             type="text"
-            name="businessName"
-            value={businessInfo.businessName}
+            name="fullName"
+            value={businessInfo.fullName}
             onChange={handleBusinessInfoChange}
-            placeholder="Enter business name"
+            placeholder="Enter your full name"
             disabled={checkoutState.loading}
             required
             className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
           />
         </div>
 
+        {/* Date of Birth */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            Date of Birth *
+            {orderType === 'business' ? '3. Date of Birth (dd/mm/yyyy)' : '3. Date of Birth (dd/mm/yyyy)'} *
           </label>
           <input
             type="date"
-            name="dateOfBirth"
-            value={businessInfo.dateOfBirth}
+            name="dob"
+            value={businessInfo.dob}
             onChange={handleBusinessInfoChange}
             disabled={checkoutState.loading}
             required
             className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all [color-scheme:dark]"
           />
+        </div>
+
+        {/* Birth Time */}
+        <div>
+          <label className="block text-sm font-medium text-primary-300 mb-2">
+            {orderType === 'business' ? '4. Birth Time (Hour/Minute) - As accurate as possible' : '4. Birth Time (Hour/Minute) - As accurate as possible'} *
+          </label>
+          <input
+            type="time"
+            name="birthTime"
+            value={businessInfo.birthTime}
+            onChange={handleBusinessInfoChange}
+            disabled={checkoutState.loading}
+            required
+            className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all [color-scheme:dark]"
+          />
+        </div>
+
+        {/* Birth Place */}
+        <div>
+          <label className="block text-sm font-medium text-primary-300 mb-2">
+            {orderType === 'business' ? '5. Birth Place (Country/City) e.g. New York, USA' : '5. Birth Place (Country/City) e.g. New York, USA'} *
+          </label>
+          <input
+            type="text"
+            name="birthPlace"
+            value={businessInfo.birthPlace}
+            onChange={handleBusinessInfoChange}
+            placeholder="e.g. New York, USA"
+            disabled={checkoutState.loading}
+            required
+            className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+          />
+        </div>
+
+        {/* Details - Company Name for Business, Usage Area for Nickname */}
+        <div>
+          <label className="block text-sm font-medium text-primary-300 mb-2">
+            {orderType === 'business'
+              ? '6. Business Type Name / Company Name (Describe in detail) *'
+              : '6. Nickname Usage Area (For Social, Entrepreneurs & Business Owners, Content Creators, Gamers, etc.) *'}
+          </label>
+          <textarea
+            name="details"
+            value={businessInfo.details}
+            onChange={handleBusinessInfoChange}
+            placeholder={orderType === 'business'
+              ? 'Company (or) Brand Name... (Describe in detail)'
+              : 'For Social, Entrepreneurs & Business Owners, Content Creators & Social Media Influencers, Gamers & Public Personalities, etc.'}
+            disabled={checkoutState.loading}
+            required
+            rows={3}
+            className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
+          />
+        </div>
+
+        {/* Preferred Syllables */}
+        <div>
+          <label className="block text-sm font-medium text-primary-300 mb-2">
+            {orderType === 'business'
+              ? '7. Preferred Name Length (Syllables) - Select at least 2'
+              : '7. Preferred Nickname Length (Syllables) - Select at least 2'}
+            {orderType === 'nickname' && <span className="text-amber-400 ml-2">(Note: Longer nicknames may reduce success rate)</span>}
+          </label>
+          <div className="flex flex-wrap gap-3">
+            {[1, 2, 3, 4, 5].map((syllable) => (
+              <button
+                key={syllable}
+                type="button"
+                onClick={() => handleSyllableToggle(syllable)}
+                disabled={checkoutState.loading}
+                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                  businessInfo.preferredSyllables.includes(syllable)
+                    ? 'bg-purple-600 text-white border-2 border-purple-400'
+                    : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {syllable}
+              </button>
+            ))}
+          </div>
+          {businessInfo.preferredSyllables.length > 0 && (
+            <p className="text-sm text-primary-400 mt-2">
+              Selected: {businessInfo.preferredSyllables.sort((a, b) => a - b).join(', ')} syllable(s)
+            </p>
+          )}
+        </div>
+
+        {/* Note */}
+        <div className="bg-primary-800/30 border border-primary-700 rounded-xl p-4">
+          <p className="text-sm text-primary-300">
+            <strong className="text-purple-400">Note:</strong> You are not required to submit your own name suggestions at this time. Once we (Galaxy NameLab) provide our initial recommendations, we will also send you the specific "Guiding Letters" to assist with your brainstorming. At that stage, you may submit your chosen names for our review. We will then identify the most auspicious selections—the true gems among your suggestions—and send the final, perfected results back to you.
+          </p>
         </div>
       </div>
 
@@ -554,70 +727,70 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
       <Elements stripe={stripePromise}>
         <AnimatePresence>
           {isOpen && selectedPackage && isAuthenticated() && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-            onClick={onClose}
-          >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: 'spring', duration: 0.3 }}
-              className="relative w-full max-w-2xl bg-gradient-to-br from-primary-900 to-primary-950 rounded-3xl shadow-2xl border border-primary-700 overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+              onClick={onClose}
             >
-              {isTestMode && (
-                <div className="bg-amber-500/20 border-b border-amber-500/50 px-6 py-3 flex items-center justify-center gap-2">
-                  <FiAlertCircle className="text-amber-400" />
-                  <span className="text-amber-200 text-sm font-medium">
-                    Test Mode - No real charges will be made
-                  </span>
-                </div>
-              )}
-
-              <div className="sticky top-0 bg-primary-900/90 backdrop-blur-md border-b border-primary-700 px-6 py-5 flex items-center justify-between z-10">
-                <div>
-                  <h2 className="text-2xl font-bold text-white">Secure Checkout</h2>
-                  <p className="text-sm text-primary-300 mt-1">
-                    {selectedPackage?.plan?.name} - {selectedPackage?.path?.name}
-                  </p>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-primary-800 rounded-full transition-all text-primary-300 hover:text-white"
-                >
-                  <FiX className="text-2xl" />
-                </button>
-              </div>
-
-              <div className="px-6 py-8 max-h-[70vh] overflow-y-auto">
-                <CheckoutForm
-                  selectedPackage={selectedPackage}
-                  onComplete={handleComplete}
-                  onCancel={onClose}
-                />
-              </div>
-
-              <div className="bg-primary-900/50 border-t border-primary-700 px-6 py-4">
-                <div className="flex items-center justify-center gap-6 text-sm text-primary-400">
-                  <div className="flex items-center gap-2">
-                    <FiLock className="text-green-400" />
-                    <span>Secure Payment</span>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: 'spring', duration: 0.3 }}
+                className="relative w-full max-w-2xl bg-gradient-to-br from-primary-900 to-primary-950 rounded-3xl shadow-2xl border border-primary-700 overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {isTestMode && (
+                  <div className="bg-amber-500/20 border-b border-amber-500/50 px-6 py-3 flex items-center justify-center gap-2">
+                    <FiAlertCircle className="text-amber-400" />
+                    <span className="text-amber-200 text-sm font-medium">
+                      Test Mode - No real charges will be made
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <FiCheckCircle className="text-purple-400" />
-                    <span>SSL Encrypted</span>
+                )}
+
+                <div className="sticky top-0 bg-primary-900/90 backdrop-blur-md border-b border-primary-700 px-6 py-5 flex items-center justify-between z-10">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">Secure Checkout</h2>
+                    <p className="text-sm text-primary-300 mt-1">
+                      {selectedPackage?.plan?.name} - {selectedPackage?.path?.name}
+                    </p>
+                  </div>
+                  <button
+                    onClick={onClose}
+                    className="p-2 hover:bg-primary-800 rounded-full transition-all text-primary-300 hover:text-white"
+                  >
+                    <FiX className="text-2xl" />
+                  </button>
+                </div>
+
+                <div className="px-6 py-8 max-h-[70vh] overflow-y-auto">
+                  <CheckoutForm
+                    selectedPackage={selectedPackage}
+                    onComplete={handleComplete}
+                    onCancel={onClose}
+                  />
+                </div>
+
+                <div className="bg-primary-900/50 border-t border-primary-700 px-6 py-4">
+                  <div className="flex items-center justify-center gap-6 text-sm text-primary-400">
+                    <div className="flex items-center gap-2">
+                      <FiLock className="text-green-400" />
+                      <span>Secure Payment</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FiCheckCircle className="text-purple-400" />
+                      <span>SSL Encrypted</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </Elements>
+          )}
+        </AnimatePresence>
+      </Elements>
     </>
   );
 };

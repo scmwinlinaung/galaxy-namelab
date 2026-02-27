@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
+import { FiMenu, FiX, FiChevronDown, FiUser, FiLogOut, FiMail, FiSmile } from 'react-icons/fi';
 import { NAVIGATION, ANIMATION } from '../../constants';
 import { STORAGE_KEYS } from '../../constants/api';
 
@@ -100,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
     };
 
     const getUserDisplayName = () => {
-        return userName || userEmail?.split('@')[0] || 'User';
+        return userName || userEmail?.split('@')[0] || '';
     };
 
     return (
@@ -148,22 +148,58 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
 
                             {isUserMenuOpen && (
                                 <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
+                                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
                                     transition={{ duration: 0.2 }}
-                                    className="absolute right-0 mt-2 w-48 bg-primary-900/95 backdrop-blur-md rounded-lg border border-primary-600/30 shadow-lg overflow-hidden"
+                                    className="absolute right-0 mt-3 w-72 bg-gradient-to-b from-primary-900/98 to-primary-950/98 backdrop-blur-xl rounded-2xl border border-primary-500/40 shadow-2xl shadow-primary-900/50 overflow-hidden"
                                 >
-                                    <div className="px-4 py-3 border-b border-primary-600/30">
-                                        <p className="text-sm text-gray-400">Signed in as</p>
-                                        <p className="text-sm font-medium text-white truncate">{userEmail}</p>
+                                    {/* User Info Section */}
+                                    <div className="px-5 py-5 bg-gradient-to-r from-primary-600/20 to-purple-600/20 border-b border-primary-500/20">
+                                        <div className="flex items-center space-x-3">
+                                            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center shadow-lg">
+                                                <FiUser className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-xs text-primary-300 font-medium tracking-wide uppercase mb-1">Signed in as</p>
+                                                <p className="text-sm text-white font-semibold truncate">{userName || 'User'}</p>
+                                                <p className="text-xs text-gray-400 truncate mt-0.5">{userEmail}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="w-full px-4 py-2 text-left text-white hover:bg-primary-800/50 transition-colors duration-200"
-                                    >
-                                        {NAVIGATION.LOGOUT_BUTTON}
-                                    </button>
+
+                                    {/* Account Details */}
+                                    <div className="px-5 py-4 space-y-3">
+                                        <div className="flex items-start space-x-3 p-3 rounded-xl bg-primary-800/40 border border-primary-700/30">
+                                            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary-700/50 flex items-center justify-center">
+                                                <FiSmile className="w-4 h-4 text-primary-300" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-xs text-gray-400 font-medium">Name</p>
+                                                <p className="text-sm text-white font-medium truncate">{userName || 'Not set'}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-3 p-3 rounded-xl bg-primary-800/40 border border-primary-700/30">
+                                            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary-700/50 flex items-center justify-center">
+                                                <FiMail className="w-4 h-4 text-primary-300" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-xs text-gray-400 font-medium">Email</p>
+                                                <p className="text-sm text-white font-medium truncate">{userEmail}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Logout Button */}
+                                    <div className="px-5 pb-4">
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-red-600/20 to-red-700/20 border border-red-500/30 text-red-400 hover:from-red-600/30 hover:to-red-700/30 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-900/20 transition-all duration-300 font-medium group"
+                                        >
+                                            <FiLogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+                                            <span>{NAVIGATION.LOGOUT_BUTTON}</span>
+                                        </button>
+                                    </div>
                                 </motion.div>
                             )}
                         </div>
@@ -233,17 +269,51 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
                                         transition={{ duration: 0.2 }}
-                                        className="mt-2 space-y-2"
+                                        className="mt-3 space-y-3"
                                     >
-                                        <div className="px-4 py-2 bg-primary-800/30 rounded-lg">
-                                            <p className="text-xs text-gray-400 mb-1">Signed in as</p>
-                                            <p className="text-sm text-white break-all">{userEmail}</p>
+                                        {/* User Info Card */}
+                                        <div className="px-4 py-4 bg-gradient-to-r from-primary-600/20 to-purple-600/20 rounded-xl border border-primary-500/20">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center shadow-lg">
+                                                    <FiUser className="w-5 h-5 text-white" />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-xs text-primary-300 font-medium tracking-wide uppercase">Signed in as</p>
+                                                    <p className="text-sm text-white font-semibold truncate">{userName || 'User'}</p>
+                                                    <p className="text-xs text-gray-400 truncate">{userEmail}</p>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        {/* Account Details */}
+                                        <div className="space-y-2">
+                                            <div className="flex items-start space-x-3 p-3 rounded-xl bg-primary-800/40 border border-primary-700/30">
+                                                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary-700/50 flex items-center justify-center">
+                                                    <FiSmile className="w-4 h-4 text-primary-300" />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-xs text-gray-400 font-medium">Name</p>
+                                                    <p className="text-sm text-white font-medium truncate">{userName || 'Not set'}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-start space-x-3 p-3 rounded-xl bg-primary-800/40 border border-primary-700/30">
+                                                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary-700/50 flex items-center justify-center">
+                                                    <FiMail className="w-4 h-4 text-primary-300" />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-xs text-gray-400 font-medium">Email</p>
+                                                    <p className="text-sm text-white font-medium truncate">{userEmail}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Logout Button */}
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full transition-colors duration-300 px-4 py-2 rounded-lg text-primary-400 hover:bg-primary-800/50 text-left font-semibold"
+                                            className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-red-600/20 to-red-700/20 border border-red-500/30 text-red-400 hover:from-red-600/30 hover:to-red-700/30 hover:border-red-500/50 transition-all duration-300 font-medium group"
                                         >
-                                            {NAVIGATION.LOGOUT_BUTTON}
+                                            <FiLogOut className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+                                            <span>{NAVIGATION.LOGOUT_BUTTON}</span>
                                         </button>
                                     </motion.div>
                                 )}
