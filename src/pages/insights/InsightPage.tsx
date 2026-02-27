@@ -218,139 +218,6 @@ const billionaires = [
         }
     },
     {
-        name: "Taylor Swift",
-        title: "The Icon of Fame",
-        entities: "Global Music Icon",
-        netWorth: "$1.6 Billion (Nov 2025 Estimate)",
-        grade: "⭐⭐⭐⭐ (4-Star / Grade A+)",
-        image: taylorSwiftImage,
-        color: "from-purple-600 to-pink-700",
-        category: "entertainment",
-        analysis: {
-            blueprint: {
-                title: "The Billionaire Anomaly",
-                content: "Taylor Swift proves a vital rule: You don't need a 'Perfect 5-Star Chart' to be a Billionaire.",
-                details: [
-                    "The Sagittarius Artist: Born under the Sagittarius Ascendant, her chart ruler Jupiter sits directly on the Ascendant. This gives her massive optimism and expansion energy.",
-                    "The Fame Engine: The key to her success lies in the 10th House (Career/Fame). Her Fortuner Planet resides here, granting her unstoppable popularity and a connection with the public that few can match."
-                ]
-            },
-            name: {
-                title: "Name Analysis: 'TAYLOR SWIFT'",
-                content: "Even with a slightly less powerful chart compared to Elon Musk, her Name Vibration elevates her to the top.",
-                details: [
-                    "Planetary Sequence: Saturn (T) . . . . Mars (S).",
-                    "The Geometric Lock: The name starts with Saturn (T). In her chart, Saturn is the 3rd Lord (Arts/Effort) placed in the 9th House (Fortune). It ends with Mars (S), placed in the 11th House (Gains). The Aspect: Saturn (from the 9th) casts a direct aspect onto Mars (in the 11th).",
-                    "The Result: This creates a powerful 3rd + 9th + 11th Circuit. 3rd (Art) connects to 9th (Luck) which connects to 11th (Massive Wealth)."
-                ]
-            },
-            companies: {
-                title: "The 'Stellar Fortune' Verdict",
-                subtitle: "Grade A+ (4-Star): Unlike the 'Titans' (Musk/Bezos) who have rare 5-Star charts, Taylor Swift represents the Grade A+ category.",
-                details: [
-                    {
-                        name: "THE LESSON",
-                        vibration: "Power of Alignment",
-                        analysis: "This proves that if your name forms the Sextile Alignment (3rd + 11th)—as 'Taylor Swift' does—you can override minor weaknesses in your chart and achieve billionaire status."
-                    }
-                ]
-            },
-            conclusion: "Taylor Swift is the beacon of hope for everyone. She shows that with the right Stellar Fortune Name, talent transforms into empire, and a singer becomes a billionaire. Grade A+ is powerful enough to rule the world."
-        }
-    },
-    {
-        name: "Michael Jackson",
-        title: "The Tragic King",
-        entities: "The King of Pop",
-        netWorth: "~$1 Billion (Career Earnings), left with ~$500M Debt at death.",
-        grade: "⭐⭐⭐ (3-Star / Flawed Structure)",
-        image: michaelJacksonImage,
-        color: "from-gray-600 to-slate-700",
-        category: "entertainment",
-        analysis: {
-            blueprint: {
-                title: "The Star of Fame",
-                content: "Why did he become the most famous person on the planet? The stars show a 'Fame Engine.'",
-                details: [
-                    "The Taurus Icon: Born under the Taurus Ascendant, his Lagna Lord (Venus) sits directly in the Ascendant.",
-                    "The Raja Yoga: Saturn (the most powerful Yogakaraka planet for Taurus) joins Venus in the 1st House. This combination creates a massive 'Raja Yoga' (King-Maker), granting him undeniable charisma and talent.",
-                    "The Fame Peak: His Fortuner Planet resides in the 10th House (Aquarius)—the House of Reputation. This placement guarantees global superstardom."
-                ]
-            },
-            name: {
-                title: "Name Analysis: 'MICHAEL JACKSON'",
-                content: "This is where the story turns tragic. His name is a 'Deceptive Trap.'",
-                details: [
-                    "The Good (The Outer Shell): Sequence: Jupiter (M) . . . . Mars (S/n). Analysis: If we look only at the first and last sounds, it forms a 3rd + 11th Sextile. This gave him the 'King of Pop' title and initial massive wealth.",
-                    "The Bad (The Internal Poison): The Defect: Inside the name, the sub-components form a destructive '2nd + 12th Alignment' (Dwirdwadasha). 'Michael' (Jupiter + Moon) and 'Jackson' (Moon + Mars) create friction.",
-                    "The Cosmic Meaning: In cosmic science, the 2nd House represents 'Accumulation,' but the 12th House represents 'Loss and Exit.' When these two energies lock together, they create a 'Leaking Bucket Effect.'"
-                ]
-            },
-            companies: {
-                title: "The Consequence: Glory and Ruin",
-                subtitle: "Because of this internal '2nd + 12th Flaw,' Michael Jackson could not hold onto his blessings.",
-                details: [
-                    {
-                        name: "FINANCIAL RUIN",
-                        vibration: "Leaking Bucket Effect",
-                        analysis: "Despite earning billions, he died with $500 million in debt. The '12th House Energy' forced the money to flow out as fast as it came in."
-                    },
-                    {
-                        name: "SHORTENED LIFE",
-                        vibration: "12th House Effect",
-                        analysis: "The 12th House also rules 'Exit from the physical plane.' The destructive vibration attacked his vitality, leading to his premature departure at age 50."
-                    }
-                ]
-            },
-            conclusion: "Michael Jackson's case teaches us a critical lesson: A 'Good Looking' name is not enough. Even if the outer frame is strong, hidden internal conflicts can drain your success and life force. True Stellar Fortune Names must be flawless inside and out."
-        }
-    },
-    {
-        name: "Steve Jobs",
-        title: "The Paradox of Genius",
-        entities: "Apple, iPhone, iOS",
-        netWorth: "$8.3 Billion (at time of death in 2011)",
-        grade: "⚠️ CRITICAL MISMATCH (Dissonant Structure)",
-        image: steveJobsImage,
-        color: "from-slate-600 to-gray-800",
-        category: "tech",
-        analysis: {
-            blueprint: {
-                title: "The Observation: A Cosmic Mystery",
-                content: "Steve Jobs presents a fascinating anomaly. He built the most valuable company on earth, yet his personal life was plagued by health struggles, and he left the world prematurely at the age of 56.",
-                details: [
-                    "Why? The answer lies in the conflict between his Stellar Business Name and his Destructive Personal Name."
-                ]
-            },
-            name: {
-                title: "Personal Name Analysis: 'STEVE JOBS'",
-                content: "Unlike Elon Musk, Steve Jobs did NOT possess a Stellar Fortune Name. In fact, his name carried a dangerous vibration known in cosmic science as a 'Dusthana' or '8th House Trap.'",
-                details: [
-                    "Planetary Sequence: Mars + Saturn + Moon + Mars",
-                    "The Fatal Geometric Flaw: The name starts and ends with Mars (S). In his chart, Mars sits in the 5th House but casts a full, powerful aspect directly into the 8th House (Scorpio)—the sector of crisis, chronic illness, and endings.",
-                    "The Saturn Connection: To make matters worse, Saturn resides in that exact 8th House. His name essentially 'activated' this sector of suffering every time it was spoken."
-                ]
-            },
-            companies: {
-                title: "The Empire Analysis: 'APPLE' & 'iPhone'",
-                subtitle: "If his personal name was destructive, why did he succeed? Because his Business Names were cosmically perfect.",
-                details: [
-                    {
-                        name: "APPLE",
-                        vibration: "Sun (A) + Jupiter (P)",
-                        analysis: "This creates the legendary 3rd + 11th Sextile Alignment. The Sun (Glory) combined with Jupiter (Expansion) creates unstoppable growth."
-                    },
-                    {
-                        name: "iOS Platform",
-                        vibration: "Sun + Mars",
-                        analysis: "Another 3rd + 11th Alignment. This explains why the software ecosystem became globally dominant."
-                    }
-                ]
-            },
-            conclusion: "Steve Jobs' life proves a critical rule: A great birth chart alone is not enough. His Chart & Business Name pushed him to the peak of success, but his Personal Name anchored him in crisis and cut his journey short. He planted the tree of wealth (Apple) but, due to his '8th House Name,' he could not stay long enough to fully enjoy its shade."
-        }
-    },
-    {
         name: "Michael Dell",
         title: "The Pioneer of Personal Branding",
         entities: "Dell Technologies",
@@ -397,6 +264,7 @@ const billionaires = [
             conclusion: "Michael Dell's success story is a masterclass in 'Identity Alignment.' Because his personal name, his company name, and his brand name all carry the same Stellar Fortune vibration, he has maintained his position as one of the world's top billionaires for decades."
         }
     },
+
     {
         name: "Larry Page",
         title: "The Architect of Information",
@@ -588,6 +456,141 @@ const billionaires = [
         }
     },
     {
+        name: "Taylor Swift",
+        title: "The Icon of Fame",
+        entities: "Global Music Icon",
+        netWorth: "$1.6 Billion (Nov 2025 Estimate)",
+        grade: "⭐⭐⭐⭐ (4-Star / Grade A+)",
+        image: taylorSwiftImage,
+        color: "from-purple-600 to-pink-700",
+        category: "entertainment",
+        analysis: {
+            blueprint: {
+                title: "The Billionaire Anomaly",
+                content: "Taylor Swift proves a vital rule: You don't need a 'Perfect 5-Star Chart' to be a Billionaire.",
+                details: [
+                    "The Sagittarius Artist: Born under the Sagittarius Ascendant, her chart ruler Jupiter sits directly on the Ascendant. This gives her massive optimism and expansion energy.",
+                    "The Fame Engine: The key to her success lies in the 10th House (Career/Fame). Her Fortuner Planet resides here, granting her unstoppable popularity and a connection with the public that few can match."
+                ]
+            },
+            name: {
+                title: "Name Analysis: 'TAYLOR SWIFT'",
+                content: "Even with a slightly less powerful chart compared to Elon Musk, her Name Vibration elevates her to the top.",
+                details: [
+                    "Planetary Sequence: Saturn (T) . . . . Mars (S).",
+                    "The Geometric Lock: The name starts with Saturn (T). In her chart, Saturn is the 3rd Lord (Arts/Effort) placed in the 9th House (Fortune). It ends with Mars (S), placed in the 11th House (Gains). The Aspect: Saturn (from the 9th) casts a direct aspect onto Mars (in the 11th).",
+                    "The Result: This creates a powerful 3rd + 9th + 11th Circuit. 3rd (Art) connects to 9th (Luck) which connects to 11th (Massive Wealth)."
+                ]
+            },
+            companies: {
+                title: "The 'Stellar Fortune' Verdict",
+                subtitle: "Grade A+ (4-Star): Unlike the 'Titans' (Musk/Bezos) who have rare 5-Star charts, Taylor Swift represents the Grade A+ category.",
+                details: [
+                    {
+                        name: "THE LESSON",
+                        vibration: "Power of Alignment",
+                        analysis: "This proves that if your name forms the Sextile Alignment (3rd + 11th)—as 'Taylor Swift' does—you can override minor weaknesses in your chart and achieve billionaire status."
+                    }
+                ]
+            },
+            conclusion: "Taylor Swift is the beacon of hope for everyone. She shows that with the right Stellar Fortune Name, talent transforms into empire, and a singer becomes a billionaire. Grade A+ is powerful enough to rule the world."
+        }
+    },
+    {
+        name: "Michael Jackson",
+        title: "The Tragic King",
+        entities: "The King of Pop",
+        netWorth: "~$1 Billion (Career Earnings), left with ~$500M Debt at death.",
+        grade: "⭐⭐⭐ (3-Star / Flawed Structure)",
+        image: michaelJacksonImage,
+        color: "from-gray-600 to-slate-700",
+        category: "entertainment",
+        analysis: {
+            blueprint: {
+                title: "The Star of Fame",
+                content: "Why did he become the most famous person on the planet? The stars show a 'Fame Engine.'",
+                details: [
+                    "The Taurus Icon: Born under the Taurus Ascendant, his Lagna Lord (Venus) sits directly in the Ascendant.",
+                    "The Raja Yoga: Saturn (the most powerful Yogakaraka planet for Taurus) joins Venus in the 1st House. This combination creates a massive 'Raja Yoga' (King-Maker), granting him undeniable charisma and talent.",
+                    "The Fame Peak: His Fortuner Planet resides in the 10th House (Aquarius)—the House of Reputation. This placement guarantees global superstardom."
+                ]
+            },
+            name: {
+                title: "Name Analysis: 'MICHAEL JACKSON'",
+                content: "This is where the story turns tragic. His name is a 'Deceptive Trap.'",
+                details: [
+                    "The Good (The Outer Shell): Sequence: Jupiter (M) . . . . Mars (S/n). Analysis: If we look only at the first and last sounds, it forms a 3rd + 11th Sextile. This gave him the 'King of Pop' title and initial massive wealth.",
+                    "The Bad (The Internal Poison): The Defect: Inside the name, the sub-components form a destructive '2nd + 12th Alignment' (Dwirdwadasha). 'Michael' (Jupiter + Moon) and 'Jackson' (Moon + Mars) create friction.",
+                    "The Cosmic Meaning: In cosmic science, the 2nd House represents 'Accumulation,' but the 12th House represents 'Loss and Exit.' When these two energies lock together, they create a 'Leaking Bucket Effect.'"
+                ]
+            },
+            companies: {
+                title: "The Consequence: Glory and Ruin",
+                subtitle: "Because of this internal '2nd + 12th Flaw,' Michael Jackson could not hold onto his blessings.",
+                details: [
+                    {
+                        name: "FINANCIAL RUIN",
+                        vibration: "Leaking Bucket Effect",
+                        analysis: "Despite earning billions, he died with $500 million in debt. The '12th House Energy' forced the money to flow out as fast as it came in."
+                    },
+                    {
+                        name: "SHORTENED LIFE",
+                        vibration: "12th House Effect",
+                        analysis: "The 12th House also rules 'Exit from the physical plane.' The destructive vibration attacked his vitality, leading to his premature departure at age 50."
+                    }
+                ]
+            },
+            conclusion: "Michael Jackson's case teaches us a critical lesson: A 'Good Looking' name is not enough. Even if the outer frame is strong, hidden internal conflicts can drain your success and life force. True Stellar Fortune Names must be flawless inside and out."
+        }
+    },
+    {
+        name: "Steve Jobs",
+        title: "The Paradox of Genius",
+        entities: "Apple, iPhone, iOS",
+        netWorth: "$8.3 Billion (at time of death in 2011)",
+        grade: "⚠️ CRITICAL MISMATCH (Dissonant Structure)",
+        image: steveJobsImage,
+        color: "from-slate-600 to-gray-800",
+        category: "tech",
+        analysis: {
+            blueprint: {
+                title: "The Observation: A Cosmic Mystery",
+                content: "Steve Jobs presents a fascinating anomaly. He built the most valuable company on earth, yet his personal life was plagued by health struggles, and he left the world prematurely at the age of 56.",
+                details: [
+                    "Why? The answer lies in the conflict between his Stellar Business Name and his Destructive Personal Name."
+                ]
+            },
+            name: {
+                title: "Personal Name Analysis: 'STEVE JOBS'",
+                content: "Unlike Elon Musk, Steve Jobs did NOT possess a Stellar Fortune Name. In fact, his name carried a dangerous vibration known in cosmic science as a 'Dusthana' or '8th House Trap.'",
+                details: [
+                    "Planetary Sequence: Mars + Saturn + Moon + Mars",
+                    "The Fatal Geometric Flaw: The name starts and ends with Mars (S). In his chart, Mars sits in the 5th House but casts a full, powerful aspect directly into the 8th House (Scorpio)—the sector of crisis, chronic illness, and endings.",
+                    "The Saturn Connection: To make matters worse, Saturn resides in that exact 8th House. His name essentially 'activated' this sector of suffering every time it was spoken."
+                ]
+            },
+            companies: {
+                title: "The Empire Analysis: 'APPLE' & 'iPhone'",
+                subtitle: "If his personal name was destructive, why did he succeed? Because his Business Names were cosmically perfect.",
+                details: [
+                    {
+                        name: "APPLE",
+                        vibration: "Sun (A) + Jupiter (P)",
+                        analysis: "This creates the legendary 3rd + 11th Sextile Alignment. The Sun (Glory) combined with Jupiter (Expansion) creates unstoppable growth."
+                    },
+                    {
+                        name: "iOS Platform",
+                        vibration: "Sun + Mars",
+                        analysis: "Another 3rd + 11th Alignment. This explains why the software ecosystem became globally dominant."
+                    }
+                ]
+            },
+            conclusion: "Steve Jobs' life proves a critical rule: A great birth chart alone is not enough. His Chart & Business Name pushed him to the peak of success, but his Personal Name anchored him in crisis and cut his journey short. He planted the tree of wealth (Apple) but, due to his '8th House Name,' he could not stay long enough to fully enjoy its shade."
+        }
+    },
+
+
+    {
         name: "Tim Cook",
         title: "The Guardian of the Galaxy",
         entities: "Apple Inc.",
@@ -711,22 +714,22 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
         });
 
         // Sort
-        filtered.sort((a, b) => {
-            switch (sortBy) {
-                case 'netWorth':
-                    const aWorth = parseFloat(a.netWorth.replace(/[^0-9.]/g, ''));
-                    const bWorth = parseFloat(b.netWorth.replace(/[^0-9.]/g, ''));
-                    return bWorth - aWorth;
-                case 'name':
-                    return a.name.localeCompare(b.name);
-                case 'grade':
-                    const aGrade = a.grade.includes('⭐⭐⭐⭐⭐') ? 5 : a.grade.includes('⭐⭐⭐⭐') ? 4 : a.grade.includes('⭐⭐⭐') ? 3 : 1;
-                    const bGrade = b.grade.includes('⭐⭐⭐⭐⭐') ? 5 : b.grade.includes('⭐⭐⭐⭐') ? 4 : b.grade.includes('⭐⭐⭐') ? 3 : 1;
-                    return bGrade - aGrade;
-                default:
-                    return 0;
-            }
-        });
+        // filtered.sort((a, b) => {
+        //     switch (sortBy) {
+        //         case 'netWorth':
+        //             const aWorth = parseFloat(a.netWorth.replace(/[^0-9.]/g, ''));
+        //             const bWorth = parseFloat(b.netWorth.replace(/[^0-9.]/g, ''));
+        //             return bWorth - aWorth;
+        //         case 'name':
+        //             return a.name.localeCompare(b.name);
+        //         case 'grade':
+        //             const aGrade = a.grade.includes('⭐⭐⭐⭐⭐') ? 5 : a.grade.includes('⭐⭐⭐⭐') ? 4 : a.grade.includes('⭐⭐⭐') ? 3 : 1;
+        //             const bGrade = b.grade.includes('⭐⭐⭐⭐⭐') ? 5 : b.grade.includes('⭐⭐⭐⭐') ? 4 : b.grade.includes('⭐⭐⭐') ? 3 : 1;
+        //             return bGrade - aGrade;
+        //         default:
+        //             return 0;
+        //     }
+        // });
 
         return filtered;
     }, [selectedCategory, searchTerm, sortBy]);
@@ -790,20 +793,7 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                                 })}
                             </div>
 
-                            {/* Sort Options */}
-                            <div className="flex justify-center">
-                                <select
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
-                                    className="px-8 py-4 rounded-2xl border border-gray-700/50 bg-gray-800/50 backdrop-blur-sm text-white focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 text-lg font-medium shadow-lg appearance-none cursor-pointer"
-                                >
-                                    {sortOptions.map((option) => (
-                                        <option key={option.id} value={option.id}>
-                                            {option.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+
                         </div>
                     </motion.div>
                 </div>

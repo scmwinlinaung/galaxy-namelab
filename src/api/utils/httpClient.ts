@@ -4,7 +4,7 @@ import { STORAGE_KEYS } from '@constants/api';
 // Get API base URL from environment variables
 // @ts-ignore
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.galaxynamelab.com/name-lab/api';
-const API_BASE_URL =  'https://api.galaxynamelab.com/name-lab/api';
+const API_BASE_URL = 'https://api.galaxynamelab.com/name-lab/api';
 // Default request configuration
 const DEFAULT_CONFIG: RequestConfig = {
   headers: {
