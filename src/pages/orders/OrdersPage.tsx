@@ -509,30 +509,11 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                         </div>
                         <div className="space-y-2 pt-2">
                           {/* Download Button */}
-                          {canDownload ? (
-                            <button
-                              onClick={() => handleDownloadPdf(order._id)}
-                              disabled={downloadingOrderId === order._id}
-                              className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-purple-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                            >
-                              {downloadingOrderId === order._id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                                  Downloading...
-                                </>
-                              ) : (
-                                <>
-                                  <FiDownload className="text-lg" />
-                                  Download Report
-                                </>
-                              )}
-                            </button>
-                          ) : (
-                            <div className="px-4 py-3 bg-primary-800/50 rounded-xl text-center text-primary-400 text-sm">
-                              <FiFileText className="inline mr-2" />
-                              Report will be available once confirmed
-                            </div>
-                          )}
+
+                          <div className="px-4 py-3 bg-primary-800/50 rounded-xl text-center text-primary-400 text-sm">
+                            <FiFileText className="inline mr-2" />
+                            Report will be available once confirmed
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -686,11 +686,11 @@ const categories = [
 ];
 
 // Sort options
-const sortOptions = [
-    { id: 'netWorth', name: 'Net Worth (High to Low)' },
-    { id: 'name', name: 'Name (A-Z)' },
-    { id: 'grade', name: 'Grade (High to Low)' },
-];
+// const sortOptions = [
+//     { id: 'netWorth', name: 'Net Worth (High to Low)' },
+//     { id: 'name', name: 'Name (A-Z)' },
+//     { id: 'grade', name: 'Grade (High to Low)' },
+// ];
 
 interface InsightPageProps {
     isLoginModalOpen: boolean;
