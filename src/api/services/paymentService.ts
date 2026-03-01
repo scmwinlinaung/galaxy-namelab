@@ -12,11 +12,16 @@ export class PaymentService {
 
   // Step 1: Initialize Stripe Payment Intent
   static async createStripeIntent(
-    packageId: string
+    packageId: string,
+    email: string,
+    name: string
   ): Promise<ApiResponse<CreateStripeIntentResponse>> {
+    console.log("packageId = " + packageId);
+    console.log("email = " + email)
+    console.log("name = " + name)
     return httpClient.post<CreateStripeIntentResponse>(
       '/payment/stripe-intent',
-      { packageId }
+      { packageId, email, name }
     );
   }
 

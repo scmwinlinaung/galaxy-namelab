@@ -69,7 +69,8 @@ const CheckoutForm: React.FC<{
   selectedPackage: Package;
   onComplete: () => void;
   onCancel: () => void;
-}> = ({ selectedPackage, onComplete, onCancel }) => {
+  onUnauthorized: () => void;
+}> = ({ selectedPackage, onComplete, onCancel, onUnauthorized }) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -109,8 +110,16 @@ const CheckoutForm: React.FC<{
       }
 
       try {
-        const response = await PaymentService.createStripeIntent(selectedPackage._id);
+        const userEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || '';
+        const name = localStorage.getItem(STORAGE_KEYS.USER_NAME) || '';
+        const response = await PaymentService.createStripeIntent(selectedPackage._id, userEmail, name);
         console.log('Stripe Intent Response:', JSON.stringify(response));
+
+        // Check for 401 unauthorized
+        if (response.statusCode === 401) {
+          onUnauthorized();
+          return;
+        }
 
         // Ensure we have the data we need
         if (response.success && response.data && response.data.clientSecret) {
@@ -278,6 +287,12 @@ const CheckoutForm: React.FC<{
 
     if (!isMountedRef.current) return;
 
+    // Check for 401 unauthorized
+    if (response.statusCode === 401) {
+      onUnauthorized();
+      return;
+    }
+
     if (response.success) {
       const emailData = {
         to: userEmail,
@@ -307,7 +322,13 @@ Best regards,
         `
       };
 
-      await EmailService.sendEmail(emailData);
+      const emailResponse = await EmailService.sendEmail(emailData);
+
+      // Check for 401 unauthorized
+      if (emailResponse.statusCode === 401) {
+        onUnauthorized();
+        return;
+      }
 
       setCheckoutState({
         step: 'complete',
@@ -804,6 +825,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     selectedPackage={selectedPackage}
                     onComplete={handleComplete}
                     onCancel={onClose}
+                    onUnauthorized={() => setShowLoginModal(true)}
                   />
                 </div>
 

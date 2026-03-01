@@ -48,6 +48,7 @@ class HttpClient {
 
     // Common auth interceptor: Add x-auth-token header if token exists
     const token = this.getAuthToken();
+
     if (token) {
       headers['x-auth-token'] = token;
     }
@@ -204,7 +205,7 @@ class HttpClient {
   async post<T>(endpoint: string, data?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
     const headers = this.buildHeaders(config?.headers);
-
+    console.log("token = " + JSON.stringify(headers))
     return this.makeRequest<T>(url, {
       method: 'POST',
       headers,
