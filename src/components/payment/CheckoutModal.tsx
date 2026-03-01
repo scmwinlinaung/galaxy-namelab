@@ -14,10 +14,12 @@ import { ROUTES } from '@constants/navigation';
 
 // Initialize Stripe with publishable key from environment variable
 // const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-const stripePromise = loadStripe("pk_live_51Sk10FFDgAPvX2A59J3M1cJaM4a1rij1ntQRNEkOvgkH5Vz08xyOJV7nw2tr780YFqYfusonrVdBMvw0edDS0ME700VyWrYVU1")
+const stripeKey = "pk_live_51Sk10FFDgAPvX2A59J3M1cJaM4a1rij1ntQRNEkOvgkH5Vz08xyOJV7nw2tr780YFqYfusonrVdBMvw0edDS0ME700VyWrYVU1";
+const stripePromise = loadStripe(stripeKey)
 // Check if using test mode
-const isTestMode = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.startsWith('pk_test_');
+// const isTestMode = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.startsWith('pk_test_');
 
+const isTestMode = stripeKey?.startsWith('pk_test_');
 // Helper function to get user-friendly error messages from Stripe errors
 const getStripeErrorMessage = (error: any): string => {
   const errorType = error.type;
