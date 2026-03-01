@@ -2,8 +2,12 @@
 
 // Business Info
 export interface BusinessInfo {
-  businessName: string;
-  dateOfBirth: string;
+  fullName: string;
+  dob: string;
+  birthTime: string;
+  birthPlace: string;
+  details: string;
+  preferredSyllables: []
 }
 
 // Payment Info

@@ -110,6 +110,7 @@ class HttpClient {
         return {
           success: false,
           error: error.message,
+          statusCode: response.status,
           ...data,
         };
       }

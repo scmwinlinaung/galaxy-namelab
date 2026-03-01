@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import {
   FiPackage,
   FiDownload,
-  FiUpload,
   FiCalendar,
   FiCheckCircle,
   FiClock,
@@ -12,15 +11,14 @@ import {
   FiAlertCircle,
   FiFileText,
   FiLock,
-  FiEdit,
   FiRefreshCw,
-  FiX,
+  FiArrowRight,
 } from 'react-icons/fi';
 
 import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import { OrderService } from '@api/services/orderService';
-import { Order, OrderStatus, Submission } from '@api/types/order';
+import { Order, OrderStatus } from '@api/types/order';
 import { STORAGE_KEYS } from '@constants/api';
 
 const fadeUp = {
@@ -42,18 +40,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [downloadingOrderId, setDownloadingOrderId] = useState<string | null>(null);
-  const [uploadingOrderId, setUploadingOrderId] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<{ orderId: string; file: File } | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [submissions, setSubmissions] = useState<Record<string, Submission[]>>({});
-  const [expandedOrders, setExpandedOrders] = useState<Record<string, boolean>>({});
-  const [loadingSubmissions, setLoadingSubmissions] = useState<Record<string, boolean>>({});
-
-  // New state for submission actions
-  const [submissionFileInputs, setSubmissionFileInputs] = useState<Record<string, File | null>>({});
-  const [replacingSubmissionId, setReplacingSubmissionId] = useState<string | null>(null);
-
-  const [downloadingAdminResponse, setDownloadingAdminResponse] = useState<string | null>(null);
 
   // Check authentication status
   const checkAuthStatus = () => {
@@ -73,13 +60,31 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
     try {
       setLoading(true);
       const response = await OrderService.getMyOrders();
-      console.log("RESPONSE = " + JSON.stringify(response.data))
+
+      // Handle 401 error specifically - clear invalid token and show login modal
+      if (response.statusCode === 401) {
+        console.log("Handling 401 - opening login modal");
+        localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+        setIsAuthenticated(false);
+        setIsLoginModalOpen(true);
+        return; // Don't set error - the "Not Authenticated" message will show
+      }
+
       if (response.success && response.data) {
         setOrders(response.data);
+        setError(null);
       } else {
         setError(response.error || 'Failed to load orders');
       }
-    } catch (err) {
+    } catch (err: any) {
+      // Handle 401 error in catch block - clear invalid token and show login modal
+      console.log('Fetch orders error:', err);
+      if (err?.response?.status === 401 || err?.message?.includes('401') || err?.statusCode === 401) {
+        localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+        setIsAuthenticated(false);
+        setIsLoginModalOpen(true);
+        return; // Don't set error - the "Not Authenticated" message will show
+      }
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -139,164 +144,6 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
     }
   };
 
-  const handleDownloadAdminResponse = async (submissionId: string) => {
-    try {
-      setDownloadingAdminResponse(submissionId);
-      const response = await OrderService.downloadAdminResponsePdf(submissionId);
-
-      if (response.success && response.blob) {
-        // Generate filename using submission ID
-        const filename = `admin-response-${submissionId}.pdf`;
-        OrderService.downloadBlob(response.blob, filename);
-      } else {
-        alert(response.error || 'Failed to download admin response');
-      }
-    } catch (err) {
-      alert('An unexpected error occurred while downloading');
-    } finally {
-      setDownloadingAdminResponse(null);
-    }
-  };
-
-  const handleFileSelect = (orderId: string, file: File) => {
-    // Validate PDF file
-    if (file.type !== 'application/pdf') {
-      alert('Please select a PDF file');
-      return;
-    }
-    setSelectedFile({ orderId, file });
-  };
-
-  const handleUploadPdf = async (orderId: string) => {
-    if (!selectedFile || selectedFile.orderId !== orderId) {
-      alert('Please select a PDF file first');
-      return;
-    }
-
-    try {
-      setUploadingOrderId(orderId);
-      const response = await OrderService.uploadSubmission(orderId, selectedFile.file);
-
-      if (response.success) {
-        alert('PDF uploaded successfully!');
-        setSelectedFile(null);
-        // Refresh submissions for this order
-        fetchSubmissionsForOrder(orderId);
-      } else {
-        alert(response.error || 'Failed to upload PDF');
-      }
-    } catch (err) {
-      alert('An unexpected error occurred while uploading');
-    } finally {
-      setUploadingOrderId(null);
-    }
-  };
-
-  const fetchSubmissionsForOrder = async (orderId: string) => {
-    try {
-      setLoadingSubmissions(prev => ({ ...prev, [orderId]: true }));
-      const response = await OrderService.getOrderSubmissions(orderId);
-      if (response.success && response.data) {
-        const submissionsData = response.data;
-        setSubmissions(prev => ({ ...prev, [orderId]: submissionsData }));
-      }
-    } catch (err) {
-      console.error('Failed to fetch submissions:', err);
-    } finally {
-      setLoadingSubmissions(prev => ({ ...prev, [orderId]: false }));
-    }
-  };
-
-  // Handle file selection for submission replacement
-  const handleSubmissionFileSelect = (submissionId: string, file: File) => {
-    if (file.type !== 'application/pdf') {
-      alert('Please select a PDF file');
-      return;
-    }
-    setSubmissionFileInputs(prev => ({ ...prev, [submissionId]: file }));
-  };
-
-  // Handle replacing submission file
-  const handleReplaceSubmissionFile = async (orderId: string, submissionId: string) => {
-    const file = submissionFileInputs[submissionId];
-    if (!file) {
-      alert('Please select a PDF file first');
-      return;
-    }
-
-    try {
-      setReplacingSubmissionId(submissionId);
-      const response = await OrderService.replaceSubmissionFile(orderId, file);
-
-      if (response.success) {
-        alert('Submission file replaced successfully!');
-        setSubmissionFileInputs(prev => ({ ...prev, [submissionId]: null }));
-        // Refresh submissions for this order
-        await fetchSubmissionsForOrder(orderId);
-      } else {
-        alert(response.error || 'Failed to replace submission file');
-      }
-    } catch (err) {
-      alert('An unexpected error occurred while replacing file');
-    } finally {
-      setReplacingSubmissionId(null);
-    }
-  };
-
-
-
-  // Handle admin update submission
-  // const handleAdminUpdateSubmission = async () => {
-  //   if (!adminUpdateModal) return;
-
-  //   try {
-  //     setIsUpdatingSubmission(adminUpdateModal.submissionId);
-  //     const response = await OrderService.updateSubmission(
-  //       adminUpdateModal.submissionId,
-  //       adminUpdateData.status,
-  //       adminUpdateData.adminComment,
-  //       adminUpdateData.file || undefined
-  //     );
-
-  //     if (response.success) {
-  //       alert('Submission updated successfully!');
-  //       closeAdminUpdateModal();
-  //       // Refresh submissions for this order
-  //       await fetchSubmissionsForOrder(adminUpdateModal.orderId);
-  //     } else {
-  //       alert(response.error || 'Failed to update submission');
-  //     }
-  //   } catch (err) {
-  //     alert('An unexpected error occurred while updating');
-  //   } finally {
-  //     setIsUpdatingSubmission(null);
-  //   }
-  // };
-
-  const toggleExpanded = (orderId: string) => {
-    setExpandedOrders(prev => {
-      const newState = { ...prev, [orderId]: !prev[orderId] };
-      // Fetch submissions when expanding for the first time
-      if (newState[orderId] && !submissions[orderId]) {
-        fetchSubmissionsForOrder(orderId);
-      }
-      return newState;
-    });
-  };
-
-  const getSubmissionStatusColor = (status: string) => {
-    switch (status) {
-      case 'reviewed':
-        return 'bg-blue-900/30 text-blue-400 border-blue-700/50';
-      case 'approved':
-        return 'bg-green-900/30 text-green-400 border-green-700/50';
-      case 'rejected':
-        return 'bg-red-900/30 text-red-400 border-red-700/50';
-      default:
-        return 'bg-gray-900/30 text-gray-400 border-gray-700/50';
-    }
-  };
-
   const getStatusBadge = (status: OrderStatus) => {
     switch (status) {
       case 'confirmed':
@@ -339,18 +186,26 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
     <PageWrapper>
       <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
 
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center bg-primary-950 text-primary-50 overflow-hidden px-4 py-32">
-        {/* Background Blobs */}
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-start text-center bg-gradient-to-b from-primary-950 via-primary-900/50 to-primary-950 text-primary-50 overflow-hidden px-4 py-32">
+        {/* Animated Background Blobs */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply blur-3xl opacity-20"
-          animate={{ y: [0, -20, 0], x: [0, 20, 0] }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full mix-blend-multiply blur-3xl"
+          animate={{ y: [0, -30, 0], x: [0, 30, 0], scale: [1, 1.1, 1] }}
           transition={{ repeat: Infinity, duration: 12, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-amber-600 rounded-full mix-blend-multiply blur-3xl opacity-15"
-          animate={{ y: [0, 20, 0], x: [0, -20, 0] }}
-          transition={{ repeat: Infinity, duration: 15, ease: 'easeInOut' }}
+          className="absolute top-1/3 right-1/4 w-80 h-80 bg-amber-600/15 rounded-full mix-blend-multiply blur-3xl"
+          animate={{ y: [0, 30, 0], x: [0, -30, 0], scale: [1, 1.15, 1] }}
+          transition={{ repeat: Infinity, duration: 15, ease: 'easeInOut', delay: 1 }}
         />
+        <motion.div
+          className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-indigo-600/20 rounded-full mix-blend-multiply blur-3xl"
+          animate={{ y: [0, -25, 0], x: [0, 25, 0], scale: [1, 1.1, 1] }}
+          transition={{ repeat: Infinity, duration: 18, ease: 'easeInOut', delay: 2 }}
+        />
+
+        {/* Decorative Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
         {/* Page Title */}
         <motion.div
@@ -358,21 +213,33 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
           initial="hidden"
           animate="visible"
           custom={0.1}
-          className="w-full max-w-5xl mb-12 mt-10 bg-primary-900/50 backdrop-blur-md rounded-3xl p-8 border border-primary-800 shadow-2xl"
+          className="w-full max-w-5xl mb-12 mt-10 relative z-10"
         >
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <FiPackage className="text-purple-400 text-4xl" />
-            <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-amber-600 to-purple-600">
-              My Orders
-            </h1>
+          <div className="bg-gradient-to-br from-primary-900/80 via-primary-800/60 to-primary-900/80 backdrop-blur-xl rounded-[2rem] p-10 border border-primary-700/50 shadow-2xl relative overflow-hidden">
+            {/* Decorative gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-amber-600/5 pointer-events-none" />
+
+            <div className="relative z-10">
+              <div className="flex items-center justify-center gap-5 mb-5">
+                <motion.div
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+                >
+                  <FiPackage className="text-purple-400 text-5xl drop-shadow-lg" />
+                </motion.div>
+                <h1 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-amber-400 to-purple-400 drop-shadow-2xl">
+                  My Orders
+                </h1>
+              </div>
+              <p className="text-xl text-primary-200 leading-relaxed font-light">
+                View and manage your orders. Download your reports once they're ready.
+              </p>
+            </div>
           </div>
-          <p className="text-xl text-white leading-relaxed">
-            View and manage your orders. Download your reports once they're ready.
-          </p>
         </motion.div>
 
         {/* Main Content */}
-        <div className="w-full max-w-6xl mx-auto mb-16">
+        <div className="w-full max-w-6xl mx-auto mb-16 relative z-10">
           {/* Not Authenticated State */}
           {!isAuthenticated && !loading && (
             <motion.div
@@ -380,35 +247,70 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
               initial="hidden"
               animate="visible"
               custom={0.2}
-              className="text-center py-16 bg-primary-900/30 backdrop-blur-sm rounded-3xl p-12 border border-primary-800"
+              className="text-center py-16 bg-gradient-to-br from-primary-900/60 to-primary-800/40 backdrop-blur-xl rounded-[2rem] p-12 border border-primary-700/50 shadow-2xl relative overflow-hidden"
             >
-              <FiLock className="text-6xl text-primary-400 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-white mb-4">Login Required</h3>
-              <p className="text-lg text-primary-300 mb-8">
-                Please log in to view your orders.
-              </p>
-              <button
-                onClick={() => setIsLoginModalOpen(true)}
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-full font-bold shadow-lg hover:shadow-purple-500/50 transition-all"
-              >
-                Login to Continue
-              </button>
+              {/* Decorative gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-amber-600/10 pointer-events-none" />
+
+              <div className="relative z-10">
+                <motion.div
+                  animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
+                  transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                  className="mb-6"
+                >
+                  <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-purple-600/20 to-amber-600/20 border-2 border-purple-500/30 backdrop-blur-sm">
+                    <FiLock className="text-6xl text-purple-400" />
+                  </div>
+                </motion.div>
+                <h3 className="text-3xl font-bold text-white mb-4">Login Required</h3>
+                <p className="text-lg text-primary-200 mb-8 max-w-md mx-auto">
+                  Please log in to view your orders.
+                </p>
+                <button
+                  onClick={() => setIsLoginModalOpen(true)}
+                  className="group px-8 py-4 bg-gradient-to-r from-purple-600 via-purple-500 to-amber-600 hover:from-purple-500 hover:via-purple-400 hover:to-amber-500 text-white rounded-full font-bold shadow-lg shadow-purple-900/50 hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 active:scale-95"
+                >
+                  <span className="flex items-center gap-2">
+                    Login to Continue
+                    <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </button>
+              </div>
             </motion.div>
           )}
 
           {/* Loading State */}
           {loading && isAuthenticated && (
-            <div className="text-center py-12">
-              <div className="text-2xl text-primary-300 font-medium animate-pulse">Loading your orders...</div>
+            <div className="text-center py-16">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+                className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-purple-600/20 to-amber-600/20 border-2 border-purple-500/30 backdrop-blur-sm mb-6"
+              >
+                <FiRefreshCw className="text-4xl text-purple-400" />
+              </motion.div>
+              <div className="text-2xl text-primary-200 font-medium">Loading your orders...</div>
             </div>
           )}
 
           {/* Error State */}
           {error && isAuthenticated && (
             <div className="text-center py-12">
-              <div className="text-2xl text-red-400 font-medium bg-red-900/20 backdrop-blur-sm rounded-2xl p-6 border border-red-800 max-w-2xl mx-auto">
-                {error}
-              </div>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="max-w-2xl mx-auto bg-gradient-to-br from-red-900/30 to-red-800/20 backdrop-blur-xl rounded-[1.5rem] p-8 border border-red-700/50 shadow-2xl relative overflow-hidden"
+              >
+                {/* Decorative gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-red-600/10 via-transparent to-red-500/10 pointer-events-none" />
+
+                <div className="relative z-10">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-600/20 border-2 border-red-500/30 mb-4">
+                    <FiAlertCircle className="text-3xl text-red-400" />
+                  </div>
+                  <div className="text-2xl text-red-300 font-medium">{error}</div>
+                </div>
+              </motion.div>
             </div>
           )}
 
@@ -419,25 +321,41 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
               initial="hidden"
               animate="visible"
               custom={0.2}
-              className="text-center py-16 bg-primary-900/30 backdrop-blur-sm rounded-3xl p-12 border border-primary-800"
+              className="text-center py-16 bg-gradient-to-br from-primary-900/60 to-primary-800/40 backdrop-blur-xl rounded-[2rem] p-12 border border-primary-700/50 shadow-2xl relative overflow-hidden"
             >
-              <FiPackage className="text-6xl text-primary-400 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-white mb-4">No Orders Yet</h3>
-              <p className="text-lg text-primary-300 mb-8">
-                You haven't placed any orders yet. Visit our pricing page to get started!
-              </p>
-              <button
-                onClick={() => window.location.href = '/pricing'}
-                className="px-8 py-4 bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white rounded-full font-bold shadow-lg hover:shadow-purple-500/50 transition-all"
-              >
-                Browse Packages
-              </button>
+              {/* Decorative gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-amber-600/10 pointer-events-none" />
+
+              <div className="relative z-10">
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                  className="mb-6"
+                >
+                  <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-purple-600/20 to-amber-600/20 border-2 border-purple-500/30 backdrop-blur-sm">
+                    <FiPackage className="text-6xl text-purple-400" />
+                  </div>
+                </motion.div>
+                <h3 className="text-3xl font-bold text-white mb-4">No Orders Yet</h3>
+                <p className="text-lg text-primary-200 mb-8 max-w-md mx-auto">
+                  You haven't placed any orders yet. Visit our pricing page to get started!
+                </p>
+                <button
+                  onClick={() => window.location.href = '/pricing'}
+                  className="group px-8 py-4 bg-gradient-to-r from-purple-600 via-purple-500 to-amber-600 hover:from-purple-500 hover:via-purple-400 hover:to-amber-500 text-white rounded-full font-bold shadow-lg shadow-purple-900/50 hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 active:scale-95"
+                >
+                  <span className="flex items-center gap-2">
+                    Browse Packages
+                    <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </button>
+              </div>
             </motion.div>
           )}
 
           {/* Orders List */}
           {!loading && !error && isAuthenticated && orders.length > 0 && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               {orders.map((order, index) => {
                 const statusBadge = getStatusBadge(order.status);
                 const canDownload = order.status === 'confirmed' || order.status === 'completed';
@@ -449,195 +367,86 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                     initial="hidden"
                     animate="visible"
                     custom={0.2 + index * 0.1}
-                    className="bg-primary-900/50 backdrop-blur-md rounded-3xl p-8 border border-primary-800 shadow-xl hover:shadow-2xl hover:border-purple-700/50 transition-all"
+                    whileHover={{ y: -4 }}
+                    className="group bg-gradient-to-br from-primary-900/70 via-primary-800/50 to-primary-900/70 backdrop-blur-xl rounded-[2rem] p-8 border border-primary-700/50 shadow-xl hover:shadow-2xl hover:border-purple-600/50 transition-all duration-300 relative overflow-hidden"
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {/* Order ID & Status */}
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm text-primary-400 mb-1">Order ID</p>
-                          <p className="text-white font-semibold">{order._id}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-primary-400 mb-1">Status</p>
-                          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border ${statusBadge.color}`}>
-                            {statusBadge.icon}
-                            <span className="font-medium">{statusBadge.text}</span>
+                    {/* Decorative gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-amber-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                    {/* Glowing border effect */}
+                    <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-r from-purple-600/20 via-amber-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300 pointer-events-none" />
+
+                    <div className="relative z-10">
+                      {/* Order Header */}
+                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 pb-6 border-b border-primary-700/50">
+                        <div className="flex items-center gap-3">
+                          <div className="p-3 bg-gradient-to-br from-purple-600/20 to-amber-600/20 rounded-xl border border-purple-500/30">
+                            <FiPackage className="text-2xl text-purple-400" />
+                          </div>
+                          <div className="text-left">
+                            <p className="text-xs text-primary-400 uppercase tracking-wider font-semibold mb-1">Order ID</p>
+                            <p className="text-lg font-bold text-white tracking-wide">{order._id}</p>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Package & Business Info */}
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm text-primary-400 mb-1">Package</p>
-                          <p className="text-white font-medium">{order.package.plan.name}</p>
+                        <div className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full border shadow-lg ${statusBadge.color}`}>
+                          {statusBadge.icon}
+                          <span className="font-semibold">{statusBadge.text}</span>
                         </div>
-                        <div>
-                          <p className="text-sm text-primary-400 mb-1">Price</p>
-                          <p className="text-white font-semibold text-lg">${order.package.price.amount}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-primary-400 mb-1">Business Name</p>
-                          <p className="text-white">{order.businessInfo.businessName}</p>
+                        <div className="flex items-center gap-2 text-primary-300">
+                          <FiCalendar className="text-lg" />
+                          <span className="text-sm font-medium">{formatDate(order.createdAt)}</span>
                         </div>
                       </div>
 
-                      {/* Date of Birth & Created At */}
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm text-primary-400 mb-1">Date of Birth</p>
-                          <p className="text-white">{formatDate(order.businessInfo.dateOfBirth)}</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <FiCalendar className="text-primary-400" />
-                          <div>
-                            <p className="text-sm text-primary-400">Created</p>
-                            <p className="text-white">{formatDate(order.createdAt)}</p>
+                      {/* Order Details Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        {/* Package & Business Info */}
+                        <div className="space-y-4">
+                          <div className="bg-primary-800/30 rounded-xl p-4 border border-primary-700/50">
+                            <p className="text-xs text-primary-400 uppercase tracking-wider font-semibold mb-2">Package</p>
+                            <p className="text-white font-bold text-lg mb-1">{order.package.plan.name}</p>
+                            <p className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-amber-400 bg-clip-text text-transparent">
+                              ${order.package.price.amount}
+                            </p>
+                          </div>
+                          <div className="bg-primary-800/30 rounded-xl p-4 border border-primary-700/50">
+                            <p className="text-xs text-primary-400 uppercase tracking-wider font-semibold mb-1">Business Name</p>
+                            <p className="text-white font-medium">{order.businessInfo.fullName}</p>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Payment & Actions */}
-                      <div className="space-y-3">
-                        <div>
-                          <p className="text-sm text-primary-400 mb-1">Payment</p>
-                          <p className="text-white text-sm capitalize">{order.payment.gateway}</p>
-                          <p className={`text-sm ${order.payment.status === 'completed' ? 'text-green-400' : 'text-amber-400'}`}>
-                            {order.payment.status}
-                          </p>
-                        </div>
-                        <div className="space-y-2 pt-2">
-                          {/* Download Button */}
-
-                          <div className="px-4 py-3 bg-primary-800/50 rounded-xl text-center text-primary-400 text-sm">
-                            <FiFileText className="inline mr-2" />
-                            Report will be available once confirmed
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Submissions Section */}
-                    <div className="mt-6 pt-6 border-t border-primary-700">
-                      {expandedOrders[order._id] && (
-                        <div className="mt-4 space-y-3">
-                          {loadingSubmissions[order._id] ? (
-                            <div className="text-center py-8 text-primary-400">Loading submissions...</div>
-                          ) : submissions[order._id]?.length > 0 ? (
-                            submissions[order._id].map((submission) => (
-                              <div
-                                key={submission._id}
-                                className="bg-primary-800/30 rounded-xl p-4 border border-primary-700"
-                              >
-                                <div className="flex flex-wrap items-start justify-between gap-4">
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-3 mb-2">
-                                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getSubmissionStatusColor(submission.status)}`}>
-                                        Status: {submission.status}
-                                      </span>
-                                    </div>
-                                    <div className="space-y-1 text-sm">
-                                      <p className="text-primary-400">
-                                        File: <span className="text-white">{submission.originalName}</span>
-                                      </p>
-                                      <p className="text-primary-400">
-                                        Submitted: <span className="text-white">{formatDate(submission.createdAt)}</span>
-                                      </p>
-                                      {submission.adminComment && (
-                                        <p className="text-primary-400">
-                                          Admin Comment: <span className="text-white">{submission.adminComment}</span>
-                                        </p>
-                                      )}
-                                      {submission.adminPdfPath && (
-                                        <p className="text-green-400">
-                                          ✓ Admin response available
-                                        </p>
-                                      )}
-                                    </div>
-                                  </div>
-                                  <div className="flex flex-col gap-2">
-                                    {/* Action Buttons */}
-                                    <div className="flex gap-2">
-                                      {/* Upload/Replace PDF Button */}
-                                      <input
-                                        type="file"
-                                        id={`submission-file-${submission._id}`}
-                                        accept=".pdf,application/pdf"
-                                        className="hidden"
-                                        onChange={(e) => {
-                                          const file = e.target.files?.[0];
-                                          if (file) {
-                                            handleSubmissionFileSelect(submission._id, file);
-                                          }
-                                        }}
-                                      />
-                                      <button
-                                        onClick={() => document.getElementById(`submission-file-${submission._id}`)?.click()}
-                                        disabled={replacingSubmissionId === submission._id}
-                                        className="px-3 py-2 bg-primary-700 hover:bg-primary-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        title="Upload/Replace PDF"
-                                      >
-                                        {submissionFileInputs[submission._id] ? (
-                                          <>
-                                            <FiCheckCircle className="text-sm text-green-400" />
-                                            {submissionFileInputs[submission._id]!.name.length > 10
-                                              ? submissionFileInputs[submission._id]!.name.substring(0, 10) + '...'
-                                              : submissionFileInputs[submission._id]!.name}
-                                          </>
-                                        ) : (
-                                          <>
-                                            <FiUpload className="text-sm" />
-                                            Upload
-                                          </>
-                                        )}
-                                      </button>
-                                      {submissionFileInputs[submission._id] && (
-                                        <button
-                                          onClick={() => handleReplaceSubmissionFile(order._id, submission._id)}
-                                          disabled={replacingSubmissionId === submission._id}
-                                          className="px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                          {replacingSubmissionId === submission._id ? (
-                                            <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
-                                          ) : (
-                                            <FiUpload className="text-sm" />
-                                          )}
-                                        </button>
-                                      )}
-
-                                      {/* Download Admin Response Button */}
-                                      {submission.adminPdfPath ? (
-                                        <button
-                                          onClick={() => handleDownloadAdminResponse(submission._id)}
-                                          disabled={downloadingAdminResponse === submission._id}
-                                          className="px-3 py-2 bg-green-700 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                          title="Download Admin Response"
-                                        >
-                                          {downloadingAdminResponse === submission._id ? (
-                                            <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
-                                          ) : (
-                                            <FiDownload className="text-sm" />
-                                          )}
-                                          Response
-                                        </button>
-                                      ) : (
-                                        <span className="px-3 py-2 bg-primary-800/50 text-primary-400 rounded-lg text-sm font-medium">
-                                          No Response
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
+                        {/* Payment Info */}
+                        <div className="space-y-4">
+                          <div className="bg-primary-800/30 rounded-xl p-4 border border-primary-700/50 h-full">
+                            <p className="text-xs text-primary-400 uppercase tracking-wider font-semibold mb-3">Payment Details</p>
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-primary-400">Gateway</span>
+                                <span className="text-white font-semibold capitalize">{order.payment.gateway}</span>
                               </div>
-                            ))
-                          ) : (
-                            <div className="text-center py-8 text-primary-400">
-                              No submissions yet for this order
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-primary-400">Status</span>
+                                <span className={`text-sm font-bold ${order.payment.status === 'completed' ? 'text-green-400' : 'text-amber-400'}`}>
+                                  {order.payment.status}
+                                </span>
+                              </div>
                             </div>
-                          )}
+                          </div>
                         </div>
-                      )}
+
+                        {/* Report Status */}
+                        <div className="space-y-4">
+                          <div className="bg-gradient-to-br from-primary-800/50 to-primary-900/50 rounded-xl p-4 border border-primary-700/50 h-full flex flex-col justify-center">
+                            <div className="flex items-center justify-center gap-2 mb-3">
+                              <FiFileText className="text-2xl text-primary-400" />
+                              <p className="text-sm font-semibold text-primary-300">Report Status</p>
+                            </div>
+                            <div className="px-4 py-3 bg-primary-900/60 rounded-lg text-center">
+                              <p className="text-sm text-primary-400">Report will be available once confirmed</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 );

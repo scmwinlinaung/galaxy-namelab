@@ -8,7 +8,7 @@ export class OrderService {
    * Get logged in user's orders
    * GET /orders/myorders
    */
-  static async getMyOrders(): Promise<{ success: boolean; data?: Order[]; error?: string }> {
+  static async getMyOrders(): Promise<{ success: boolean; data?: Order[]; error?: string; statusCode?: number }> {
     try {
       const response = await httpClient.get<Order[]>(`/orders/myorders`);
 
@@ -16,12 +16,15 @@ export class OrderService {
         return {
           success: true,
           data: response.data,
+          statusCode: response.statusCode,
         };
       }
 
+      // Return statusCode with the error response
       return {
         success: false,
         error: response.error || 'Failed to fetch orders',
+        statusCode: response.statusCode,
       };
     } catch (error: any) {
       return {
