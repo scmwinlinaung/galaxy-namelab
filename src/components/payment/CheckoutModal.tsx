@@ -13,8 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@constants/navigation';
 
 // Initialize Stripe with publishable key from environment variable
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
+// const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe("pk_live_51Sk10FFDgAPvX2A59J3M1cJaM4a1rij1ntQRNEkOvgkH5Vz08xyOJV7nw2tr780YFqYfusonrVdBMvw0edDS0ME700VyWrYVU1")
 // Check if using test mode
 const isTestMode = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.startsWith('pk_test_');
 
