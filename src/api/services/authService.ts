@@ -1,5 +1,4 @@
 import { httpClient } from '../utils/httpClient';
-import { API_HOST } from '../config/host';
 import { ApiResponse, LoginRequest, RegisterRequest, AuthResponse, User } from '../types';
 
 // Authentication service
