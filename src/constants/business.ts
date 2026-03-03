@@ -18,7 +18,7 @@ export const PACKAGE_LABELS = {
 } as const;
 
 export const IMAGES = {
-  HOROSCOPE: '/Horoscope.jpg',
+  HOROSCOPE: '/Horoscope.png',
   LOGOS: '/Logos.jpg',
   PEOPLE: '/People.jpg',
 } as const;
