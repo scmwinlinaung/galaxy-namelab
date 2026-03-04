@@ -115,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                     <img
                         src="/logo.png"
                         alt="Galaxy NameLab"
-                        className="h-15 w-auto"
+                        className="h-20 w-auto"
                     />
                 </Link>
 
