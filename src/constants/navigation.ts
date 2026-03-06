@@ -20,7 +20,7 @@ export const NAVIGATION = {
     { to: ROUTES.HOME, label: 'Home' },
     { to: ROUTES.INSIGHT, label: 'Insight' },
     { to: ROUTES.CHECK_YOUR_NAME, label: 'Check Your Name' },
-    { to: ROUTES.PRICING, label: 'Prcing' },
+    { to: ROUTES.PRICING, label: 'Pricing' },
     { to: ROUTES.FAQ, label: 'FAQ' },
     { to: ROUTES.ABOUT, label: 'About' },
     { to: ROUTES.ORDERS, label: 'My Orders' },
