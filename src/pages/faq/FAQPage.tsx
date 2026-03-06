@@ -110,10 +110,17 @@ const AnswerContent: React.FC<{ content: string }> = ({ content }) => {
             '3rd + 11th Sextile Alignment',
             'Stellar Fortune Naming System',
             'Galaxy Naming Package',
+            'Galaxy Naming',
+            'Hybrid Packages',
+            'Ultimate Hybrid Packages',
             'Self-Naming',
             'Cosmic Validator',
             'Stellar Key Letters',
-            'Stellar Fortune Nickname'
+            'Stellar Fortune Nickname',
+            'Stellar Key Letters',
+            'Stellar Fortune Naming System',
+            'unlimited name audits',
+            'guaranteed result'
         ];
 
         let highlightedText = text;
@@ -236,7 +243,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen
             items: [
                 {
                     question: "What is the difference between the \"Galaxy Naming\" and \"Self-Naming\" packages?",
-                    answer: "In the Galaxy Naming Package, our experts calculate and provide ready-to-use names for you. In the Self-Naming (Cosmic Validator) Package, we provide you with your specific \"Stellar Key Letters,\" and you generate names using AI or your own creativity, which we then audit for accuracy.",
+                    answer: "Both methods are now combined into our Hybrid Packages to give you the best of both worlds:\n\n• Galaxy Naming: Our experts perform deep astrological calculations to provide you with a curated list of ready-to-use, high-resonance names.\n\n• Self-Naming: We provide you with your specific Stellar Key Letters based on your birth data. You can then suggest names you personally love, and we will audit them using our Stellar Fortune Naming System to ensure they align perfectly with your destiny.",
                     icon: <FiPackage className="text-blue-400" />
                 },
                 {
@@ -257,7 +264,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen
             items: [
                 {
                     question: "What if I don't like the names suggested by Galaxy NameLab?",
-                    answer: "While our experts select names with the highest cosmic resonance, personal preference varies. To solve this, we offer Self-Naming (Cosmic Validator) Packages. These allow you to propose names based on our \"Stellar Key Letters,\" which we then audit and certify for you.\n\nExpert Tip: If you are highly selective about your name's style or sound, we strongly recommend starting with a Self-Naming Package from the beginning.",
+                    answer: "Your satisfaction is our priority.\n\n• If the names provided by our experts do not fully resonate with you, you can use the Self-Naming portion of your package. Simply propose your own name ideas based on the Stellar Key Letters we provide, and we will audit and certify them according to the Stellar Fortune Naming System standards.\n\n• For those who desire absolute perfection and ultimate choice, we highly recommend our Ultimate Hybrid Packages. This VIP service offers unlimited name audits over a 3-month period, ensuring a guaranteed result where you will find the one name you truly love and cherish.",
                     icon: <FiShield className="text-amber-400" />
                 }
             ]
@@ -418,6 +425,9 @@ const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen
                         </h3>
                         <p className="text-xl text-primary-200 mb-6">
                             Our cosmic experts are here to help guide you on your journey to stellar success.
+                        </p>
+                        <p className="text-xl text-primary-200 mb-6 text-white font-bold">
+                            consult@galaxynamelab.com
                         </p>
                     </div>
                 </motion.div>
