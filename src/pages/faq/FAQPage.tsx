@@ -242,7 +242,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen
             icon: <FiPackage className="text-purple-400" />,
             items: [
                 {
-                    question: "What is the difference between the \"Galaxy Naming\" and \"Self-Naming\" packages?",
+                    question: "What is the difference between the \"Galaxy Naming\" and \"Self-Naming\" ?",
                     answer: "Both methods are now combined into our Hybrid Packages to give you the best of both worlds:\n\n• Galaxy Naming: Our experts perform deep astrological calculations to provide you with a curated list of ready-to-use, high-resonance names.\n\n• Self-Naming: We provide you with your specific Stellar Key Letters based on your birth data. You can then suggest names you personally love, and we will audit them using our Stellar Fortune Naming System to ensure they align perfectly with your destiny.",
                     icon: <FiPackage className="text-blue-400" />
                 },
