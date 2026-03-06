@@ -738,7 +738,9 @@ Best regards,
             </>
           )}
         </button>
+
       </div>
+      <p className="text-red-200 text-sm">After your payment is confirmed, a confirmation email will be sent to you. If you do not see it in your inbox, please check your Spam or Junk folder.</p>
     </form>
   );
 };

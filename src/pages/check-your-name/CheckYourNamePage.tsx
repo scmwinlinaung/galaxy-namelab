@@ -321,7 +321,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
                                     onChange={handleInputChange}
                                     className={`w-full px-4 py-3 rounded-lg bg-white/10 border ${errors.placeOfBirth ? 'border-red-400' : 'border-white/30'
                                         } text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all`}
-                                    placeholder="e.g., Bangkok, Thailand"
+                                    placeholder="e.g., New York, USA"
                                 />
                                 {errors.placeOfBirth && (
                                     <p className="text-red-300 text-sm mt-1">{errors.placeOfBirth}</p>
