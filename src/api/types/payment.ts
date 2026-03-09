@@ -71,7 +71,7 @@ export interface BusinessInfoForm {
 }
 
 // Order Type: 'business' for Business Name, 'nickname' for Personal Name
-export type OrderType = 'business' | 'nickname';
+export type OrderType = 'BUSINESS' | 'PERSONAL';
 
 // Checkout State
 export interface CheckoutState {

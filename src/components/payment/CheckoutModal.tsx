@@ -90,7 +90,8 @@ const CheckoutForm: React.FC<{
     details: '',
     preferredSyllables: [],
   });
-  const [orderType, setOrderType] = useState<OrderType>('business');
+  console.log("selectedPackage = " + JSON.stringify(selectedPackage))
+  const [orderType, setOrderType] = useState<OrderType>(selectedPackage.categoryCode as OrderType);
   const [isElementsReady, setIsElementsReady] = useState(false);
   const isInitializingRef = useRef(false);
   const isMountedRef = useRef(true);
@@ -464,9 +465,9 @@ Best regards,
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => setOrderType('business')}
+              // onClick={() => setOrderType('BUSINESS')}
               disabled={checkoutState.loading}
-              className={`px-4 py-3 rounded-xl font-semibold transition-all ${orderType === 'business'
+              className={`px-4 py-3 rounded-xl font-semibold transition-all ${orderType === 'BUSINESS'
                 ? 'bg-purple-600 text-white border-2 border-purple-400'
                 : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
@@ -475,9 +476,9 @@ Best regards,
             </button>
             <button
               type="button"
-              onClick={() => setOrderType('nickname')}
+              // onClick={() => setOrderType('PERSONAL')}
               disabled={checkoutState.loading}
-              className={`px-4 py-3 rounded-xl font-semibold transition-all ${orderType === 'nickname'
+              className={`px-4 py-3 rounded-xl font-semibold transition-all ${orderType === 'PERSONAL'
                 ? 'bg-purple-600 text-white border-2 border-purple-400'
                 : 'bg-primary-800/50 text-primary-300 border-2 border-primary-700 hover:border-purple-500'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
@@ -490,7 +491,7 @@ Best regards,
         {/* Full Name */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            {orderType === 'business' ? '1. Contact Email' : '1. Contact Email'} *
+            {orderType === 'BUSINESS' ? '1. Contact Email' : '1. Contact Email'} *
           </label>
           <input
             type="email"
@@ -504,7 +505,7 @@ Best regards,
         {/* Full Name */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            {orderType === 'business' ? '2. Your Full Name' : '2. Your Full Name'} *
+            {orderType === 'BUSINESS' ? '2. Your Full Name' : '2. Your Full Name'} *
           </label>
           <input
             type="text"
@@ -521,7 +522,7 @@ Best regards,
         {/* Date of Birth */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            {orderType === 'business' ? '3. Date of Birth (dd/mm/yyyy)' : '3. Date of Birth (dd/mm/yyyy)'} *
+            {orderType === 'BUSINESS' ? '3. Date of Birth (dd/mm/yyyy)' : '3. Date of Birth (dd/mm/yyyy)'} *
           </label>
           <input
             type="date"
@@ -537,7 +538,7 @@ Best regards,
         {/* Birth Time */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            {orderType === 'business' ? '4. Birth Time (Hour/Minute) - As accurate as possible' : '4. Birth Time (Hour/Minute) - As accurate as possible'} *
+            {orderType === 'BUSINESS' ? '4. Birth Time (Hour/Minute) - As accurate as possible' : '4. Birth Time (Hour/Minute) - As accurate as possible'} *
           </label>
           <input
             type="time"
@@ -553,7 +554,7 @@ Best regards,
         {/* Birth Place */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            {orderType === 'business' ? '5. Birth Place (Country/City) e.g. New York, USA' : '5. Birth Place (Country/City) e.g. New York, USA'} *
+            {orderType === 'BUSINESS' ? '5. Birth Place (Country/City) e.g. New York, USA' : '5. Birth Place (Country/City) e.g. New York, USA'} *
           </label>
           <input
             type="text"
@@ -570,7 +571,7 @@ Best regards,
         {/* Details - Company Name for Business, Usage Area for Nickname */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            {orderType === 'business'
+            {orderType === 'BUSINESS'
               ? '6. Business Type Name / Company Name (Describe in detail) *'
               : '6. Nickname Usage Area (For Social, Entrepreneurs & Business Owners, Content Creators, Gamers, etc.) *'}
           </label>
@@ -578,7 +579,7 @@ Best regards,
             name="details"
             value={businessInfo.details}
             onChange={handleBusinessInfoChange}
-            placeholder={orderType === 'business'
+            placeholder={orderType === 'BUSINESS'
               ? 'Company (or) Brand Name... (Describe in detail)'
               : 'For Social, Entrepreneurs & Business Owners, Content Creators & Social Media Influencers, Gamers & Public Personalities, etc.'}
             disabled={checkoutState.loading}
@@ -591,10 +592,10 @@ Best regards,
         {/* Preferred Syllables */}
         <div>
           <label className="block text-sm font-medium text-primary-300 mb-2">
-            {orderType === 'business'
+            {orderType === 'BUSINESS'
               ? '7. Preferred Name Length (Syllables) - Select at least 2'
               : '7. Preferred Nickname Length (Syllables) - Select at least 2'}
-            {orderType === 'nickname' && <span className="text-amber-400 ml-2">(Note: Longer nicknames may reduce success rate)</span>}
+            {orderType === 'PERSONAL' && <span className="text-amber-400 ml-2">(Note: Longer nicknames may reduce success rate)</span>}
           </label>
           <div className="flex flex-wrap gap-3">
             {[1, 2, 3, 4, 5].map((syllable) => (
