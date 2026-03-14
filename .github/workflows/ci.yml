@@ -28,7 +28,7 @@ jobs:
 
       - name: Build project
         run: npm run build
-        env:
+        # env:
           # Add any environment variables needed for build
           # VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
 
