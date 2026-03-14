@@ -57,10 +57,10 @@ const ContactInfoPage: React.FC<ContactInfoPageProps> = ({ isLoginModalOpen, set
                         <div className="bg-primary-900/50 border border-primary-800 p-8 rounded-3xl">
                             <h3 className="text-2xl font-bold text-primary-50 mb-4">The Architect Behind the System</h3>
                             <p className="text-primary-100 leading-relaxed mb-4">
-                                Galaxy NameLab is led by a Master Astrologer and Scholar with over <span className="text-primary-300 font-bold">46 years of esoteric experience</span>. He is a published author of authoritative texts on astrological naming sciences and has dedicated nearly half a century to decoding the relationship between cosmic vibrations and human success.
+                                Galaxy NameLab is led by a Master Astrologer and Scholar with over <span className="text-primary-300 font-bold">46 years of esoteric experience</span>. He,<span className="text-primary-300 font-bold">Gabriel Faith</span>, is a published author of authoritative texts on astrological naming sciences and has dedicated nearly half a century to decoding the relationship between cosmic vibrations and human success.
                             </p>
                             <p className="text-primary-100 leading-relaxed">
-                                Founded in <span className="text-primary-300 font-bold">1998</span>, Galaxy NameLab has stood the test of time for <span className="text-primary-300 font-bold">27 years</span>. We are not a new startup experimenting with trends; we are a deeply established institution with a massive empirical dataset.
+                                Founded in <span className="text-primary-300 font-bold">1998</span>, Galaxy NameLab has stood the test of time for <span className="text-primary-300 font-bold">28 years</span>. We are not a new startup experimenting with trends; we are a deeply established institution with a massive empirical dataset.
                             </p>
                         </div>
                     </motion.div>
@@ -100,7 +100,7 @@ const ContactInfoPage: React.FC<ContactInfoPageProps> = ({ isLoginModalOpen, set
                         <h3 className="text-3xl font-bold text-primary-50 text-center mb-12">The Success Rate: Radical Honesty</h3>
                         <div className="max-w-4xl mx-auto bg-primary-900/50 border border-primary-800 p-8 rounded-3xl">
                             <p className="text-primary-100 leading-relaxed mb-6">
-                                We believe in transparency. Based on our <span className="text-primary-300 font-bold">27 years of data</span>, businesses utilizing our <span className="text-primary-300 font-bold">Stellar Fortune Names</span> show a remarkable success rate:
+                                We believe in transparency. Based on our <span className="text-primary-300 font-bold">28 years of data</span>, businesses utilizing our <span className="text-primary-300 font-bold">Stellar Fortune Names</span> show a remarkable success rate:
                             </p>
                             <div className="text-center mb-8">
                                 <div className="inline-block">
