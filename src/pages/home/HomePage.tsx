@@ -200,7 +200,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">The 90% Rule of Global Dominance</h2>
                     <div className="w-32 h-1 bg-primary-500 mx-auto mb-8"></div>
                     <p className="text-xl leading-relaxed text-gray-700 max-w-4xl mx-auto mb-12">
-                        Our research into the top 100 global companies reveals a startling truth: the vast majority possess a specific celestial alignment in their names. It’s not just business—it’s Harmonic Resonance.
+                        Our research into the top 100 global companies reveals a startling truth: the vast majority possess a specific celestial alignment in their names. It’s not just business : it’s Harmonic Resonance.
                     </p>
                 </motion.div>
 
@@ -332,7 +332,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         <div className="mb-8">
                             <h3 className="text-2xl font-bold mb-3 text-primary-300">The Steve Jobs Paradox</h3>
                             <p className="text-lg leading-relaxed text-primary-100">
-                                Even with a perfect business name, YOU are the captain. If your personal vibration is misaligned—like Steve Jobs—you become the bottleneck to your own growth.
+                                Even with a perfect business name, YOU are the captain. If your personal vibration is misaligned : like Steve Jobs : you become the bottleneck to your own growth.
                             </p>
                         </div>
 
