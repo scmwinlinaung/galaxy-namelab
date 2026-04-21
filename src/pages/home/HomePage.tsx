@@ -212,15 +212,24 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     custom={0.2}
                     className="mb-16"
                 >
-                    <img src={IMAGES.LOGOS} alt="Global Giant Logos" className="w-full max-w-4xl mx-auto rounded-xl shadow-xl mb-8 object-cover border border-gray-200" />
+                    <img src={IMAGES.LOGOS} alt="Successful Brand Names and Billionaire Brand Secrets" className="w-full max-w-4xl mx-auto rounded-xl shadow-xl mb-8 object-cover border border-gray-200" />
                     
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-5xl mx-auto">
-                        {celebrityImagesList.map((img, index) => (
-                            <div key={index} className="aspect-square rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100 flex items-center justify-center">
-                                {/* Using an object-cover image or a fallback icon if image is missing */}
-                                <img src={img} alt="Billionaire" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Leader' }} />
-                            </div>
-                        ))}
+                        {celebrityImagesList.map((img, index) => {
+                            const altTexts = [
+                                "Elon Musk - Successful Brand Names",
+                                "Mark Zuckerberg - Wealth Manifestation Names",
+                                "Bill Gates - Lucky Business Names",
+                                "Steve Jobs - Vibrationally Aligned Names",
+                                "Jeff Bezos - Spiritual Business Naming",
+                                "Tim Cook - Billionaire Brand Secrets"
+                            ];
+                            return (
+                                <div key={index} className="aspect-square rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100 flex items-center justify-center">
+                                    <img src={img} alt={altTexts[index]} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Leader' }} />
+                                </div>
+                            );
+                        })}
                     </div>
                 </motion.div>
             </Section>
@@ -235,7 +244,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     viewport={{ once: true }}
                 >
                     <div className="md:w-1/2">
-                        <img src={IMAGES.HOROSCOPE} alt="Beyond Astrology" className="rounded-lg shadow-2xl w-full border border-primary-800" />
+                        <img src={IMAGES.HOROSCOPE} alt="Astrology for Branding and Vibrationally Aligned Names" className="rounded-lg shadow-2xl w-full border border-primary-800" />
                     </div>
                     <div className="md:w-1/2">
                         <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Beyond Numerology. Beyond Traditional Astrology.</h2>
@@ -348,7 +357,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                     <div className="order-1 md:order-2">
                         <div className="relative">
                             <div className="absolute inset-0 bg-primary-500 rounded-2xl transform rotate-3 opacity-20"></div>
-                            <img src={CELEBRITY_IMAGES.STEVE_JOBS} alt="Steve Jobs" className="relative z-10 rounded-2xl shadow-2xl w-full object-cover border border-white/10" style={{maxHeight: '500px'}} />
+                            <img src={CELEBRITY_IMAGES.STEVE_JOBS} alt="Steve Jobs - Brand Identity Consultant & Business Numerology" className="relative z-10 rounded-2xl shadow-2xl w-full object-cover border border-white/10" style={{maxHeight: '500px'}} />
                         </div>
                     </div>
                 </motion.div>
