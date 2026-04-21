@@ -295,6 +295,16 @@ const CheckoutForm: React.FC<{
     }
 
     if (response.success) {
+      // Track Meta Pixel Purchase event
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Purchase', {
+          value: selectedPackage.price?.amount || 0,
+          currency: selectedPackage.price?.currency || 'USD',
+          content_name: selectedPackage.plan?.name,
+          content_category: selectedPackage.path?.name,
+        });
+      }
+
       const emailData = {
         to: userEmail,
         subject: `We've Received Your Naming Request - Stellar Fortune Name`,
@@ -623,7 +633,7 @@ Best regards,
         {/* Note */}
         <div className="bg-primary-800/30 border border-primary-700 rounded-xl p-4">
           <p className="text-sm text-primary-300">
-            <strong className="text-purple-400">Note:</strong> You are not required to submit your own name suggestions at this time. Once we (Galaxy NameLab) provide our initial recommendations, we will also send you the specific "Guiding Letters" to assist with your brainstorming. At that stage, you may submit your chosen names for our review. We will then identify the most auspicious selections—the true gems among your suggestions—and send the final, perfected results back to you.
+            <strong className="text-purple-400">Note:</strong> You are not required to submit your own name suggestions at this time. Once we (Galaxy NameLab) provide our initial recommendations, we will also send you the specific "Guiding Letters" to assist with your brainstorming. At that stage, you may submit your chosen names for our review. We will then identify the most auspicious selections : the true gems among your suggestions : and send the final, perfected results back to you.
           </p>
         </div>
       </div>

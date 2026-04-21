@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiStar, FiCheckCircle, FiTrendingUp } from 'react-icons/fi';
+import { FiArrowRight, FiStar, FiCheckCircle, FiTrendingUp, FiUsers } from 'react-icons/fi';
 
 import PageWrapper from '@components/layouts/PageWrapper';
 import Header from '@components/layouts/Header';
 import Section from '@components/ui/Section';
 import { ANIMATION, IMAGES } from '../../constants';
 import { STORAGE_KEYS } from '@constants/api';
-import { AuthService } from '@api/index';
+import { AuthService, VisitorService } from '@api/index';
+
+// Module-level variable to guarantee the API is only called once per page load,
+// completely bypassing any React StrictMode double-mounting behavior.
+let hasRecordedVisit = false;
 
 interface HomePageProps {
     isLoginModalOpen: boolean;
@@ -18,6 +22,29 @@ interface HomePageProps {
 const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOpen }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const [visitorCount, setVisitorCount] = useState<number | null>(null);
+
+    useEffect(() => {
+        // Record visit once on mount
+        if (!hasRecordedVisit) {
+            hasRecordedVisit = true;
+            VisitorService.recordVisit();
+        }
+
+        // Initial count fetch
+        const fetchCount = async () => {
+            const response = await VisitorService.getVisitorCount();
+            if (response.success && response.data !== undefined) {
+                setVisitorCount(response.data);
+            }
+        };
+
+        fetchCount();
+
+        // Poll for updates every 30 seconds
+        const interval = setInterval(fetchCount, 30000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         // Check if user is returning from OAuth callback (Google or Facebook)
@@ -88,10 +115,40 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         animate="visible"
                         custom={0.2}
                     >
-                        Unlock the hidden potential of your business and personal brand with "Stellar Fortune Names"—the proprietary naming architecture used by the world's most successful billionaires.
+                        Unlock the hidden potential of your business and personal brand with "Stellar Fortune Names" : the proprietary naming architecture used by the world's most successful billionaires.
                     </motion.p>
                 </div>
             </section>
+
+            {/* Visitor Counter Section */}
+            <Section variant="dark" py="py-12" className="border-y border-white/10">
+                <motion.div
+                    className="flex flex-col items-center justify-center text-center"
+                    variants={ANIMATION.VARIANTS.FADE_UP}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                >
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-primary-400 rounded-full text-primary-950">
+                            <FiUsers className="text-2xl md:text-3xl" />
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-bold text-white tabular-nums">
+                            {visitorCount !== null ? visitorCount.toLocaleString() : '...'}
+                        </h2>
+                    </div>
+                    <p className="text-lg md:text-xl text-primary-200 font-medium">
+                        Total individuals whose destinies have been touched by Galaxy NameLab
+                    </p>
+                    <div className="mt-4 flex items-center gap-2">
+                        <span className="flex h-3 w-3">
+                            <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span className="text-sm text-green-400 font-semibold tracking-wide uppercase">Live Traffic Tracking</span>
+                    </div>
+                </motion.div>
+            </Section>
 
             {/* Introduction Section */}
             <Section variant="light">
@@ -221,7 +278,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                 >
                     <h3 className="text-xl font-bold text-primary-800 mb-2">The Dissonant Structures:</h3>
                     <p className="text-gray-700">
-                        In stark contrast, struggling or failed businesses almost always lack these harmonic alignments. They typically fall into weak or dissonant structures—specifically the 2+12, 6+8, or the 4+7 Square alignments.
+                        In stark contrast, struggling or failed businesses almost always lack these harmonic alignments. They typically fall into weak or dissonant structures : specifically the 2+12, 6+8, or the 4+7 Square alignments.
                     </p>
                 </motion.div>
 
@@ -239,7 +296,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         Apple, Microsoft, Google, YouTube, TikTok, Tesla, Rolex, Mercedes, SpaceX, X, Dell, Amazon, Toyota, Samsung, Honda, Walmart, Facebook, Meta, Mitsubishi.
                     </p>
                     <p className="text-lg leading-relaxed mt-4 text-gray-700">
-                        It's not just companies. The visionaries behind them—Elon Musk, Mark Zuckerberg, Bill Gates, Jeff Bezos, Larry Page, Sergey Brin, Michael Dell, Sam Walton, Warren Buffett, Tim Cook, Lee Byung-Chul, Soichiro Honda, Zhang Yiming, Kiichiro Toyota—also carry Stellar Fortune Names.
+                        It's not just companies. The visionaries behind them : Elon Musk, Mark Zuckerberg, Bill Gates, Jeff Bezos, Larry Page, Sergey Brin, Michael Dell, Sam Walton, Warren Buffett, Tim Cook, Lee Byung-Chul, Soichiro Honda, Zhang Yiming, Kiichiro Toyota : also carry Stellar Fortune Names.
                     </p>
                 </motion.div>
             </Section>
@@ -263,7 +320,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                             Did these billionaires consult astrologers? Likely not.
                         </p>
                         <p className="text-lg leading-relaxed mb-4 text-primary-200">
-                            They were born with a powerful Cosmic Blueprint. Their past karma naturally attracted names that aligned with their destiny. This is the mystery of fortune—sometimes, a random choice becomes a legendary brand.
+                            They were born with a powerful Cosmic Blueprint. Their past karma naturally attracted names that aligned with their destiny. This is the mystery of fortune : sometimes, a random choice becomes a legendary brand.
                         </p>
                         <p className="text-lg leading-relaxed mb-4 text-primary-200">
                             But here is the risk: Even with good karma, many entrepreneurs accidentally choose names that block their energy. A "misaligned" name can turn a brilliant business plan into an uphill struggle, making wealth accumulation difficult despite hard work.
@@ -333,7 +390,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                             Steve Jobs created one of the most powerful brand names in history: Apple. It was a perfect Stellar Fortune Name. But his own name? It was a different story.
                         </p>
                         <p className="text-lg leading-relaxed text-primary-200">
-                            While his company soared to trillion-dollar heights, his personal name carried a dissonant vibration—a "destructive alignment" that brought immense stress and health challenges, cutting short his time to enjoy the fruits of his success.
+                            While his company soared to trillion-dollar heights, his personal name carried a dissonant vibration : a "destructive alignment" that brought immense stress and health challenges, cutting short his time to enjoy the fruits of his success.
                         </p>
                     </div>
                     <div className="order-first md:order-last">

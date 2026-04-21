@@ -108,6 +108,14 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
 
             await EmailService.sendEmail(emailData);
 
+            // Track Meta Pixel Lead event
+            if (typeof window !== 'undefined' && window.fbq) {
+                window.fbq('track', 'Lead', {
+                    content_name: 'Free Name Audit',
+                    content_category: 'Audit Request',
+                });
+            }
+
             setSubmitSuccess(true);
 
             // Reset form after 3 seconds
@@ -182,7 +190,7 @@ const CheckYourNamePage: React.FC<CheckYourNamePageProps> = ({
 
                         <div className="bg-gradient-to-r from-primary-50 to-purple-50 border-2 border-primary-200 rounded-lg p-8 mb-8">
                             <p className="text-lg leading-relaxed text-gray-700 mb-4">
-                                As we explored in our Case Studies, some individuals possess names that naturally resonate with the Stellar Fortune frequency. This phenomenon, often occurring in only <span className="font-bold text-primary-700">2 to 3 out of every 100 people</span>, is the result of what we call "Cosmic Merit"—an accidental yet perfect alignment between your identity and your birth chart.
+                                As we explored in our Case Studies, some individuals possess names that naturally resonate with the Stellar Fortune frequency. This phenomenon, often occurring in only <span className="font-bold text-primary-700">2 to 3 out of every 100 people</span>, is the result of what we call "Cosmic Merit" : an accidental yet perfect alignment between your identity and your birth chart.
                             </p>
                             <p className="text-lg leading-relaxed text-gray-700">
                                 Could you be one of the rare few?

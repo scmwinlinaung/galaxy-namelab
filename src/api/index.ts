@@ -2,6 +2,7 @@
 export { AuthService } from './services/authService';
 export { PricingService } from './services/pricingService';
 export { EmailService } from './services/emailService';
+export { VisitorService } from './services/visitorService';
 
 // HTTP client and utilities
 export { httpClient, HttpClient } from './utils/httpClient';

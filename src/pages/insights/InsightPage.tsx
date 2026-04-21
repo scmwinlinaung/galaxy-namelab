@@ -92,7 +92,7 @@ const billionaires = [
                 title: "The Cosmic Blueprint",
                 content: "Elon Musk is not just hard-working; he is mathematically designed to work hard.",
                 details: [
-                    "The Engine of Effort: Born under the Capricorn Ascendant, his chart ruler is Saturn. Interestingly, Saturn resides in the 3rd House—the specific sector of courage, enterprise, and tireless effort. This placement dictates a personality that views 'work as life.'",
+                    "The Engine of Effort: Born under the Capricorn Ascendant, his chart ruler is Saturn. Interestingly, Saturn resides in the 3rd House : the specific sector of courage, enterprise, and tireless effort. This placement dictates a personality that views 'work as life.'",
                     "The Exalted Amplifier: The planet Jupiter sits in its Exalted Position (Highest Dignity) and casts a direct aspect on Saturn. In cosmic mechanics, this means his massive efforts (Saturn) are constantly expanded and blessed by the planet of fortune (Jupiter)."
                 ]
             },
@@ -126,7 +126,7 @@ const billionaires = [
                     }
                 ]
             },
-            conclusion: "Elon Musk represents the ultimate synchronization of Cosmic Blueprint (Birth Chart) and Stellar Fortune Names. When a relentless destiny meets a harmonized name, the result is not just success—it is history."
+            conclusion: "Elon Musk represents the ultimate synchronization of Cosmic Blueprint (Birth Chart) and Stellar Fortune Names. When a relentless destiny meets a harmonized name, the result is not just success : it is history."
         }
     },
     {
@@ -214,7 +214,7 @@ const billionaires = [
                     }
                 ]
             },
-            conclusion: "Bill Gates teaches us the power of 'Total Alignment.' When your personal name and your business name sing the same cosmic song, and that song aligns with your birth chart, success is not just possible—it is inevitable."
+            conclusion: "Bill Gates teaches us the power of 'Total Alignment.' When your personal name and your business name sing the same cosmic song, and that song aligns with your birth chart, success is not just possible : it is inevitable."
         }
     },
     {
@@ -247,7 +247,7 @@ const billionaires = [
             },
             companies: {
                 title: "The Brand Synergy: 'DELL' & 'DELL TECHNOLOGIES'",
-                subtitle: "Using one's own last name as a brand is risky—unless it is a Stellar Fortune Name. Michael Dell took that risk, and the stars rewarded him.",
+                subtitle: "Using one's own last name as a brand is risky : unless it is a Stellar Fortune Name. Michael Dell took that risk, and the stars rewarded him.",
                 details: [
                     {
                         name: "DELL TECHNOLOGIES (Corporate Name)",
@@ -405,7 +405,7 @@ const billionaires = [
                     }
                 ]
             },
-            conclusion: "Mark Zuckerberg represents the 'Architect archetype.' His chart provided a rare geometric blueprint, and he (consciously or unconsciously) built his entire identity—his name, his first company, and his rebranded company—strictly adhering to that blueprint. Consistency is the key to his empire."
+            conclusion: "Mark Zuckerberg represents the 'Architect archetype.' His chart provided a rare geometric blueprint, and he (consciously or unconsciously) built his entire identity : his name, his first company, and his rebranded company : strictly adhering to that blueprint. Consistency is the key to his empire."
         }
     },
     {
@@ -489,7 +489,7 @@ const billionaires = [
                     {
                         name: "THE LESSON",
                         vibration: "Power of Alignment",
-                        analysis: "This proves that if your name forms the Sextile Alignment (3rd + 11th)—as 'Taylor Swift' does—you can override minor weaknesses in your chart and achieve billionaire status."
+                        analysis: "This proves that if your name forms the Sextile Alignment (3rd + 11th) : as 'Taylor Swift' does : you can override minor weaknesses in your chart and achieve billionaire status."
                     }
                 ]
             },
@@ -512,7 +512,7 @@ const billionaires = [
                 details: [
                     "The Taurus Icon: Born under the Taurus Ascendant, his Lagna Lord (Venus) sits directly in the Ascendant.",
                     "The Raja Yoga: Saturn (the most powerful Yogakaraka planet for Taurus) joins Venus in the 1st House. This combination creates a massive 'Raja Yoga' (King-Maker), granting him undeniable charisma and talent.",
-                    "The Fame Peak: His Fortuner Planet resides in the 10th House (Aquarius)—the House of Reputation. This placement guarantees global superstardom."
+                    "The Fame Peak: His Fortuner Planet resides in the 10th House (Aquarius) : the House of Reputation. This placement guarantees global superstardom."
                 ]
             },
             name: {
@@ -565,7 +565,7 @@ const billionaires = [
                 content: "Unlike Elon Musk, Steve Jobs did NOT possess a Stellar Fortune Name. In fact, his name carried a dangerous vibration known in cosmic science as a 'Dusthana' or '8th House Trap.'",
                 details: [
                     "Planetary Sequence: Mars + Saturn + Moon + Mars",
-                    "The Fatal Geometric Flaw: The name starts and ends with Mars (S). In his chart, Mars sits in the 5th House but casts a full, powerful aspect directly into the 8th House (Scorpio)—the sector of crisis, chronic illness, and endings.",
+                    "The Fatal Geometric Flaw: The name starts and ends with Mars (S). In his chart, Mars sits in the 5th House but casts a full, powerful aspect directly into the 8th House (Scorpio) : the sector of crisis, chronic illness, and endings.",
                     "The Saturn Connection: To make matters worse, Saturn resides in that exact 8th House. His name essentially 'activated' this sector of suffering every time it was spoken."
                 ]
             },
@@ -1064,7 +1064,7 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                             <h3 className="text-2xl font-bold text-white mb-4">Alignment is Everything</h3>
                             <p className="text-gray-300 leading-relaxed text-lg">
                                 When birth chart, personal name, and business name synchronize, success becomes not just
-                                possible—it becomes inevitable.
+                                possible : it becomes inevitable.
                             </p>
                         </motion.div>
 
@@ -1077,7 +1077,7 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-4">Cosmic Mathematics</h3>
                             <p className="text-gray-300 leading-relaxed text-lg">
-                                These titans prove the cosmic mathematics works. The numbers don't lie—alignment creates destiny.
+                                These titans prove the cosmic mathematics works. The numbers don't lie : alignment creates destiny.
                             </p>
                         </motion.div>
                     </div>
@@ -1090,8 +1090,8 @@ const InsightPage: React.FC<InsightPageProps> = ({ isLoginModalOpen, setIsLoginM
                         className="text-center"
                     >
                         <p className="text-2xl text-gray-200 leading-relaxed max-w-4xl mx-auto mb-12 font-light">
-                            "The cosmos doesn't reward the lucky—it rewards the aligned. These stories prove that when
-                            your name vibrates in harmony with your celestial blueprint, you don't chase success—success
+                            "The cosmos doesn't reward the lucky : it rewards the aligned. These stories prove that when
+                            your name vibrates in harmony with your celestial blueprint, you don't chase success : success
                             finds you."
                         </p>
                         <motion.button
