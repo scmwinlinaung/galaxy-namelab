@@ -227,11 +227,11 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ isLoginModalOpen, setIsLoginMod
                 >
                   <FiPackage className="text-purple-400 text-5xl drop-shadow-lg" />
                 </motion.div>
-                <h1 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-amber-400 to-purple-400 drop-shadow-2xl">
+                <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-amber-400 to-purple-400 drop-shadow-2xl font-display">
                   My Orders
                 </h1>
               </div>
-              <p className="text-xl text-primary-200 leading-relaxed font-light">
+              <p className="text-base md:text-lg lg:text-xl text-primary-200 leading-relaxed font-light font-body">
                 View and manage your orders. Download your reports once they're ready.
               </p>
             </div>

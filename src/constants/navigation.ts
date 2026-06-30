@@ -10,7 +10,8 @@ export const ROUTES = {
   ABOUT: '/about',
   FAQ: '/faq',
   ORDERS: '/orders',
-  CHECK_YOUR_NAME: '/check-your-name',
+  PORTFOLIOS: '/portfolios',
+  SUCCESS_STORIES: '/success-stories',
   GOOGLE_CALLBACK: '/auth/google/callback',
   FACEBOOK_CALLBACK: '/auth/facebook/callback'
 } as const;
@@ -19,7 +20,8 @@ export const NAVIGATION = {
   ITEMS: [
     { to: ROUTES.HOME, label: 'Home' },
     { to: ROUTES.INSIGHT, label: 'Insight' },
-    { to: ROUTES.CHECK_YOUR_NAME, label: 'Check Your Name' },
+    { to: ROUTES.PORTFOLIOS, label: 'Portfolios' },
+    { to: ROUTES.SUCCESS_STORIES, label: 'Success Stories' },
     { to: ROUTES.PRICING, label: 'Pricing' },
     { to: ROUTES.FAQ, label: 'FAQ' },
     { to: ROUTES.ABOUT, label: 'About' },
@@ -38,5 +40,6 @@ export const ROUTE_COMPONENTS = {
   [ROUTES.FAQ]: 'FAQPage',
   [ROUTES.ABOUT]: 'ContactInfoPage',
   [ROUTES.ORDERS]: 'OrdersPage',
-  [ROUTES.CHECK_YOUR_NAME]: 'CheckYourNamePage',
+  [ROUTES.PORTFOLIOS]: 'PortfoliosPage',
+  [ROUTES.SUCCESS_STORIES]: 'SuccessStoriesPage',
 } as const;

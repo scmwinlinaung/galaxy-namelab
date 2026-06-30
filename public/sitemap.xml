@@ -13,10 +13,16 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://galaxynamelab.com/check-your-name</loc>
-    <lastmod>2024-05-22</lastmod>
+    <loc>https://galaxynamelab.com/portfolios</loc>
+    <lastmod>2026-06-30</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://galaxynamelab.com/success-stories</loc>
+    <lastmod>2026-06-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://galaxynamelab.com/pricing</loc>

@@ -319,13 +319,13 @@ const FAQPage: React.FC<FAQPageProps> = ({ isLoginModalOpen, setIsLoginModalOpen
                     custom={0.1}
                     className="w-full max-w-5xl mb-12 mt-10 bg-primary-900/50 backdrop-blur-md rounded-3xl p-8 border border-primary-800 shadow-2xl"
                 >
-                    <h1 className="text-5xl md:text-7xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-amber-600 to-purple-600">
+                    <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-amber-600 to-purple-600 font-display">
                         Frequently Asked Questions
                     </h1>
-                    <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-white">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6 text-white font-display">
                         Everything You Need to Know
                     </h2>
-                    <p className="text-xl text-white leading-relaxed max-w-4xl mx-auto">
+                    <p className="text-base md:text-lg lg:text-xl text-white leading-relaxed max-w-4xl mx-auto font-body">
                         Find answers to common questions about our Stellar Fortune Naming System, services, and the cosmic principles behind our work.
                     </p>
                 </motion.div>

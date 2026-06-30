@@ -120,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center space-x-10 text-base font-medium tracking-wide uppercase">
+                <div className="hidden xl:flex items-center space-x-6 text-sm font-semibold tracking-wide uppercase">
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.to}
@@ -216,7 +216,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                 {/* Mobile Menu Button */}
                 <button
                     onClick={toggleMenu}
-                    className="md:hidden text-white hover:text-primary-300 transition-colors duration-300"
+                    className="xl:hidden text-white hover:text-primary-300 transition-colors duration-300"
                     aria-label={NAVIGATION.MENU_TOGGLE_ARIA_LABEL}
                 >
                     {isMenuOpen ? (
@@ -234,7 +234,7 @@ const Header: React.FC<HeaderProps> = ({ isLoginModalOpen, setIsLoginModalOpen }
                     animate={ANIMATION.VARIANTS.SLIDE.ANIMATE}
                     exit={ANIMATION.VARIANTS.SLIDE.EXIT}
                     transition={ANIMATION.VARIANTS.SLIDE.TRANSITION}
-                    className="md:hidden mt-4 bg-primary-900/95 backdrop-blur-md rounded-2xl p-4 border border-primary-600/30"
+                    className="xl:hidden mt-4 bg-primary-900/95 backdrop-blur-md rounded-2xl p-4 border border-primary-600/30"
                 >
                     <nav className="flex flex-col space-y-4 text-lg">
                         {navLinks.map((link) => (
