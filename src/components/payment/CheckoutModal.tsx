@@ -228,7 +228,7 @@ const CheckoutForm: React.FC<{
                                  backendMsg.toLowerCase().includes('exist');
             
             const userFriendlyError = isEmailExists 
-              ? 'This email address is already registered in our system. Please click the "Login" button at the top-right to sign in first, then proceed with your checkout!'
+              ? 'This email address is already registered in our system. Please click the "Login" button to sign in first, then proceed with your checkout!'
               : backendMsg || 'This email is already registered. Please login to your account at the top right before checking out, or use a different email.';
 
             setCheckoutState((prev) => ({
