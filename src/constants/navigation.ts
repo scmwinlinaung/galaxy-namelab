@@ -12,6 +12,7 @@ export const ROUTES = {
   ORDERS: '/orders',
   PORTFOLIOS: '/portfolios',
   SUCCESS_STORIES: '/success-stories',
+  INQUIRY: '/inquiry',
   GOOGLE_CALLBACK: '/auth/google/callback',
   FACEBOOK_CALLBACK: '/auth/facebook/callback'
 } as const;
@@ -25,6 +26,7 @@ export const NAVIGATION = {
     { to: ROUTES.PRICING, label: 'Pricing' },
     { to: ROUTES.FAQ, label: 'FAQ' },
     { to: ROUTES.ABOUT, label: 'About' },
+    { to: ROUTES.INQUIRY, label: 'Inquiry' },
     { to: ROUTES.ORDERS, label: 'My Orders' },
   ],
   LOGIN_BUTTON: 'Login',
@@ -39,6 +41,7 @@ export const ROUTE_COMPONENTS = {
   [ROUTES.PRICING]: 'PricingPage',
   [ROUTES.FAQ]: 'FAQPage',
   [ROUTES.ABOUT]: 'ContactInfoPage',
+  [ROUTES.INQUIRY]: 'InquiryPage',
   [ROUTES.ORDERS]: 'OrdersPage',
   [ROUTES.PORTFOLIOS]: 'PortfoliosPage',
   [ROUTES.SUCCESS_STORIES]: 'SuccessStoriesPage',

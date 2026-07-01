@@ -11,6 +11,7 @@ import FAQPage from '../pages/faq/FAQPage';
 import OrdersPage from '../pages/orders/OrdersPage';
 import PortfoliosPage from '../pages/portfolios/PortfoliosPage';
 import SuccessStoriesPage from '../pages/success-stories/SuccessStoriesPage';
+import InquiryPage from '../pages/inquiry/InquiryPage';
 import GoogleCallbackPage from '../pages/auth/GoogleCallbackPage';
 import FacebookCallbackPage from '../pages/auth/FacebookCallbackPage';
 
@@ -32,6 +33,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ isLoginModalOpen, setIsLoginModal
                 <Route path={ROUTES.ORDERS} element={<OrdersPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
                 <Route path={ROUTES.PORTFOLIOS} element={<PortfoliosPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
                 <Route path={ROUTES.SUCCESS_STORIES} element={<SuccessStoriesPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
+                <Route path={ROUTES.INQUIRY} element={<InquiryPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
                 <Route path={ROUTES.GOOGLE_CALLBACK} element={<GoogleCallbackPage />} />
                 <Route path={ROUTES.FACEBOOK_CALLBACK} element={<FacebookCallbackPage />} />
             </Routes>

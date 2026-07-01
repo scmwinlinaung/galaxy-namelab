@@ -492,7 +492,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                                 </p>
                             </div>
                             <div className="aspect-square w-24 bg-white border border-gray-100 p-2 rounded-xl flex items-center justify-center">
-                                <img src="/portfolio/1.Gems%26Jewelry.jpg" alt="She Shines Logo" className="max-w-full max-h-full object-contain" />
+                                <img src="/portfolio/1.Gems&Jewelry.jpg" alt="She Shines Logo" className="max-w-full max-h-full object-contain" />
                             </div>
                         </div>
 
