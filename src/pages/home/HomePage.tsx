@@ -182,14 +182,25 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                         custom={0.4}
                         className="space-y-4"
                     >
-                        <Link 
-                            to="/pricing" 
-                            className="inline-flex items-center justify-center bg-gradient-to-r from-amber-400 to-orange-500 text-primary-950 font-extrabold text-lg py-4 px-10 rounded-full hover:from-amber-300 hover:to-orange-400 transition-all duration-300 shadow-xl shadow-amber-500/10 hover:shadow-amber-500/30 transform hover:-translate-y-1 font-body"
-                        >
-                            Begin Alignment Scan <FiArrowRight className="ml-2 font-extrabold" />
-                        </Link>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <Link 
+                                to="/pricing" 
+                                className="inline-flex items-center justify-center bg-gradient-to-r from-amber-400 to-orange-500 text-primary-950 font-extrabold text-lg py-4 px-10 rounded-full hover:from-amber-300 hover:to-orange-400 transition-all duration-300 shadow-xl shadow-amber-500/10 hover:shadow-amber-500/30 transform hover:-translate-y-1 font-body w-full sm:w-auto"
+                            >
+                                Begin Alignment Scan <FiArrowRight className="ml-2 font-extrabold" />
+                            </Link>
+                            
+                            <button
+                                onClick={() => {
+                                    document.getElementById('why-alignment-matters')?.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                                className="inline-flex items-center justify-center bg-transparent border-2 border-primary-300/40 hover:border-amber-400 hover:text-amber-400 text-primary-200 font-bold text-lg py-4 px-10 rounded-full transition-all duration-300 transform hover:-translate-y-1 font-body w-full sm:w-auto cursor-pointer"
+                            >
+                                Learn How It Works
+                            </button>
+                        </div>
                         <p className="text-xs text-primary-300 tracking-wider font-body block opacity-80">
-                            Limited sessions per month — serious inquiries only.
+                            No credit card required to explore packages — 100% Secure Cosmic Audit.
                         </p>
                     </motion.div>
                 </div>
@@ -197,6 +208,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
 
 
             {/* SECTION 2: WHY ALIGNMENT MATTERS (Dual Destinies) */}
+            <div id="why-alignment-matters" />
             <Section variant="light" py="py-24" className="bg-slate-50">
                 <div className="max-w-5xl mx-auto">
                     <motion.div
@@ -516,7 +528,7 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                                 <span className="text-primary-600 text-[10px] font-bold tracking-widest uppercase block mb-2 font-body">Computer Training</span>
                                 <h4 className="text-xl md:text-2xl font-extrabold text-gray-900 mb-4 font-display">Tech Nova</h4>
                                 <p className="text-gray-700 text-sm md:text-base leading-relaxed font-body font-light mb-6">
-                                    Goal was 20 students per month. Post-rename ➔ <span className="font-bold text-emerald-600">4 fully booked batches per week</span>, dominating the local tech-training sector.
+                                    Originally targeted just 1 batch of 20 students per month ➔ post-rename successfully scaled to <span className="font-bold text-emerald-600">4 fully booked batches of 20 students per month</span>, dominating the local sector.
                                 </p>
                             </div>
                             <div className="aspect-square w-24 bg-white border border-gray-100 p-2 rounded-xl flex items-center justify-center">

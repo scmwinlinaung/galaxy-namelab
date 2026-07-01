@@ -556,24 +556,6 @@ Best regards,
         <div className="absolute inset-0 bg-primary-950/20 z-10 rounded-xl cursor-wait" />
       )}
 
-      {checkoutState.error && (
-        <div className="p-4 bg-red-900/30 border border-red-800/60 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-red-200 text-sm font-body animate-pulse">
-          <div className="flex items-start gap-3">
-            <FiAlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-red-400" />
-            <span className="leading-relaxed">{checkoutState.error}</span>
-          </div>
-          {checkoutState.error.includes('already registered') && (
-            <button
-              type="button"
-              onClick={onUnauthorized}
-              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 hover:scale-105 text-white font-bold rounded-lg transition-all text-xs flex-shrink-0 font-display shadow-md cursor-pointer"
-            >
-              Login Now
-            </button>
-          )}
-        </div>
-      )}
-
       {/* Business Info Section */}
       <div className="space-y-4">
         <h4 className="text-lg font-semibold text-white flex items-center gap-2 font-display">
@@ -841,6 +823,25 @@ Best regards,
           )}
         </button>
       </div>
+
+      {checkoutState.error && (
+        <div className="p-4 bg-red-900/30 border border-red-800/60 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-red-200 text-sm font-body animate-pulse">
+          <div className="flex items-start gap-3">
+            <FiAlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-red-400" />
+            <span className="leading-relaxed">{checkoutState.error}</span>
+          </div>
+          {checkoutState.error.includes('already registered') && (
+            <button
+              type="button"
+              onClick={onUnauthorized}
+              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 hover:scale-105 text-white font-bold rounded-lg transition-all text-xs flex-shrink-0 font-display shadow-md cursor-pointer"
+            >
+              Login Now
+            </button>
+          )}
+        </div>
+      )}
+
       <p className="text-primary-300 text-xs font-body leading-normal text-center opacity-85">
         After your payment is confirmed, a confirmation email will be sent to you. If you do not see it in your inbox, please check your Spam or Junk folder.
       </p>

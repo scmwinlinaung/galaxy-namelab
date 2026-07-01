@@ -92,7 +92,7 @@ const successStories: SuccessStory[] = [
         logo: '9.Computer Training.png',
         industry: 'Computer Training Centre',
         challenge: 'Entering a hyper-saturated tech-education market with a modest, cautious goal of securing just 20 students for a single monthly batch.',
-        blueprintAndResult: 'The magnetic resonance of "Tech Nova" attracted immense student interest that far exceeded all initial expectations. Instead of running just one class a month, the institute successfully scaled to running four fully occupied batches simultaneously per week (4 batches a month), dominating the local tech-training sector.'
+        blueprintAndResult: 'The magnetic resonance of "Tech Nova" attracted immense student interest that far exceeded all initial expectations. Instead of running just one class of 20 students a month, the institute successfully scaled to running four fully occupied batches of 20 students simultaneously per month, dominating the local tech-training sector.'
     },
     {
         id: 10,
