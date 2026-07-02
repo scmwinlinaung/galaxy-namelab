@@ -206,6 +206,36 @@ const HomePage: React.FC<HomePageProps> = ({ isLoginModalOpen, setIsLoginModalOp
                 </div>
             </section>
 
+            {/* Visitor Counter Section */}
+            <Section variant="dark" py="py-12" className="border-y border-white/10 bg-primary-950">
+                <motion.div
+                    className="flex flex-col items-center justify-center text-center max-w-4xl mx-auto"
+                    variants={ANIMATION.VARIANTS.FADE_UP}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                >
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-primary-400 rounded-full text-primary-950">
+                            <FiUsers className="text-2xl md:text-3xl" />
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-black text-white tabular-nums font-display">
+                            {visitorCount !== null ? visitorCount.toLocaleString() : '...'}
+                        </h2>
+                    </div>
+                    <p className="text-lg md:text-xl text-primary-200 font-medium font-body">
+                        Total individuals whose destinies have been touched by Galaxy NameLab
+                    </p>
+                    <div className="mt-4 flex items-center gap-2">
+                        <span className="flex h-3 w-3 relative">
+                            <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span className="text-sm text-green-400 font-semibold tracking-wide uppercase font-body">Live Traffic Tracking</span>
+                    </div>
+                </motion.div>
+            </Section>
+
 
             {/* SECTION 2: WHY ALIGNMENT MATTERS (Dual Destinies) */}
             <div id="why-alignment-matters" />
