@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { STORAGE_KEYS } from '@constants/api';
-import { AuthService } from '@api/services/authService';
+import { completeOAuthLogin } from '../../utils/oauthCallback';
 
 /**
  * Facebook OAuth Callback Handler
@@ -21,31 +20,9 @@ const FacebookCallbackPage: React.FC = () => {
     const userId = searchParams.get('userId');
 
     if (token && userId) {
-      // Store authentication data in localStorage
-      localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
-      localStorage.setItem(STORAGE_KEYS.USER_ID, userId);
-
-      // Clear the password since Facebook users don't have one
-      localStorage.removeItem(STORAGE_KEYS.USER_PASSWORD);
-
-      // Fetch user data and save name and email
-      AuthService.getUserById(userId, token)
-        .then((userData) => {
-          localStorage.setItem(STORAGE_KEYS.USER_NAME, userData?.data?.name || "");
-          localStorage.setItem(STORAGE_KEYS.USER_EMAIL, userData?.data?.email || "");
-
-          // Dispatch custom event to notify components about login
-          window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
-
-          // Redirect to home page or pricing page
-          navigate('/', { replace: true });
-        })
-        .catch((error) => {
-          console.error('Failed to fetch user data:', error);
-          // Still dispatch auth change and redirect even if fetching user data fails
-          window.dispatchEvent(new CustomEvent('authChange', { detail: { isAuthenticated: true } }));
-          navigate('/', { replace: true });
-        });
+      completeOAuthLogin(token, userId).finally(() => {
+        navigate('/', { replace: true });
+      });
     } else {
       // Handle error - missing token or userId
       console.error('Facebook OAuth callback failed: missing token or userId');
