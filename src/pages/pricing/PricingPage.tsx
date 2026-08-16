@@ -75,18 +75,6 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
         acc[category].push(pkg);
         return acc;
     }, {} as Record<string, Package[]>);
-
-    // Category display order: Personal & Nickname Solutions above, Business Naming Solutions below
-    const categoryDisplayOrder = ['Personal & Nickname Solutions', 'Business Naming Solutions'];
-    const sortedCategoryEntries = Object.entries(packagesByCategory).sort(([a], [b]) => {
-        const indexA = categoryDisplayOrder.indexOf(a);
-        const indexB = categoryDisplayOrder.indexOf(b);
-        if (indexA === -1 && indexB === -1) return 0;
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        return indexA - indexB;
-    });
-
     return (
         <PageWrapper>
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
@@ -144,7 +132,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                     {!loading && !error && packages.length > 0 && (
                         <>
                             {/* Dynamic Category Rendering */}
-                            {sortedCategoryEntries.map(([category, categoryPackages], categoryIndex) => (
+                            {Object.entries(packagesByCategory).map(([category, categoryPackages], categoryIndex) => (
                                 <motion.div
                                     key={category}
                                     variants={fadeUp}
