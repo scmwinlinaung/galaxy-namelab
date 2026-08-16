@@ -75,6 +75,18 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
         acc[category].push(pkg);
         return acc;
     }, {} as Record<string, Package[]>);
+
+    // Category display order: Personal & Nickname Solutions above, Business Naming Solutions below
+    const categoryDisplayOrder = ['Personal Naming Solutions', 'Business Naming Solutions'];
+    const sortedCategoryEntries = Object.entries(packagesByCategory).sort(([a], [b]) => {
+        const indexA = categoryDisplayOrder.indexOf(a);
+        const indexB = categoryDisplayOrder.indexOf(b);
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
+
     return (
         <PageWrapper>
             <Header isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />
@@ -132,7 +144,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                     {!loading && !error && packages.length > 0 && (
                         <>
                             {/* Dynamic Category Rendering */}
-                            {Object.entries(packagesByCategory).map(([category, categoryPackages], categoryIndex) => (
+                            {sortedCategoryEntries.map(([category, categoryPackages], categoryIndex) => (
                                 <motion.div
                                     key={category}
                                     variants={fadeUp}
@@ -148,7 +160,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                         <p className="text-xl text-white max-w-4xl mx-auto leading-relaxed font-light">
                                             {category === 'Business Naming Solutions'
                                                 ? 'Professional naming services tailored to your business needs'
-                                                : category === 'Personal & Nickname Solutions'
+                                                : category === 'Personal Naming Solutions'
                                                     ? 'Unlock your personal charisma. These hybrid packages combine our expert suggestions with a validation of your own ideas.'
                                                     : 'Premium solutions designed to meet your unique requirements'
                                             }
@@ -398,7 +410,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                         )}
 
                                                         {/* Enhanced Personal & Nickname Solutions Features */}
-                                                        {category === 'Personal & Nickname Solutions' && (
+                                                        {category === 'Personal Naming Solutions' && (
                                                             <div className="space-y-3">
                                                                 {/* Expert-Crafted Names */}
                                                                 {pkg.deliverables?.generatedNames > 0 && (
@@ -467,7 +479,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                         )}
 
                                                         {/* Default Features for other categories */}
-                                                        {category !== 'Business Naming Solutions' && category !== 'Personal & Nickname Solutions' && (
+                                                        {category !== 'Business Naming Solutions' && category !== 'Personal Naming Solutions' && (
                                                             <>
                                                                 {pkg.expectedOutcome && (
                                                                     <div className="flex items-center text-primary-50">
