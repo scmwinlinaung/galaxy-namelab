@@ -215,6 +215,16 @@ const PricingPage: React.FC<PricingPageProps> = ({ isLoginModalOpen, setIsLoginM
                                                                 {pkg.path.name}
                                                             </div>
                                                         )}
+                                                        {(pkg.price?.discountPercentage ?? 0) > 0 && (pkg.price?.originalAmount ?? 0) > 0 && (
+                                                            <div className="flex items-center justify-center gap-2 mb-1">
+                                                                <span className="text-base text-primary-300 line-through opacity-70">
+                                                                    ${pkg.price.originalAmount}
+                                                                </span>
+                                                                <span className="bg-red-500/90 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                                                                    {pkg.price.discountPercentage}% OFF
+                                                                </span>
+                                                            </div>
+                                                        )}
                                                         <div className="text-3xl font-bold text-white mb-1">
                                                             ${pkg.price?.amount || 0}
                                                         </div>

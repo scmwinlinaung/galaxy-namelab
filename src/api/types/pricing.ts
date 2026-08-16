@@ -15,6 +15,8 @@ export interface Package {
   price: {
     amount: number;
     currency: string;
+    discountPercentage?: number;
+    originalAmount?: number;
   };
   deliverables: {
     generatedNames: number;
