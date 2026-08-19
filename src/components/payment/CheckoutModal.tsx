@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiLock, FiCreditCard, FiCheckCircle, FiAlertCircle, FiUser } from 'react-icons/fi';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, PaymentElement, LinkAuthenticationElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { PaymentService } from '@api/services/paymentService';
 import { Package } from '@api/types/pricing';
 import { BusinessInfoForm, CheckoutState, OrderType } from '@api/types/payment';
 import LoginModal from '@components/auth/LoginModal';
 import { STORAGE_KEYS } from '@constants/api';
-import { EmailService, AuthService } from '@api/index';
+import { AuthService } from '@api/index';
+import { finalizeOrder, savePendingOrder, PendingOrderPayload } from '@api/utils/orderFinalization';
+import { stripePromise, isStripeTestMode } from '@api/utils/stripeClient';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@constants/navigation';
-
-// Initialize Stripe with publishable key from environment variable
-const stripeKey = (import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY) || "pk_live_51Sk10FFDgAPvX2A59J3M1cJaM4a1rij1ntQRNEkOvgkH5Vz08xyOJV7nw2tr780YFqYfusonrVdBMvw0edDS0ME700VyWrYVU1";
-const stripePromise = loadStripe(stripeKey);
-const isTestMode = stripeKey?.startsWith('pk_test_');
 
 // Helper function to get user-friendly error messages from Stripe errors
 const getStripeErrorMessage = (error: any): string => {
@@ -47,25 +43,29 @@ interface CheckoutModalProps {
   selectedPackage: Package | null;
 }
 
-// Inner Checkout Form Component
-const CheckoutForm: React.FC<{
+// Payment Fields Component — rendered inside <Elements>, once the PaymentIntent
+// (and its clientSecret) already exists. Holds the actual form + PaymentElement,
+// which renders Card, Apple Pay, Google Pay, Link and Amazon Pay based on what's
+// eligible for the amount/currency/device/browser.
+const CheckoutFormFields: React.FC<{
   selectedPackage: Package;
+  paymentIntentId: string | null;
   onComplete: () => void;
   onCancel: () => void;
   onUnauthorized: () => void;
-}> = ({ selectedPackage, onComplete, onCancel, onUnauthorized }) => {
+}> = ({ selectedPackage, paymentIntentId, onComplete, onCancel, onUnauthorized }) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const [guestEmail, setGuestEmail] = useState('');
   const [isAutoCreatedAccount, setIsAutoCreatedAccount] = useState(false);
   const [checkoutState, setCheckoutState] = useState<CheckoutState>({
-    step: 'initialize',
+    step: 'payment',
     packageId: selectedPackage._id,
     clientSecret: null,
-    paymentIntentId: null,
+    paymentIntentId,
     error: null,
-    loading: true,
+    loading: false,
   });
   const [businessInfo, setBusinessInfo] = useState<BusinessInfoForm>({
     fullName: '',
@@ -77,92 +77,77 @@ const CheckoutForm: React.FC<{
   });
   const [orderType] = useState<OrderType>(selectedPackage.categoryCode as OrderType);
   const [isElementsReady, setIsElementsReady] = useState(false);
-  const isInitializingRef = useRef(false);
   const isMountedRef = useRef(true);
 
-  // Step 1: Initialize Payment
   useEffect(() => {
     isMountedRef.current = true;
-
-    if (isInitializingRef.current) return;
-
-    const initializePayment = async () => {
-      if (!selectedPackage._id) return;
-
-      isInitializingRef.current = true;
-      if (isMountedRef.current) {
-        setCheckoutState((prev) => ({ ...prev, loading: true, error: null }));
-      }
-
-      try {
-        const userEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || '';
-        const name = localStorage.getItem(STORAGE_KEYS.USER_NAME) || '';
-        const response = await PaymentService.createStripeIntent(selectedPackage._id, userEmail, name);
-
-        // Check for 401 unauthorized
-        if (response.statusCode === 401) {
-          onUnauthorized();
-          return;
-        }
-
-        // Ensure we have the data we need
-        if (response.success && response.data && response.data.clientSecret) {
-          if (isMountedRef.current) {
-            setCheckoutState({
-              step: 'payment',
-              packageId: selectedPackage._id,
-              clientSecret: response.data.clientSecret,
-              paymentIntentId: response.data.paymentIntentId,
-              error: null,
-              loading: false,
-            });
-          }
-        } else {
-          if (isMountedRef.current) {
-            setCheckoutState({
-              step: 'error',
-              packageId: selectedPackage._id,
-              clientSecret: null,
-              paymentIntentId: null,
-              error: response.error || 'Failed to initialize payment',
-              loading: false,
-            });
-          }
-        }
-      } catch (error) {
-        if (isMountedRef.current) {
-          setCheckoutState({
-            step: 'error',
-            packageId: selectedPackage._id,
-            clientSecret: null,
-            paymentIntentId: null,
-            error: 'Failed to connect to payment server',
-            loading: false,
-          });
-        }
-      }
-    };
-
-    initializePayment();
-
     return () => {
-      isInitializingRef.current = false;
       isMountedRef.current = false;
     };
-  }, [selectedPackage._id]);
+  }, []);
 
-  // Ensure elements are ready before allowing payment
-  useEffect(() => {
-    if (elements && stripe) {
-      setIsElementsReady(true);
+  // Create the order in the backend, send the confirmation email, and navigate away.
+  // Shared logic lives in finalizeOrder() since the redirect-return page
+  // (/payment-complete) needs to do the exact same thing for wallet methods
+  // like Amazon Pay that leave the SPA before the intent settles.
+  const finishOrder = async (confirmedPaymentIntentId: string, pendingOrder: PendingOrderPayload) => {
+    try {
+      const result = await finalizeOrder(confirmedPaymentIntentId, pendingOrder);
+
+      if (!isMountedRef.current) return;
+
+      if (result.unauthorized) {
+        onUnauthorized();
+        return;
+      }
+
+      if (result.success) {
+        setCheckoutState({
+          step: 'complete',
+          packageId: selectedPackage._id,
+          clientSecret: null,
+          paymentIntentId: confirmedPaymentIntentId,
+          error: null,
+          loading: false,
+        });
+
+        // Keep success message on screen for 5 seconds so they can read the login credentials notice
+        setTimeout(() => {
+          if (isMountedRef.current) {
+            onComplete();
+            navigate(ROUTES.ORDERS);
+          }
+        }, 5000);
+      } else {
+        setCheckoutState({
+          step: 'error',
+          packageId: selectedPackage._id,
+          clientSecret: null,
+          paymentIntentId: confirmedPaymentIntentId,
+          error: result.error || 'Failed to create order',
+          loading: false,
+        });
+      }
+    } catch (err: any) {
+      console.error('Fatal order creation error:', err);
+      if (isMountedRef.current) {
+        setCheckoutState({
+          step: 'error',
+          packageId: selectedPackage._id,
+          clientSecret: null,
+          paymentIntentId: confirmedPaymentIntentId,
+          error: err?.message || 'Payment confirmed but failed to register the order. Please contact support.',
+          loading: false,
+        });
+      }
     }
-  }, [elements, stripe]);
+  };
 
-  // Step 2: Confirm Payment with Stripe (with Pre-Payment account validation)
+  // Confirm Payment with Stripe (with Pre-Payment account validation)
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements || !checkoutState.clientSecret) {
+    if (!stripe || !elements) {
       setCheckoutState((prev) => ({
         ...prev,
         error: 'Payment system not ready. Please try again.',
@@ -170,11 +155,12 @@ const CheckoutForm: React.FC<{
       return;
     }
 
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
+    // LinkAuthenticationElement lives in a Stripe iframe, so the form's native
+    // `required` validation can't reach it — check the guest email explicitly.
+    if (!localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) && !guestEmail.trim()) {
       setCheckoutState((prev) => ({
         ...prev,
-        error: 'Card element not found. Please refresh the page.',
+        error: 'Please enter your contact email.',
       }));
       return;
     }
@@ -192,10 +178,10 @@ const CheckoutForm: React.FC<{
 
       const effectiveEmail = authToken ? userEmail : guestEmail.trim();
 
-      // Ensure account is registered and logged in BEFORE capturing credit card info!
+      // Ensure account is registered and logged in BEFORE capturing payment details!
       if (!authToken) {
         autoGeneratedPassword = 'Galaxy_' + Math.random().toString(36).slice(-8) + '!';
-        
+
         try {
           const registerResponse = await AuthService.register({
             name: businessInfo.fullName,
@@ -206,13 +192,13 @@ const CheckoutForm: React.FC<{
           if (registerResponse.success && registerResponse.data) {
             const token = registerResponse.data.token;
             const userId = registerResponse.data.user?.id || '';
-            
+
             localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
             localStorage.setItem(STORAGE_KEYS.USER_EMAIL, effectiveEmail);
             localStorage.setItem(STORAGE_KEYS.USER_NAME, businessInfo.fullName);
             localStorage.setItem(STORAGE_KEYS.USER_ID, userId);
             localStorage.setItem(STORAGE_KEYS.USER_PASSWORD, autoGeneratedPassword);
-            
+
             authToken = token;
             userEmail = effectiveEmail;
             password = autoGeneratedPassword;
@@ -224,10 +210,10 @@ const CheckoutForm: React.FC<{
           } else {
             // STOP! Registration failed (likely email exists). Do NOT charge the card.
             const backendMsg = (registerResponse as any).msg || (registerResponse as any).message || registerResponse.error || '';
-            const isEmailExists = backendMsg.toLowerCase().includes('already') || 
+            const isEmailExists = backendMsg.toLowerCase().includes('already') ||
                                  backendMsg.toLowerCase().includes('exist');
-            
-            const userFriendlyError = isEmailExists 
+
+            const userFriendlyError = isEmailExists
               ? 'This email address is already registered in our system. Please click the "Login" button to sign in first, then proceed with your checkout!'
               : backendMsg || 'This email is already registered. Please login to your account at the top right before checking out, or use a different email.';
 
@@ -249,18 +235,40 @@ const CheckoutForm: React.FC<{
         }
       }
 
+      // Persist what's needed to finish the order in case this payment method
+      // redirects the browser away before returning (e.g. Amazon Pay via /payment-complete).
+      const pendingOrder: PendingOrderPayload = {
+        packageId: selectedPackage._id,
+        businessInfo,
+        email: userEmail,
+        password: password || '',
+        isAutoCreated,
+        pixel: {
+          value: selectedPackage.price?.amount || 0,
+          currency: selectedPackage.price?.currency || 'USD',
+          contentName: selectedPackage.plan?.name,
+          contentCategory: selectedPackage.path?.name,
+        },
+      };
+      savePendingOrder(pendingOrder);
+
       // Account verified or newly auto-registered. Proceed with secure payment confirmation!
-      const { error, paymentIntent } = await stripe.confirmCardPayment(
-        checkoutState.clientSecret,
-        {
-          payment_method: {
-            card: cardElement,
+      // redirect: 'if_required' keeps the user on this page for methods that don't need
+      // one (Card, Link, Apple Pay, Google Pay); wallets that do (e.g. Amazon Pay) will
+      // navigate to return_url, which is handled by PaymentCompletePage.
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}${ROUTES.PAYMENT_COMPLETE}`,
+          payment_method_data: {
             billing_details: {
               name: businessInfo.fullName || 'Customer',
+              email: effectiveEmail,
             },
           },
-        }
-      );
+        },
+        redirect: 'if_required',
+      });
 
       if (!isMountedRef.current) return;
 
@@ -273,9 +281,19 @@ const CheckoutForm: React.FC<{
         return;
       }
 
-      if (paymentIntent?.id) {
-        await createOrder(paymentIntent.id, userEmail, password, isAutoCreated);
+      if (paymentIntent?.status === 'succeeded') {
+        await finishOrder(paymentIntent.id, pendingOrder);
+      } else if (paymentIntent) {
+        // Resolved without a redirect but not yet settled (e.g. still 'processing').
+        // Don't leave the user staring at an indefinite spinner.
+        setCheckoutState((prev) => ({
+          ...prev,
+          loading: false,
+          error: 'Your payment is still being processed. Please wait a moment and check your email — we will confirm your order as soon as it settles.',
+        }));
       }
+      // Otherwise (no error, no paymentIntent) the browser is mid-redirect to a
+      // wallet's approval flow (e.g. Amazon Pay); nothing more to do here.
     } catch (err) {
       console.error("Payment Error:", err);
       if (isMountedRef.current) {
@@ -284,168 +302,6 @@ const CheckoutForm: React.FC<{
           error: 'An unexpected error occurred. Please try again.',
           loading: false,
         }));
-      }
-    }
-  };
-
-  // Step 3: Create Order in backend
-  const createOrder = async (
-    paymentIntentId: string, 
-    userEmail: string, 
-    password?: string, 
-    isAutoCreated: boolean = false
-  ) => {
-    try {
-      // Prepare order payload
-      const orderData: any = {
-        packageId: selectedPackage._id,
-        paymentMethod: 'stripe' as const,
-        paymentDetails: {
-          paymentIntentId,
-        },
-        businessInfo: {
-          fullName: businessInfo.fullName,
-          dob: businessInfo.dob,
-          birthTime: businessInfo.birthTime,
-          birthPlace: businessInfo.birthPlace,
-          details: businessInfo.details,
-          preferredSyllables: businessInfo.preferredSyllables,
-        },
-      };
-
-      // Include credentials for order tracking validation
-      orderData.name = userEmail?.split('@')[0] || '';
-      orderData.email = userEmail;
-      orderData.password = password || '';
-
-      const response = await PaymentService.createOrder(orderData);
-
-      if (!isMountedRef.current) return;
-
-      if (response.statusCode === 401) {
-        onUnauthorized();
-        return;
-      }
-
-      if (response.success) {
-        // Track Meta Pixel Purchase event
-        if (typeof window !== 'undefined' && window.fbq) {
-          window.fbq('track', 'Purchase', {
-            value: selectedPackage.price?.amount || 0,
-            currency: selectedPackage.price?.currency || 'USD',
-            content_name: selectedPackage.plan?.name,
-            content_category: selectedPackage.path?.name,
-          });
-        }
-
-        let emailText = '';
-        let emailSubject = '';
-
-        if (isAutoCreated) {
-          emailSubject = `Your order is confirmed - Galaxy NameLab account created ✨`;
-          emailText = `
-Your order is confirmed. ✨
-
-We've created your Galaxy NameLab account for you so you can easily track and manage your orders.
-
-Your Login Credentials:
-• Email: ${userEmail}
-• Temp Password: ${password}
-
-Click here to view your order and download your report when ready:
-https://galaxynamelab.com/orders
-
-(We highly recommend changing your password under your profile after logging in.)
-
-Thank you for choosing Stellar Fortune Name! Our senior consultant is now carefully reviewing your astrological data.
-
-Best regards,
-The Stellar Fortune Name Team
-(Galaxy NameLab, LLC)
-          `;
-        } else {
-          emailSubject = `We've Received Your Naming Request - Stellar Fortune Name`;
-          emailText = `
-Thank you for choosing **Stellar Fortune Name** for your naming needs. ✨
-
-We have successfully received your information and payment.
-
-Our senior consultant, with **over 28 years of expertise**, is now carefully reviewing your astrological data to find the most auspicious and meaningful names for you.
-
-**WHAT HAPPENS NEXT?**
-
-• **REVIEW PERIOD**
-  We will perform detailed calculations based on your provided data.
-
-• **DELIVERY**
-  You will receive your personalized Naming Report via email within **3 business days**.
-  If we need any further information, we will reach out to you directly.
-
-Thank you for trusting us with this important milestone.
-
-Best regards,
-
-**The Stellar Fortune Name Team**
-(Galaxy NameLab, LLC)
-          `;
-        }
-
-        const emailData = {
-          to: userEmail,
-          subject: emailSubject,
-          text: emailText
-        };
-
-        // Send email inside an isolated try-catch. If the email delivery fails (due to connection timeouts or mail server status),
-        // we MUST NOT block the successful checkout completion since the order was successfully persisted in the database!
-        try {
-          const emailResponse = await EmailService.sendEmail(emailData);
-          if (emailResponse?.statusCode === 401) {
-            onUnauthorized();
-            return;
-          }
-        } catch (emailErr) {
-          console.error('Non-blocking confirmation email delivery failure:', emailErr);
-        }
-
-        setCheckoutState({
-          step: 'complete',
-          packageId: selectedPackage._id,
-          clientSecret: checkoutState.clientSecret,
-          paymentIntentId,
-          error: null,
-          loading: false,
-        });
-
-        // Keep success message on screen for 5 seconds so they can read the login credentials notice
-        setTimeout(() => {
-          if (isMountedRef.current) {
-            onComplete();
-            navigate(ROUTES.ORDERS);
-          }
-        }, 5000);
-
-      } else {
-        setCheckoutState({
-          step: 'error',
-          packageId: selectedPackage._id,
-          clientSecret: checkoutState.clientSecret,
-          paymentIntentId,
-          error: response.error || 'Failed to create order',
-          loading: false,
-        });
-      }
-    } catch (err: any) {
-      console.error('Fatal order creation or payment handler error:', err);
-      if (isMountedRef.current) {
-        setCheckoutState({
-          step: 'error',
-          packageId: selectedPackage._id,
-          clientSecret: checkoutState.clientSecret,
-          paymentIntentId,
-          error: err?.message || 'Payment confirmed but failed to register the order. Please contact support.',
-          loading: false,
-        });
       }
     }
   };
@@ -480,15 +336,6 @@ Best regards,
 
   // --- RENDER STATES ---
 
-  if (checkoutState.loading && checkoutState.step === 'initialize') {
-    return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-500 mb-6"></div>
-        <p className="text-white text-lg">Initializing secure payment...</p>
-      </div>
-    );
-  }
-
   if (checkoutState.step === 'complete') {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center max-w-lg mx-auto">
@@ -501,7 +348,7 @@ Best regards,
           <FiCheckCircle className="text-green-400 text-7xl" />
         </motion.div>
         <h3 className="text-3xl font-extrabold text-white mb-4 font-display">Payment Successful!</h3>
-        
+
         {isAutoCreatedAccount ? (
           <div className="space-y-4 mb-4 bg-primary-900/50 border border-primary-700/50 rounded-2xl p-6 shadow-xl text-left">
             <p className="text-emerald-400 font-bold text-lg font-display flex items-center gap-2">
@@ -577,21 +424,19 @@ Best regards,
               className="w-full px-4 py-3 bg-primary-800/30 border border-primary-700 rounded-xl text-primary-300 cursor-not-allowed font-body"
             />
           ) : (
-            <input
-              type="email"
-              name="email"
-              value={guestEmail}
-              onChange={(e) => {
-                setGuestEmail(e.target.value);
-                if (checkoutState.error) {
-                  setCheckoutState(prev => ({ ...prev, error: null }));
-                }
-              }}
-              placeholder="Enter your contact email"
-              disabled={checkoutState.loading}
-              required
-              className="w-full px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl text-white placeholder-primary-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all font-body text-sm md:text-base"
-            />
+            // LinkAuthenticationElement (instead of a plain input) so Stripe can recognize
+            // the email and offer Link as a payment method in the PaymentElement below.
+            <div className="px-4 py-3 bg-primary-800/50 border border-primary-700 rounded-xl focus-within:ring-2 focus-within:ring-purple-500">
+              <LinkAuthenticationElement
+                options={{ defaultValues: { email: guestEmail } }}
+                onChange={(e) => {
+                  setGuestEmail(e.value.email);
+                  if (checkoutState.error) {
+                    setCheckoutState(prev => ({ ...prev, error: null }));
+                  }
+                }}
+              />
+            </div>
           )}
         </div>
 
@@ -721,7 +566,8 @@ Best regards,
         </div>
       </div>
 
-      {/* Card Payment Section */}
+      {/* Payment Section — PaymentElement self-renders Card, Apple Pay, Google Pay, Link
+          and Amazon Pay tabs/buttons based on what's eligible for this device/browser/amount */}
       <div className="space-y-4">
         <h4 className="text-lg font-semibold text-white flex items-center gap-2 font-display">
           <FiCreditCard className="text-purple-400" />
@@ -739,32 +585,9 @@ Best regards,
         </h4>
 
         <div className="p-4 bg-primary-800/50 border border-primary-700 rounded-xl">
-          <CardElement
-            options={{
-              style: {
-                base: {
-                  fontSize: '16px',
-                  color: '#ffffff',
-                  backgroundColor: '#1f2937',
-                  fontFamily: 'system-ui, -apple-system, sans-serif',
-                  fontSmoothing: 'antialiased',
-                  '::placeholder': {
-                    color: '#9ca3af',
-                  },
-                  ':-webkit-autofill': {
-                    color: '#ffffff',
-                  },
-                },
-                invalid: {
-                  color: '#ef4444',
-                  iconColor: '#ef4444',
-                },
-                empty: {
-                  color: '#9ca3af',
-                },
-              },
-            }}
-            className="stripe-card-element"
+          <PaymentElement
+            options={{ layout: 'tabs' }}
+            onReady={() => setIsElementsReady(true)}
           />
         </div>
 
@@ -849,6 +672,129 @@ Best regards,
   );
 };
 
+// Outer Checkout Form Component — creates the PaymentIntent first, then mounts
+// Stripe <Elements> with its clientSecret (required up front so PaymentElement
+// knows which payment methods, Card/Apple Pay/Google Pay/Link/Amazon Pay, to offer).
+const CheckoutForm: React.FC<{
+  selectedPackage: Package;
+  onComplete: () => void;
+  onCancel: () => void;
+  onUnauthorized: () => void;
+}> = ({ selectedPackage, onComplete, onCancel, onUnauthorized }) => {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
+  const [initError, setInitError] = useState<string | null>(null);
+  const isInitializingRef = useRef(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isInitializingRef.current) return;
+
+    const initializePayment = async () => {
+      if (!selectedPackage._id) return;
+
+      isInitializingRef.current = true;
+      if (isMounted) setInitError(null);
+
+      try {
+        const userEmail = localStorage.getItem(STORAGE_KEYS.USER_EMAIL) || '';
+        const name = localStorage.getItem(STORAGE_KEYS.USER_NAME) || '';
+        const response = await PaymentService.createStripeIntent(selectedPackage._id, userEmail, name);
+
+        // Check for 401 unauthorized
+        if (response.statusCode === 401) {
+          onUnauthorized();
+          return;
+        }
+
+        // Ensure we have the data we need
+        if (response.success && response.data && response.data.clientSecret) {
+          if (isMounted) {
+            setClientSecret(response.data.clientSecret);
+            setPaymentIntentId(response.data.paymentIntentId);
+          }
+        } else if (isMounted) {
+          setInitError(response.error || 'Failed to initialize payment');
+        }
+      } catch (error) {
+        if (isMounted) {
+          setInitError('Failed to connect to payment server');
+        }
+      }
+    };
+
+    initializePayment();
+
+    return () => {
+      isInitializingRef.current = false;
+      isMounted = false;
+    };
+  }, [selectedPackage._id]);
+
+  if (initError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <FiAlertCircle className="text-red-400 text-6xl mb-6" />
+        <h3 className="text-2xl font-bold text-white mb-4">Payment Failed</h3>
+        <p className="text-red-300 text-center mb-8 font-body">{initError}</p>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-6 py-3 bg-primary-700 hover:bg-primary-600 text-white rounded-full font-semibold transition-all cursor-pointer"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-full font-semibold transition-all cursor-pointer"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!clientSecret) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-500 mb-6"></div>
+        <p className="text-white text-lg">Initializing secure payment...</p>
+      </div>
+    );
+  }
+
+  return (
+    <Elements
+      stripe={stripePromise}
+      options={{
+        clientSecret,
+        appearance: {
+          theme: 'night',
+          variables: {
+            colorPrimary: '#a855f7',
+            colorBackground: '#1f2937',
+            colorText: '#ffffff',
+            colorDanger: '#ef4444',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            borderRadius: '12px',
+          },
+        },
+      }}
+    >
+      <CheckoutFormFields
+        selectedPackage={selectedPackage}
+        paymentIntentId={paymentIntentId}
+        onComplete={onComplete}
+        onCancel={onCancel}
+        onUnauthorized={onUnauthorized}
+      />
+    </Elements>
+  );
+};
+
 // Main Checkout Modal Component
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
   isOpen,
@@ -867,74 +813,72 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   return (
     <>
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
-      <Elements stripe={stripePromise}>
-        <AnimatePresence>
-          {isOpen && selectedPackage && (
+      <AnimatePresence>
+        {isOpen && selectedPackage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={onClose}
+          >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-              onClick={onClose}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', duration: 0.3 }}
+              className="relative w-full max-w-2xl bg-gradient-to-br from-primary-900 to-primary-950 rounded-3xl shadow-2xl border border-primary-700 overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
             >
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ type: 'spring', duration: 0.3 }}
-                className="relative w-full max-w-2xl bg-gradient-to-br from-primary-900 to-primary-950 rounded-3xl shadow-2xl border border-primary-700 overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {isTestMode && (
-                  <div className="bg-amber-500/20 border-b border-amber-500/50 px-6 py-3 flex items-center justify-center gap-2">
-                    <FiAlertCircle className="text-amber-400" />
-                    <span className="text-amber-200 text-sm font-medium font-body">
-                      Test Mode - No real charges will be made
-                    </span>
-                  </div>
-                )}
-
-                <div className="sticky top-0 bg-primary-900/90 backdrop-blur-md border-b border-primary-700 px-6 py-5 flex items-center justify-between z-10">
-                  <div>
-                    <h2 className="text-xl md:text-2xl font-bold text-white font-display">Secure Checkout</h2>
-                    <p className="text-xs md:text-sm text-primary-300 mt-1 font-body">
-                      {selectedPackage?.plan?.name} — {selectedPackage?.path?.name}
-                    </p>
-                  </div>
-                  <button
-                    onClick={onClose}
-                    className="p-2 hover:bg-primary-800 rounded-full transition-all text-primary-300 hover:text-white cursor-pointer"
-                  >
-                    <FiX className="text-2xl" />
-                  </button>
+              {isStripeTestMode && (
+                <div className="bg-amber-500/20 border-b border-amber-500/50 px-6 py-3 flex items-center justify-center gap-2">
+                  <FiAlertCircle className="text-amber-400" />
+                  <span className="text-amber-200 text-sm font-medium font-body">
+                    Test Mode - No real charges will be made
+                  </span>
                 </div>
+              )}
 
-                <div className="px-6 py-8 max-h-[70vh] overflow-y-auto">
-                  <CheckoutForm
-                    selectedPackage={selectedPackage}
-                    onComplete={handleComplete}
-                    onCancel={onClose}
-                    onUnauthorized={() => setShowLoginModal(true)}
-                  />
+              <div className="sticky top-0 bg-primary-900/90 backdrop-blur-md border-b border-primary-700 px-6 py-5 flex items-center justify-between z-10">
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold text-white font-display">Secure Checkout</h2>
+                  <p className="text-xs md:text-sm text-primary-300 mt-1 font-body">
+                    {selectedPackage?.plan?.name} — {selectedPackage?.path?.name}
+                  </p>
                 </div>
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-primary-800 rounded-full transition-all text-primary-300 hover:text-white cursor-pointer"
+                >
+                  <FiX className="text-2xl" />
+                </button>
+              </div>
 
-                <div className="bg-primary-900/50 border-t border-primary-700 px-6 py-4">
-                  <div className="flex items-center justify-center gap-6 text-xs md:text-sm text-primary-400 font-body">
-                    <div className="flex items-center gap-2">
-                      <FiLock className="text-green-400" />
-                      <span>Secure Payment</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <FiCheckCircle className="text-purple-400" />
-                      <span>SSL Encrypted</span>
-                    </div>
+              <div className="px-6 py-8 max-h-[70vh] overflow-y-auto">
+                <CheckoutForm
+                  selectedPackage={selectedPackage}
+                  onComplete={handleComplete}
+                  onCancel={onClose}
+                  onUnauthorized={() => setShowLoginModal(true)}
+                />
+              </div>
+
+              <div className="bg-primary-900/50 border-t border-primary-700 px-6 py-4">
+                <div className="flex items-center justify-center gap-6 text-xs md:text-sm text-primary-400 font-body">
+                  <div className="flex items-center gap-2">
+                    <FiLock className="text-green-400" />
+                    <span>Secure Payment</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiCheckCircle className="text-purple-400" />
+                    <span>SSL Encrypted</span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </Elements>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

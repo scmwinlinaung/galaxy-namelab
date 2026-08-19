@@ -58,4 +58,7 @@ export const STORAGE_KEYS = {
   USER_NAME: 'userName',
   USER_ID: 'userId',
   REFRESH_TOKEN: 'refreshToken',
+  // Holds the order details needed to finish checkout after a wallet payment
+  // (e.g. Amazon Pay) redirects the browser away and back via /payment-complete.
+  PENDING_ORDER: 'pendingOrder',
 } as const;

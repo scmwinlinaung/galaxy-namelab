@@ -15,6 +15,7 @@ import SuccessStoriesPage from '../pages/success-stories/SuccessStoriesPage';
 import InquiryPage from '../pages/inquiry/InquiryPage';
 import GoogleCallbackPage from '../pages/auth/GoogleCallbackPage';
 import FacebookCallbackPage from '../pages/auth/FacebookCallbackPage';
+import PaymentCompletePage from '../pages/payment-complete/PaymentCompletePage';
 
 interface AppRoutesProps {
     isLoginModalOpen: boolean;
@@ -71,6 +72,7 @@ const AppRoutes: React.FC<AppRoutesProps> = ({ isLoginModalOpen, setIsLoginModal
                 <Route path={ROUTES.INQUIRY} element={<InquiryPage isLoginModalOpen={isLoginModalOpen} setIsLoginModalOpen={setIsLoginModalOpen} />} />
                 <Route path={ROUTES.GOOGLE_CALLBACK} element={<GoogleCallbackPage />} />
                 <Route path={ROUTES.FACEBOOK_CALLBACK} element={<FacebookCallbackPage />} />
+                <Route path={ROUTES.PAYMENT_COMPLETE} element={<PaymentCompletePage />} />
             </Routes>
         </Router>
     );

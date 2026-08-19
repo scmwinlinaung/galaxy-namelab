@@ -14,7 +14,8 @@ export const ROUTES = {
   SUCCESS_STORIES: '/success-stories',
   INQUIRY: '/inquiry',
   GOOGLE_CALLBACK: '/auth/google/callback',
-  FACEBOOK_CALLBACK: '/auth/facebook/callback'
+  FACEBOOK_CALLBACK: '/auth/facebook/callback',
+  PAYMENT_COMPLETE: '/payment-complete'
 } as const;
 
 export const NAVIGATION = {
@@ -45,4 +46,5 @@ export const ROUTE_COMPONENTS = {
   [ROUTES.ORDERS]: 'OrdersPage',
   [ROUTES.PORTFOLIOS]: 'PortfoliosPage',
   [ROUTES.SUCCESS_STORIES]: 'SuccessStoriesPage',
+  [ROUTES.PAYMENT_COMPLETE]: 'PaymentCompletePage',
 } as const;
